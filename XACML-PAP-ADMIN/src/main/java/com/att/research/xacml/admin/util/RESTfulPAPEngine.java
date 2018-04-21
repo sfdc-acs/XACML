@@ -391,6 +391,7 @@ public class RESTfulPAPEngine extends StdPDPItemSetChangeNotifier implements PAP
 		    			//
 		    			// Send our current policy configuration
 		    			//
+		    			connection.setRequestProperty("Content-Type", "application/xml");
 		    			try (OutputStream os = connection.getOutputStream()) {
 		    				int count = IOUtils.copy((InputStream)content, os);
 		    				if (logger.isDebugEnabled()) {
@@ -401,12 +402,13 @@ public class RESTfulPAPEngine extends StdPDPItemSetChangeNotifier implements PAP
 		    			logger.error("Failed to write content in '" + method + "'", e);
 		    			throw e;
 		    		}
-				} else {
-					// The content is an object to be encoded in JSON
-		            ObjectMapper mapper = new ObjectMapper();
-		            mapper.writeValue(connection.getOutputStream(),  content);
-				}
-			}
+		    	} else {
+		    		// The content is an object to be encoded in JSON
+		    		connection.setRequestProperty("Content-Type", "application/json");
+		    		ObjectMapper mapper = new ObjectMapper();
+		    		mapper.writeValue(connection.getOutputStream(),  content);
+		    	}
+		    }
             //
             // Do the connect
             //

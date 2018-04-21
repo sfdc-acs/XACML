@@ -3,10 +3,11 @@
     <parent>
 	  <groupId>com.att.research.xacml</groupId>
 	  <artifactId>att-xacml</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>xacml-pap-rest</artifactId>
+    <packaging>war</packaging>
     <dependencies>
         <dependency>
             <groupId>com.att.research.xacml</groupId>
@@ -45,4 +46,32 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <configuration>
+                      <failOnMissingWebXml>false</failOnMissingWebXml>
+                      <attachClasses>true</attachClasses>
+                    </configuration>
+                </plugin>
+                <plugin>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-maven-plugin</artifactId>
+                  <version>${jetty.version}</version>
+                  <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <webApp>
+                      <contextPath>/pap</contextPath>
+                    </webApp>
+                    <httpConnector>
+                      <port>9090</port>
+                    </httpConnector>
+                  </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

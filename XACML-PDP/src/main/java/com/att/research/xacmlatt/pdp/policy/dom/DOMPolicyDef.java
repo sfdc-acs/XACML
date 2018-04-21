@@ -44,6 +44,16 @@ public abstract class DOMPolicyDef {
 				throw new Exception("No child in document");
 			}
 			
+			// Process comments
+			while (true) {
+				if (rootNode.getNodeType() != Node.COMMENT_NODE) {
+					break;
+				}
+				rootNode = rootNode.getNextSibling();
+				if (rootNode == null) {
+					throw new Exception("Only comments encountered in document");
+				}
+			}
 			if (DOMUtil.isInNamespace(rootNode, XACML3.XMLNS)) {
 				if (XACML3.ELEMENT_POLICY.equals(rootNode.getLocalName())) {
 					policyDef	= DOMPolicy.newInstance(rootNode, policySetParent, null);

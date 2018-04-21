@@ -856,9 +856,16 @@ public class XACMLPolicyScanner {
 		    // find the first element
 		    //
 			NodeList nodes = doc.getChildNodes();
-			Node node = nodes.item(0);
+			Node node = null;
+			// Process comments
+			for (int i = 0; i<nodes.getLength(); i++) {
+				if (nodes.item(i).getNodeType() != Node.COMMENT_NODE) {
+					node = nodes.item(i);
+					break;
+				}
+			}
 			Element e = null;
-			if (node.getNodeType() == Node.ELEMENT_NODE) {
+			if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
 				e = (Element) node;
 				//
 				// Is it a 3.0 policy?
