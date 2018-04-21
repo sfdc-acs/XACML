@@ -15,6 +15,7 @@ import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -75,6 +76,22 @@ public abstract class DOMPolicyDef {
 			throw new DOMStructureException("No XML DocumentBuilderFactory configured");
 		}
 		documentBuilderFactory.setNamespaceAware(true);
+		documentBuilderFactory.setIgnoringComments(true);
+
+		/*
+		 * Configure the parser to prevent XXE exploits
+		 * @see https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Prevention_Cheat_Sheet#JAXP_DocumentBuilderFactory.2C_SAXParserFactory_and_DOM4J
+		 */
+		try {
+			documentBuilderFactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+			documentBuilderFactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+			documentBuilderFactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+			documentBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+			documentBuilderFactory.setXIncludeAware(false);
+			documentBuilderFactory.setExpandEntityReferences(false);
+		} catch (ParserConfigurationException ex) {
+			throw new DOMStructureException("Exception configuring parser: " + ex.getMessage(), ex);
+		}
 		
 		/*
 		 * Get the DocumentBuilder

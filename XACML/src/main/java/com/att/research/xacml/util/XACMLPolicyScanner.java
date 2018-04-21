@@ -834,6 +834,18 @@ public class XACMLPolicyScanner {
 			//
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		    dbf.setNamespaceAware(true);
+		    dbf.setIgnoringComments(true);
+
+		    //
+		    // Configure the parser to prevent XXE exploits
+		    // @see https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Prevention_Cheat_Sheet#JAXP_DocumentBuilderFactory.2C_SAXParserFactory_and_DOM4J
+		    dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+		    dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+		    dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+		    dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+		    dbf.setXIncludeAware(false);
+		    dbf.setExpandEntityReferences(false);
+
 		    DocumentBuilder db = dbf.newDocumentBuilder();
 		    //
 		    // Parse the policy file
