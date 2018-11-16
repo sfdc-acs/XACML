@@ -61,12 +61,12 @@ public class HexBinary implements SemanticString {
 	
 	@Override
 	public int hashCode() {
-		return (this.getData() == null ? 0 : this.getData().hashCode());
+		return (this.getData() == null ? 0 : Arrays.hashCode(this.getData()));
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof HexBinary)) {
+		if (!(obj instanceof HexBinary)) {
 			return false;
 		} else if (obj == this) {
 			return true;

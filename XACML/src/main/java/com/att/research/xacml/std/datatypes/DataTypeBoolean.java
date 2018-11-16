@@ -25,8 +25,8 @@ import com.att.research.xacml.std.StdAttributeValue;
 public class DataTypeBoolean extends DataTypeBase<Boolean> {
 	private static final DataTypeBoolean	singleInstance	= new DataTypeBoolean();
 	
-	public static final AttributeValue<Boolean>	AV_TRUE	= new StdAttributeValue<Boolean>(XACML.ID_DATATYPE_BOOLEAN, Boolean.TRUE);
-	public static final AttributeValue<Boolean> AV_FALSE	= new StdAttributeValue<Boolean>(XACML.ID_DATATYPE_BOOLEAN, Boolean.FALSE);
+	public static final AttributeValue<Boolean>	AV_TRUE	= new StdAttributeValue<>(XACML.ID_DATATYPE_BOOLEAN, Boolean.TRUE);
+	public static final AttributeValue<Boolean> AV_FALSE	= new StdAttributeValue<>(XACML.ID_DATATYPE_BOOLEAN, Boolean.FALSE);
 	
 	private DataTypeBoolean() {
 		super(XACML.ID_DATATYPE_BOOLEAN, Boolean.class);

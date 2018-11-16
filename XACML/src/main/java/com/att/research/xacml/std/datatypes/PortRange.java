@@ -106,7 +106,7 @@ public final class PortRange implements SemanticString {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof PortRange)) {
+		if (!(obj instanceof PortRange)) {
 			return false;
 		} else if (obj == this) {
 			return true;

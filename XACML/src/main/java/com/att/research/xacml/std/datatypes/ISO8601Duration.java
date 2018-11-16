@@ -21,6 +21,10 @@ import com.att.research.xacml.api.SemanticString;
  * @version $Revision: 1.2 $
  */
 public class ISO8601Duration implements SemanticString {
+	
+	private static final String INVALID_DURATION_STRING = "Invalid ISO8601 duration string \"";
+	private static final String POSITION_STRING = "\" at position ";
+	
 	private static int getChunkOrder(boolean sawT, char chunkName) {
 		switch(chunkName) {
 		case 'Y':
@@ -85,12 +89,12 @@ public class ISO8601Duration implements SemanticString {
 				try {
 					dvalue	= Double.parseDouble(duration.substring(startPos, curPos));
 				} catch (NumberFormatException ex) {
-					throw new ParseException("Invalid chunk \"" + duration + "\" at position " + startPos, startPos);
+					throw new ParseException("Invalid chunk \"" + duration + POSITION_STRING + startPos, startPos);
 				}
 				curPos++;
 				return new DurationChunk(chunkName, dvalue, (curPos - startPos));
 			} else {
-				throw new ParseException("Invalid chunk \"" + duration + "\" at position " + startPos, curPos);
+				throw new ParseException("Invalid chunk \"" + duration + POSITION_STRING + startPos, curPos);
 			}			
 		}
 	}
@@ -153,12 +157,12 @@ public class ISO8601Duration implements SemanticString {
 			curPos++;
 		}
 		if (iso8601DurationString.charAt(curPos) != 'P') {
-			throw new ParseException("Invalid ISO8601 duration string \"" + iso8601DurationString + "\" at position " + curPos, curPos);
+			throw new ParseException(INVALID_DURATION_STRING + iso8601DurationString + POSITION_STRING + curPos, curPos);
 		}
 		curPos++;
 		
 		if (curPos >= endPos) {
-			throw new ParseException("Invalid ISO8601 duration string \"" + iso8601DurationString + "\": No duration components following P", curPos);
+			throw new ParseException(INVALID_DURATION_STRING + iso8601DurationString + "\": No duration components following P", curPos);
 		}
 		
 		int lastChunkOrder	= 0;
@@ -169,7 +173,7 @@ public class ISO8601Duration implements SemanticString {
 			 */
 			if (iso8601DurationString.charAt(curPos) == 'T') {
 				if (sawT) {
-					throw new ParseException("Invalid ISO8601 duration string \"" + iso8601DurationString + "\" at position " + curPos + ": saw multiple T separators", curPos);
+					throw new ParseException(INVALID_DURATION_STRING + iso8601DurationString + POSITION_STRING + curPos + ": saw multiple T separators", curPos);
 				} else {
 					sawT	= true;
 				}
@@ -182,9 +186,9 @@ public class ISO8601Duration implements SemanticString {
 				 */
 				int			chunkOrder		= getChunkOrder(sawT, durationChunk.getChunkName());
 				if (chunkOrder <= 0) {
-					throw new ParseException("Invalid ISO8601 duration string \"" + iso8601DurationString + "\" at position " + curPos + ": invalid component", curPos);
+					throw new ParseException(INVALID_DURATION_STRING + iso8601DurationString + POSITION_STRING + curPos + ": invalid component", curPos);
 				} else if (chunkOrder <= lastChunkOrder) {
-					throw new ParseException("Invalid ISO8601 duration string \"" + iso8601DurationString + "\" at position " + curPos + ": out of order component", curPos);
+					throw new ParseException(INVALID_DURATION_STRING + iso8601DurationString + POSITION_STRING + curPos + ": out of order component", curPos);
 				}
 				lastChunkOrder	= chunkOrder;
 				
@@ -192,7 +196,7 @@ public class ISO8601Duration implements SemanticString {
 				 * Check for correct value type
 				 */
 				if (durationChunk.getChunkName() != 'S' && !durationChunk.isIntValue()) {
-					throw new ParseException("Invalid ISO8601 duration string \"" + iso8601DurationString + "\" at position " + curPos + ": expected int value", curPos);
+					throw new ParseException(INVALID_DURATION_STRING + iso8601DurationString + POSITION_STRING + curPos + ": expected int value", curPos);
 				}
 				
 				/*
@@ -258,8 +262,7 @@ public class ISO8601Duration implements SemanticString {
 		return this.millis;
 	}
 	public double getFractionalSecs() {
-		double dSec = (double)(this.seconds) + (( (double)this.millis) / 1000);
-		return dSec;
+		return (double)(this.seconds) + (( (double)this.millis) / 1000);
 	}
 	
 	@Override
@@ -269,7 +272,7 @@ public class ISO8601Duration implements SemanticString {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof ISO8601Duration)) {
+		if (!(obj instanceof ISO8601Duration)) {
 			return false;
 		} else if (obj == this) {
 			return true;

@@ -11,6 +11,10 @@ Click here to view the [JavaDoc](http://att.github.io/XACML/javadocs/index.html)
 
 Tutorials and other useful information is also located on our [Github Pages site](http://att.github.io/XACML). TBD - working on this 10/14.
 
+# Release
+
+There is a branch v1.0 that is the official release. Master branch is WIP.
+
 # Requirements
 
 * Java JDK 1.8, you will need to ensure Eclipse has that JDK installed in your development environment.

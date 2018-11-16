@@ -12,7 +12,6 @@ package com.att.research.xacml.std.datatypes;
 
 import java.util.Arrays;
 
-import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 
 import com.att.research.xacml.api.SemanticString;
@@ -42,7 +41,7 @@ public class Base64Binary implements SemanticString {
 	 * @param stringBase64Binary the <code>String</code> to convert
 	 * @return a new <code>Base64Binary</code> from the converted <code>String</code>.
 	 */
-	public static Base64Binary newInstance(String stringBase64Binary) throws DecoderException {
+	public static Base64Binary newInstance(String stringBase64Binary) {
 		if (stringBase64Binary == null) {
 			return null;
 		}
@@ -61,7 +60,7 @@ public class Base64Binary implements SemanticString {
 	
 	@Override
 	public int hashCode() {
-		return (this.getData() == null ? 0 : this.getData().hashCode());
+		return (this.getData() == null ? 0 : Arrays.hashCode(this.getData()));
 	}
 	
 	@Override
@@ -75,9 +74,8 @@ public class Base64Binary implements SemanticString {
 			if (this.getData() == null) {
 				if (hexBinaryObj.getData() == null) {
 					return true;
-				} else {
-					return false;
 				}
+				return false;
 			} else {
 				if (hexBinaryObj.getData() == null) {
 					return false;

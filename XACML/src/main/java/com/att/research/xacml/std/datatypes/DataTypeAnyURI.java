@@ -50,7 +50,6 @@ public class DataTypeAnyURI extends DataTypeBase<URI> {
 			}
 			URI		uriValue	= null;
 			try {
-				//uriValue	= URI.create(stringValue);
 				uriValue	= new URI(stringValue);
 			} catch (URISyntaxException ex) {
 				throw new DataTypeException(this, "Failed to convert \"" + source.getClass().getCanonicalName() + "\" with value \"" + stringValue + "\" to anyURI", ex);

@@ -37,6 +37,8 @@ public class IPv4Address extends IPAddress {
 	private short[]		addressMask;
 	private PortRange	portRange;
 	
+	private static final String INVALID_IP4ADDRESS_MSG = "Invalid IPv4 address string \"";
+	
 	public IPv4Address(short[] addressBytesIn, short[] addressMaskIn, PortRange portRangeIn) {
 		addressBytes = addressBytesIn;
 		addressMask = addressMaskIn;
@@ -49,19 +51,19 @@ public class IPv4Address extends IPAddress {
 	protected static short[] getAddress(String ipv4AddressString) throws ParseException {
 		String[]	addressParts	= ipv4AddressString.split("[.]",-1);
 		if (addressParts == null || addressParts.length != 4) {
-			throw new ParseException("Invalid IPv4 address string \"" + ipv4AddressString + "\": invalid address", 0);
+			throw new ParseException(INVALID_IP4ADDRESS_MSG + ipv4AddressString + "\": invalid address", 0);
 		}
 		short[]		addressBytes	= new short[4];
 		for (int i = 0 ; i < 4 ; i++) {
 			try {
 				int	octet	= Integer.parseInt(addressParts[i]);
 				if (octet < 0 || octet > 255) {
-					throw new ParseException("Invalid IPv4 address string \"" + ipv4AddressString + "\": invalid octet: \"" + addressParts[i], 0);
+					throw new ParseException(INVALID_IP4ADDRESS_MSG + ipv4AddressString + "\": invalid octet: \"" + addressParts[i], 0);
 				} else {
 					addressBytes[i]	= (short)octet;
 				}
 			} catch (NumberFormatException ex) {
-				throw new ParseException("Invalid IPv4 address string \"" + ipv4AddressString + "\": invalid octet: \"" + addressParts[i], 0);
+				throw new ParseException(INVALID_IP4ADDRESS_MSG + ipv4AddressString + "\": invalid octet: \"" + addressParts[i], 0);
 			}
 		}
 		return addressBytes;
@@ -81,11 +83,11 @@ public class IPv4Address extends IPAddress {
 		int	slashPos	= ipv4AddressString.indexOf('/');
 		int	colonPos	= ipv4AddressString.indexOf(':');
 		if ((colonPos >= 0) && (colonPos < slashPos)) {
-			throw new ParseException("Invalid IPv4 address string \"" + ipv4AddressString + "\": out of order components", colonPos);
+			throw new ParseException(INVALID_IP4ADDRESS_MSG + ipv4AddressString + "\": out of order components", colonPos);
 		}
 		int endAddress	= (slashPos >= 0 ? slashPos : (colonPos >= 0 ? colonPos : ipv4AddressString.length() ));
 		if (endAddress < 7) {
-			throw new ParseException("Invalid IPv4 address string \"" + ipv4AddressString + "\": address too short", 0);
+			throw new ParseException(INVALID_IP4ADDRESS_MSG + ipv4AddressString + "\": address too short", 0);
 		}
 		
 		short[]		addressBytes	= getAddress(ipv4AddressString.substring(0, endAddress));
@@ -98,7 +100,7 @@ public class IPv4Address extends IPAddress {
 		PortRange	portRange		= null;
 		if (colonPos >= 0) {
 			if (ipv4AddressString.substring(colonPos+1).length() < 1) {
-				throw new ParseException("Invalid IPv4 address string \"" + ipv4AddressString + "\": no portrange given after ':'", colonPos+1);
+				throw new ParseException(INVALID_IP4ADDRESS_MSG + ipv4AddressString + "\": no portrange given after ':'", colonPos+1);
 			}
 			portRange	= PortRange.newInstance(ipv4AddressString.substring(colonPos+1));
 		}
@@ -124,15 +126,13 @@ public class IPv4Address extends IPAddress {
 	public static boolean isIPv4Address(String ipv4AddressString) {
 		if (ipv4AddressString == null || ipv4AddressString.length() == 0) {
 			return false;
-		} else {
-			// V4 addresses contain dots between multiple groups and at most one colon (may be none)
-			if (ipv4AddressString.indexOf('.') < ipv4AddressString.lastIndexOf('.') && 
-					ipv4AddressString.indexOf(':') == ipv4AddressString.lastIndexOf(':') ) {
-				return true;
-			} else {
-				return false;
-			}
 		}
+		// V4 addresses contain dots between multiple groups and at most one colon (may be none)
+		if (ipv4AddressString.indexOf('.') < ipv4AddressString.lastIndexOf('.') && 
+				ipv4AddressString.indexOf(':') == ipv4AddressString.lastIndexOf(':') ) {
+			return true;
+		}
+		return false;
 	}
 
 	
@@ -167,7 +167,7 @@ public class IPv4Address extends IPAddress {
 	@Override
 	public boolean equals(Object obj) {
 		// for the moment assume that different IP formats can never be equal
-		if (obj == null || !(obj instanceof IPv4Address)) {
+		if (!(obj instanceof IPv4Address)) {
 			return false;
 		} else if (obj == this) {
 			return true;

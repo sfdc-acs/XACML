@@ -259,7 +259,7 @@ public class ISO8601DateTime implements IDateTime<ISO8601DateTime>, Comparable<I
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
-		} else if (obj == null || !(obj instanceof ISO8601DateTime)) {
+		} else if (!(obj instanceof ISO8601DateTime)) {
 			return false;
 		} else {
 			ISO8601DateTime iso8601DateTime	= (ISO8601DateTime)obj;
@@ -372,14 +372,12 @@ public class ISO8601DateTime implements IDateTime<ISO8601DateTime>, Comparable<I
 		 * Now determine if we have a milliseconds portion
 		 */
 		int	ms			= 0;
-		if (startPos < strDateTime.length()) {
-			if (strDateTime.charAt(startPos) == '.') {
-				startPos++;
-				if ((ms = ParseUtils.getThreeDigitValue(strDateTime, startPos)) < 0 || ms >= 1000) {
-					throw new ParseException("Invalid milliseconds", startPos);
-				}
-				startPos	+= 3;
+		if (startPos < strDateTime.length() && strDateTime.charAt(startPos) == '.') {
+			startPos++;
+			if ((ms = ParseUtils.getThreeDigitValue(strDateTime, startPos)) < 0 || ms >= 1000) {
+				throw new ParseException("Invalid milliseconds", startPos);
 			}
+			startPos	+= 3;
 		}
 
 		/*
@@ -391,7 +389,6 @@ public class ISO8601DateTime implements IDateTime<ISO8601DateTime>, Comparable<I
 			switch(strDateTime.charAt(startPos)) {
 			case 'Z':
 				timezone	= "GMT";
-				startPos++;
 				break;
 			case '-':
 			case '+':
@@ -459,38 +456,41 @@ public class ISO8601DateTime implements IDateTime<ISO8601DateTime>, Comparable<I
 
 	@Override
 	public int compareTo(ISO8601DateTime o) {
+		//
+		// Either they BOTH have time zones or the BOTH don't
+		//
+		if ((this.getHasTimeZone() && o.getHasTimeZone()) ||
+			(!this.getHasTimeZone() && !o.getHasTimeZone()) ) {
+			return compareCalendars(this.calendar, o.calendar);
+		}
+		//
+		// This has a time zone so the compare should not
+		//
 		if (this.getHasTimeZone()) {
-			if (o.getHasTimeZone()) {
-				return compareCalendars(this.calendar, o.calendar);
+			long thisMilliseconds	= this.calendar.getTimeInMillis();
+			long oMilliseconds		= o.calendar.getTimeInMillis();
+			if (thisMilliseconds < (oMilliseconds - TZOFFSET_14_HOURS_MILLIS)) {
+				return -1;
+			} else if (thisMilliseconds > (oMilliseconds + TZOFFSET_14_HOURS_MILLIS)) {
+				return 1;
 			} else {
-				long thisMilliseconds	= this.calendar.getTimeInMillis();
-				long oMilliseconds		= o.calendar.getTimeInMillis();
-				if (thisMilliseconds < (oMilliseconds - TZOFFSET_14_HOURS_MILLIS)) {
-					return -1;
-				} else if (thisMilliseconds > (oMilliseconds + TZOFFSET_14_HOURS_MILLIS)) {
-					return 1;
-				} else {
-					throw new IllegalArgumentException("Cannot compare this ISO8601DateTime with non-time-zoned ISO8601DateTime");
-				}
-			}
-		} else {
-			if (o.getHasTimeZone()) {
-				long thisMilliseconds	= this.calendar.getTimeInMillis();
-				long oMilliseconds		= o.calendar.getTimeInMillis();
-				if ((thisMilliseconds + TZOFFSET_14_HOURS_MILLIS) < oMilliseconds) {
-					return -1;
-				} else if ((thisMilliseconds - TZOFFSET_14_HOURS_MILLIS) > oMilliseconds) {
-					return 1;
-				} else {
-					throw new IllegalArgumentException("Cannot compare this ISO8601DateTime with time-zoned ISO8601DateTime");
-				}				
-			} else {
-				/*
-				 * Neither has a timezone, so we can just compare the time in milliseconds
-				 */
-				return compareCalendars(this.calendar, o.calendar);
+				throw new IllegalArgumentException("Cannot compare this ISO8601DateTime with non-time-zoned ISO8601DateTime");
 			}
 		}
+		//
+		// This does not have a timezone the other should
+		//
+		long thisMilliseconds	= this.calendar.getTimeInMillis();
+		long oMilliseconds		= o.calendar.getTimeInMillis();
+		if ((thisMilliseconds + TZOFFSET_14_HOURS_MILLIS) < oMilliseconds) {
+			return -1;
+		} else if ((thisMilliseconds - TZOFFSET_14_HOURS_MILLIS) > oMilliseconds) {
+			return 1;
+		}
+		//
+		// Should not get here
+		//
+		throw new IllegalArgumentException("Cannot compare this ISO8601DateTime with time-zoned ISO8601DateTime");
 	}
 	
 }

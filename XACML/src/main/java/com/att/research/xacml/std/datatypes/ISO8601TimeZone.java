@@ -21,8 +21,8 @@ import com.att.research.xacml.api.SemanticString;
  * @version $Revision: 1.1 $
  */
 public class ISO8601TimeZone implements Comparable<ISO8601TimeZone>, SemanticString {
-	private static int MAX_TZOFFSET_MINUTES				= 60*24;
-	private static int MAX_NORMALIZED_TZOFFSET_MINUTES	= 60*12;
+	private static final int MAX_TZOFFSET_MINUTES				= 60*24;
+	private static final int MAX_NORMALIZED_TZOFFSET_MINUTES	= 60*12;
 	
 	private int	tzOffsetMinutes;
 	
@@ -50,6 +50,12 @@ public class ISO8601TimeZone implements Comparable<ISO8601TimeZone>, SemanticStr
 	}
 	
 	public static ISO8601TimeZone fromString(String timezoneString) throws ParseException {
+		if (timezoneString == null) {
+			throw new NullPointerException();
+		}
+		if (timezoneString.length() == 0) {
+			throw new ParseException("zero length string for time zone", 0);
+		}
 		/*
 		 * Look for timezone information
 		 */

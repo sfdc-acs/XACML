@@ -47,7 +47,7 @@ public abstract class DataTypeBase<T> implements DataType<T> {
 	}
 	
 	private Object collapse(Collection<?> objects) throws DataTypeException {
-		if (objects == null || objects.size() == 0) {
+		if (objects == null || objects.isEmpty()) {
 			return "";
 		} else if (objects.size() == 1) {
 			return objects.iterator().next();
@@ -99,17 +99,16 @@ public abstract class DataTypeBase<T> implements DataType<T> {
 			try {
 				xpathCategory	= DOMUtil.getIdentifierAttribute((Node)source, XACML3.ATTRIBUTE_XPATHCATEGORY, false);
 			} catch (Exception ex) {
-				// TODO:
 			}
-			return new StdAttributeValue<T>(this.getId(), this.convert(source), xpathCategory);
+			return new StdAttributeValue<>(this.getId(), this.convert(source), xpathCategory);
 		} else {
-			return new StdAttributeValue<T>(this.getId(), this.convert(source));
+			return new StdAttributeValue<>(this.getId(), this.convert(source));
 		}
 	}
 	
 	@Override
 	public AttributeValue<T> createAttributeValue(Object source, Identifier xpathCategory) throws DataTypeException {
-		return new StdAttributeValue<T>(this.getId(), this.convert(source), xpathCategory);
+		return new StdAttributeValue<>(this.getId(), this.convert(source), xpathCategory);
 	}
 
 	@Override
@@ -117,7 +116,7 @@ public abstract class DataTypeBase<T> implements DataType<T> {
 		if (attributeValue == null) {
 			return null;
 		} else {
-			return new StdAttributeValue<T>(this.getId(), this.convert(attributeValue.getValue()), attributeValue.getXPathCategory());
+			return new StdAttributeValue<>(this.getId(), this.convert(attributeValue.getValue()), attributeValue.getXPathCategory());
 		}
 	}
 	
