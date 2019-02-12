@@ -1,11 +1,6 @@
 package com.att.research.xacml.util;
-
-import java.util.Calendar;
-import java.util.TimeZone;
-
 public class CalendarTest {
 
-	public CalendarTest() {
 	}
 	
 	private static class CField {

@@ -1,9 +1,5 @@
 package com.att.research.xacml.std.datatypes;
 
-import static org.junit.Assert.*;
-
-import java.util.Calendar;
-
 import org.junit.Test;
 
 import com.att.research.xacml.api.DataTypeException;
