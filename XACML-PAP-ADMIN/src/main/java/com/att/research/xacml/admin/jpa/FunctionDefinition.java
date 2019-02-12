@@ -1,12 +1,7 @@
 /*
- *                        AT&T - PROPRIETARY
- *          THIS FILE CONTAINS PROPRIETARY INFORMATION OF
- *        AT&T AND IS NOT TO BE DISCLOSED OR USED EXCEPT IN
- *             ACCORDANCE WITH APPLICABLE AGREEMENTS.
  *
- *          Copyright (c) 2014 AT&T Knowledge Ventures
- *              Unpublished and Not for Publication
- *                     All Rights Reserved
+ *          Copyright (c) 2014,2019  AT&T Knowledge Ventures
+ *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.admin.jpa;
 
