@@ -1,4 +1,13 @@
+/*
+ *		Copyright (c) 2019 AT&T Knowledge Ventures
+ *		SPDX-License-Identifier: MIT
+*/
+
 package com.att.research.xacml.std.datatypes;
+
+import java.text.ParseException;
+
+import com.att.research.xacml.api.SemanticString;
 
 /**
  * for either port represents the limit for port numbers (min or max) in the given addressing scheme.
