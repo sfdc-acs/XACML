@@ -1,8 +1,7 @@
 /*
  *
- *          Copyright (c) 2018 AT&T Knowledge Ventures
- *              Unpublished and Not for Publication
- *                     All Rights Reserved
+ *          Copyright (c) 2019 AT&T Knowledge Ventures
+ *                     SPDX-License-Identifier: MIT
  */
 
 package com.att.research.xacml.std.datatypes;
