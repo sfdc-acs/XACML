@@ -17,8 +17,7 @@
 		<version.velocity>1.7</version.velocity>
 		<version.opencsv>2.3</version.opencsv>
 		<version.h2>1.4.190</version.h2>
-		<version.mysql>5.1.37</version.mysql>
-		<version.postgresql>9.1-901-1.jdbc4</version.postgresql>
+		<version.mariadb>2.4.0</version.mariadb>
 		<version.hsqldb>2.3.3</version.hsqldb>
 	</properties>
 
@@ -33,14 +32,9 @@
 			<version>${version.h2}</version>
 		</dependency>
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${version.mysql}</version>
-		</dependency>
-		<dependency>
-			<groupId>postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>${version.postgresql}</version>
+		    <groupId>org.mariadb.jdbc</groupId>
+		    <artifactId>mariadb-java-client</artifactId>
+		    <version>${version.mariadb}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
