@@ -35,7 +35,7 @@ import oasis.names.tc.xacml._3_0.core.schema.wd_17.PolicyType;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.RequestType;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
@@ -125,7 +125,7 @@ public class TestPolicy extends TestBase {
 		// Look for the policy option
 		//
 		CommandLine cl;
-		cl = new GnuParser().parse(options, args);
+		cl = new DefaultParser().parse(options, args);
 		if (cl.hasOption(OPTION_POLICY)) {
 			this.policy = Paths.get(cl.getOptionValue(OPTION_POLICY));
 			//

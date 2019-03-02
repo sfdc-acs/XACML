@@ -27,7 +27,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.logging.Log;
@@ -144,7 +144,7 @@ public class TestCustom extends TestBase {
 		// Parse the command line options
 		//
 		CommandLine cl;
-		cl = new GnuParser().parse(options, args);
+		cl = new DefaultParser().parse(options, args);
 		if (cl.hasOption(OPTION_GENERATE)) {
 			//
 			// Really only need to do this once to setup the test.
