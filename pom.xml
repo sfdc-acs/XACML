@@ -71,7 +71,7 @@
 		<version.java>1.8</version.java>
 		<version.guava>27.0.1-jre</version.guava>
 		<jetty.version>9.4.12.v20180830</jetty.version>
-		<version.jackson>2.9.5</version.jackson>
+		<version.jackson>2.9.8</version.jackson>
 		<version.httpclient>4.5.5</version.httpclient>
 		<version.servletapi>3.1.0</version.servletapi>
 		<version.commons.io>2.4</version.commons.io>
