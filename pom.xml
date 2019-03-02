@@ -130,30 +130,6 @@
 				<artifactId>httpclient</artifactId>
 				<version>${version.httpclient}</version>
 			</dependency>
-			
-			<!-- 
-			<dependency>
-				<groupId>com.h2database</groupId>
-				<artifactId>h2</artifactId>
-				<version>${version.h2}</version>
-			</dependency>
-			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
-				<version>${version.mysql}</version>
-			</dependency>
-			<dependency>
-				<groupId>postgresql</groupId>
-				<artifactId>postgresql</artifactId>
-				<version>${version.postgresql}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hsqldb</groupId>
-				<artifactId>hsqldb</artifactId>
-				<version>${version.hsqldb}</version>
-			</dependency>
-			
-			 -->
 			<dependency>
 				<groupId>xml-apis</groupId>
 				<artifactId>xml-apis</artifactId>
