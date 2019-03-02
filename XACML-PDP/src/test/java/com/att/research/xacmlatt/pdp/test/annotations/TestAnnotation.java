@@ -163,7 +163,7 @@ public class TestAnnotation extends TestBase {
 		@XACMLResource(id="resource")
 		String	resource = "www.mywebsite.com";
 	}
-
+	
 	public TestAnnotation(String[] args) throws MalformedURLException, ParseException, HelpException {
 		super(args);
 	}
