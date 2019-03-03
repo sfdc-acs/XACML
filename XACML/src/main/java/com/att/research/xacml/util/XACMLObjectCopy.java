@@ -62,6 +62,10 @@ import oasis.names.tc.xacml._3_0.core.schema.wd_17.VariableReferenceType;
 
 public class XACMLObjectCopy {
 	
+	private XACMLObjectCopy() {
+		super();
+	}
+	
 	public static PolicySetType	copy(PolicySetType policySet) {
 		return deepCopy(policySet);
 	}

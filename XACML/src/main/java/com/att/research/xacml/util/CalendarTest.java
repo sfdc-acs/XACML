@@ -12,6 +12,7 @@ import java.util.TimeZone;
 public class CalendarTest {
 
 	public CalendarTest() {
+		super();
 	}
 	
 	private static class CField {

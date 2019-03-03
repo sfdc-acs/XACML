@@ -29,6 +29,10 @@ import oasis.names.tc.xacml._3_0.core.schema.wd_17.PolicyType;
  */
 public class XACMLPolicyWriter {
 	private static final Log logger				= LogFactory.getLog(XACMLPolicyWriter.class);
+	
+	private XACMLPolicyWriter() {
+		super();
+	}
 
 	/**
 	 * Helper static class that does the work to write a policy set to a file on disk.

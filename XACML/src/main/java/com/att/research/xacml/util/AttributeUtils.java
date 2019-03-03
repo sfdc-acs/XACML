@@ -14,6 +14,10 @@ import com.att.research.xacml.api.RequestReference;
 import com.att.research.xacml.api.pip.PIPRequest;
 
 public class AttributeUtils {
+	
+	private AttributeUtils() {
+		super();
+	}
 
 	public static String	prettyPrint(Attribute attribute) {
 		String tab = "\t";
