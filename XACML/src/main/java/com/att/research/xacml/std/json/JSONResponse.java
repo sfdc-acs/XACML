@@ -158,7 +158,7 @@ public class JSONResponse {
 	 */
 	private static void initOutputShorthandMap() throws JSONStructureException {
 		Field[] declaredFields	= XACML3.class.getDeclaredFields();
-		outputShorthandMap = new HashMap<String, String>();
+		outputShorthandMap = new HashMap<>();
 		for (Field field : declaredFields) {
 			if (Modifier.isStatic(field.getModifiers()) && 
 				field.getName().startsWith("ID_DATATYPE") &&
@@ -168,12 +168,12 @@ public class JSONResponse {
 					Identifier id = (Identifier)field.get(null);
 					String longName = id.stringValue();
 					// most names start with 'http://www.w3.org/2001/XMLSchema#'
-					int sharpIndex = longName.lastIndexOf("#");
+					int sharpIndex = longName.lastIndexOf('#');
 					if (sharpIndex <= 0) {
 						// some names start with 'urn:oasis:names:tc:xacml:1.0:data-type:'
 						// or urn:oasis:names:tc:xacml:2.0:data-type:
 						if (longName.contains(":data-type:")) {
-							sharpIndex = longName.lastIndexOf(":");
+							sharpIndex = longName.lastIndexOf(':');
 						} else {
 							continue;
 						}
@@ -197,7 +197,7 @@ public class JSONResponse {
 	 */
 	private static void initShorthandMap() throws JSONStructureException {
 		Field[] declaredFields	= XACML3.class.getDeclaredFields();
-		shorthandMap = new HashMap<String, Identifier>();
+		shorthandMap = new HashMap<>();
 		for (Field field : declaredFields) {
 			if (Modifier.isStatic(field.getModifiers()) && 
 				field.getName().startsWith("ID_DATATYPE") &&
@@ -207,12 +207,12 @@ public class JSONResponse {
 					Identifier id = (Identifier)field.get(null);
 					String longName = id.stringValue();
 					// most names start with 'http://www.w3.org/2001/XMLSchema#'
-					int sharpIndex = longName.lastIndexOf("#");
+					int sharpIndex = longName.lastIndexOf('#');
 					if (sharpIndex <= 0) {
 						// some names start with 'urn:oasis:names:tc:xacml:1.0:data-type:'
 						// or urn:oasis:names:tc:xacml:2.0:data-type:
 						if (longName.contains(":data-type:")) {
-							sharpIndex = longName.lastIndexOf(":");
+							sharpIndex = longName.lastIndexOf(':');
 						} else {
 							continue;
 						}
@@ -281,9 +281,7 @@ public class JSONResponse {
 		
 		checkUnknown("StatusCode", statusCodeMap);
 		
-		StdStatusCode statusCode = new StdStatusCode(identifier, childStatusCode);
-		
-		return statusCode;
+		return new StdStatusCode(identifier, childStatusCode);
 	}
 	
 	
@@ -414,7 +412,7 @@ public class JSONResponse {
 			
 			// get optional list of AttributeAssignment
 			Object aaListObject = oaMap.remove("AttributeAssignment");
-			List<AttributeAssignment> attributeAssignmentList = new ArrayList<AttributeAssignment>();
+			List<AttributeAssignment> attributeAssignmentList = new ArrayList<>();
 			if (aaListObject != null) {
 				if ( ! (aaListObject instanceof List)) {
 					throw new JSONStructureException("AttributeAssignment must be list in " + oaTypeName);
@@ -1153,7 +1151,7 @@ public class JSONResponse {
     	Iterator<Result> iter = response.getResults().iterator();
     	while (iter.hasNext()) {
     		Result result = iter.next();
-    		Map<String, Object> responseTree = new HashMap<String, Object> ();
+    		Map<String, Object> responseTree = new HashMap<> ();
     		if (result.getDecision() == null) {
     			throw new JSONStructureException("No Decision in Result");
     		}
@@ -1182,8 +1180,8 @@ public class JSONResponse {
 	    		//
 	    		// Create the status
 	    		//
-	    		Map<String, Object> statusTree = new HashMap<String, Object>();
-	    		Map<String, Object> statusValue = new HashMap<String, Object>();
+	    		Map<String, Object> statusTree = new HashMap<>();
+	    		Map<String, Object> statusValue = new HashMap<>();
 	    		statusValue.put("Value", statusCodeId.stringValue());
 	    		addChildStatusCodes(result.getStatus().getStatusCode(), statusValue);
 	    		statusTree.put("StatusCode", statusValue);
@@ -1278,10 +1276,10 @@ public class JSONResponse {
     		//
     		if (result.getObligations() != null && result.getObligations().size() > 0) {
     			Iterator<Obligation> iterObs = result.getObligations().iterator();
-    			List<Object> obligationCollectionList = new ArrayList<Object>();
+    			List<Object> obligationCollectionList = new ArrayList<>();
     			while (iterObs.hasNext()) {
     				Obligation ob = iterObs.next();
-        			Map<String, Object> obligationTree = new HashMap<String, Object>();
+        			Map<String, Object> obligationTree = new HashMap<>();
         			if (ob.getId() == null) {
         				throw new JSONStructureException("Obligation must have Id");
         			}
@@ -1291,7 +1289,7 @@ public class JSONResponse {
     					ArrayList<HashMap<String, Object>> attributes = new ArrayList<HashMap<String, Object>>();
     					while (iterSetObs.hasNext()) {
     						AttributeAssignment entity = iterSetObs.next();
-    						HashMap<String, Object> entityTree = new HashMap<String, Object>();
+    						HashMap<String, Object> entityTree = new HashMap<>();
     						if (entity.getAttributeId() == null) {
     							throw new JSONStructureException("Obligation Attribute must have AttributeId");
     						}
@@ -1337,10 +1335,10 @@ public class JSONResponse {
     		//
     		if (result.getAssociatedAdvice() != null && result.getAssociatedAdvice().size() > 0) {
     			Iterator<Advice> iterAAs = result.getAssociatedAdvice().iterator();
-    			List<Object> adviceCollectionList = new ArrayList<Object>();
+    			List<Object> adviceCollectionList = new ArrayList<>();
     			while (iterAAs.hasNext()) {
     				Advice advice = iterAAs.next();
-        			Map<String, Object> adviceTree = new HashMap<String, Object>();
+        			Map<String, Object> adviceTree = new HashMap<>();
         			if (advice.getId() == null) {
         				throw new JSONStructureException("Advice must have Id");
         			}
@@ -1350,7 +1348,7 @@ public class JSONResponse {
     					ArrayList<HashMap<String, Object>> attributes = new ArrayList<HashMap<String, Object>>();
     					while (iterSetObs.hasNext()) {
     						AttributeAssignment entity = iterSetObs.next();
-    						HashMap<String, Object> entityTree = new HashMap<String, Object>();
+    						HashMap<String, Object> entityTree = new HashMap<>();
     						if (entity.getAttributeId() == null) {
     							throw new JSONStructureException("Advice Attribute must have AttributeId");
     						}
@@ -1402,7 +1400,7 @@ public class JSONResponse {
 				ArrayList<HashMap<String, Object>> categoryArray = new ArrayList<HashMap<String, Object>>();
 				while (iterAttributes.hasNext()) {
 					AttributeCategory entity = iterAttributes.next();
-					HashMap<String, Object> categoryTree = new HashMap<String, Object>();
+					HashMap<String, Object> categoryTree = new HashMap<>();
 					categoryTree.put("CategoryId", entity.getCategory().stringValue());
 					
 // The JSON and XML spec both imply that we can return Content here, but they do not say so explicitly and give no indication of when to include/not-include it			
@@ -1420,13 +1418,13 @@ public class JSONResponse {
 						ArrayList<HashMap<String, Object>> arrayAttributes = new ArrayList<HashMap<String, Object>>();
 						while (iterAttrs.hasNext()) {
 							Attribute attribute = iterAttrs.next();
-							if (attribute.getIncludeInResults() == false) {
+							if (! attribute.getIncludeInResults()) {
 								// Would this be an error?  This is an internal matter and we arbitrarily decided to just ignore it.  
 								// The attribute will not be included in the output, so the receiver won't know that this happened.
 								continue;
 							}
 							
-							HashMap<String, Object> theAttribute = new HashMap<String, Object>();
+							HashMap<String, Object> theAttribute = new HashMap<>();
 //TODO - no need to put this in Result because, by definition, if it is in the result then this must be true?  Since it is optional we do not want to add to length of JSON output
 //							theAttribute.put("IncludeInResult", true);
 							
@@ -1434,7 +1432,7 @@ public class JSONResponse {
     							throw new JSONStructureException("Attribute must have AttributeId");
 							}
 							theAttribute.put("AttributeId", attribute.getAttributeId().stringValue());
-							if (attribute.getValues() == null || attribute.getValues().size() == 0) {
+							if (attribute.getValues() == null || attribute.getValues().isEmpty()) {
 								throw new JSONStructureException("Attribute missing required Value");
 							}
 							Iterator<AttributeValue<?>> valueIterator = attribute.getValues().iterator();
@@ -1462,7 +1460,7 @@ public class JSONResponse {
 								}
 							} else {
 								// there are multiple values so we have to make a list of the Values
-								List<Object> attrValueList = new ArrayList<Object>();
+								List<Object> attrValueList = new ArrayList<>();
 								boolean mixedTypes = false;
 								Identifier inferredDataTypeId = null;
 								while (valueIterator.hasNext()) {
@@ -1522,7 +1520,7 @@ public class JSONResponse {
 						categoryArray.add(categoryTree);
 					}
 				}
-				if (categoryArray.size() > 0) {
+				if (! categoryArray.isEmpty()) {
 //TODO - Spec changing from Attributes to Category - change is for no good reason other than they didn't like the XML name.
 					responseTree.put("Category", categoryArray);
 				}
@@ -1540,15 +1538,15 @@ public class JSONResponse {
 			if ((result.getPolicyIdentifiers() != null && result.getPolicyIdentifiers().size() > 0) ||
 					(result.getPolicySetIdentifiers() != null && result.getPolicySetIdentifiers().size() > 0) ) {
 				
-    			Map<String, Object> policyIdentifierCollectionList = new HashMap<String, Object>();
+    			Map<String, Object> policyIdentifierCollectionList = new HashMap<>();
     			// handle PolicyIds separately from PolicySetIds 
     			if (result.getPolicyIdentifiers() != null && result.getPolicyIdentifiers().size() > 0) {
-        			List<Object> policyIdentifierList = new ArrayList<Object>();
+        			List<Object> policyIdentifierList = new ArrayList<>();
         			for (IdReference  idRef : result.getPolicyIdentifiers()) {
         				if (idRef == null) {
         					throw new JSONStructureException("PolicyIdReference with null reference");
         				}
-						HashMap<String, Object> entityTree = new HashMap<String, Object>();
+						HashMap<String, Object> entityTree = new HashMap<>();
 						entityTree.put("Id", idRef.getId().stringValue());
 						if (idRef.getVersion() != null) {
 							entityTree.put("Version", idRef.getVersion().stringValue());
@@ -1561,12 +1559,12 @@ public class JSONResponse {
     			}
     			// handle PolicySetIds
     			if (result.getPolicySetIdentifiers() != null && result.getPolicySetIdentifiers().size() > 0) {
-        			List<Object> policyIdentifierList = new ArrayList<Object>();
+        			List<Object> policyIdentifierList = new ArrayList<>();
         			for (IdReference  idRef : result.getPolicySetIdentifiers()) {
         				if (idRef == null) {
         					throw new JSONStructureException("PolicySetIdReference with null reference");
         				}
-						HashMap<String, Object> entityTree = new HashMap<String, Object>();
+						HashMap<String, Object> entityTree = new HashMap<>();
 						entityTree.put("Id", idRef.getId().stringValue());
 						if (idRef.getVersion() != null) {
 							entityTree.put("Version", idRef.getVersion().stringValue());
@@ -1592,7 +1590,7 @@ public class JSONResponse {
     	//
     	// Create the overall response
     	//
-    	Map<String, Object> theWholeResponse = new HashMap<String, Object>();
+    	Map<String, Object> theWholeResponse = new HashMap<>();
     	theWholeResponse.put("Response", responses);
     	//
     	// Create a string buffer
@@ -1624,7 +1622,7 @@ public class JSONResponse {
 	private static void addChildStatusCodes(StatusCode statusCode, Map<String, Object> map) {
 		if (statusCode.getChild() != null ) {
 			StatusCode child = statusCode.getChild();
-			Map<String, Object> childMap = new HashMap<String, Object>();
+			Map<String, Object> childMap = new HashMap<>();
 	    	childMap.put("Value", child.getStatusCodeValue().stringValue());
 	    	addChildStatusCodes(child, childMap);
 				
@@ -1671,7 +1669,7 @@ public class JSONResponse {
 			return obj.toString();
 		} else if (obj instanceof XPathExpressionWrapper) {
 			// create a map containing the complex value for the XPathExpression
-			Map<String,Object> xpathExpressionMap = new HashMap<String,Object>();
+			Map<String,Object> xpathExpressionMap = new HashMap<>();
 			Identifier xpathCategoryId = attrValue.getXPathCategory();
 			if (xpathCategoryId == null) {
 				throw new JSONStructureException("XPathExpression is missing XPathCategory");
@@ -1683,14 +1681,14 @@ public class JSONResponse {
 			
 			ExtendedNamespaceContext namespaceContext = xw.getNamespaceContext();
 			if (namespaceContext != null) {
-				List<Object> namespaceList = new ArrayList<Object>();
+				List<Object> namespaceList = new ArrayList<>();
 
 				// get the list of all namespace prefixes
 				Iterator<String> prefixIt = namespaceContext.getAllPrefixes();
 				while (prefixIt.hasNext()) {
 					String prefix = prefixIt.next();
 					String namespaceURI = namespaceContext.getNamespaceURI(prefix);
-					Map<String,Object> namespaceMap = new HashMap<String,Object>();
+					Map<String,Object> namespaceMap = new HashMap<>();
 					if (prefix != null && ! prefix.equals(XMLConstants.DEFAULT_NS_PREFIX)) {
 						namespaceMap.put("Prefix", prefix);
 					}
