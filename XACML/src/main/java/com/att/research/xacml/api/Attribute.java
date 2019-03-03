@@ -59,7 +59,7 @@ public interface Attribute {
 	public String getIssuer();
 	
 	/**
-	 * Gets the <code>boolean</code> value indicating whether this <code>Attribute</code> should be included in the {@link com.att.research.xacml.Response}
+	 * Gets the <code>boolean</code> value indicating whether this <code>Attribute</code> should be included in the {@link com.att.research.xacml.api.Response}
 	 * to a XACML 3.0 Request.
 	 *  
 	 * @return true if this <code>Attribute</code> should be included in the <code>Response</code> else false.

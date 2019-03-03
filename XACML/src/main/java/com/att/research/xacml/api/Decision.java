@@ -94,6 +94,7 @@ public enum Decision {
 	 * 
 	 * @return the canonical XACML 3.0 <code>String</code> name for this <code>Decision</code> 
 	 */
+	@Override
 	public String toString() {
 		return this.name;
 	}

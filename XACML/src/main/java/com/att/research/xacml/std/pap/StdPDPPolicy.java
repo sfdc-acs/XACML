@@ -251,7 +251,7 @@ public class StdPDPPolicy implements PDPPolicy, Serializable {
 	 * Given a version string consisting of integers with dots between them, convert it into an array of ints.
 	 * 
 	 * @param version
-	 * @return
+	 * @return int array of version
 	 * @throws NumberFormatException
 	 */
 	public static int[] versionStringToArray(String version) throws NumberFormatException {
@@ -270,7 +270,7 @@ public class StdPDPPolicy implements PDPPolicy, Serializable {
 	 * Given an array representing a version, create the corresponding dot-separated string.
 	 * 
 	 * @param array
-	 * @return
+	 * @return String representation of version
 	 */
 	public static String versionArrayToString(int[] array) {
 		if (array == null || array.length == 0) {

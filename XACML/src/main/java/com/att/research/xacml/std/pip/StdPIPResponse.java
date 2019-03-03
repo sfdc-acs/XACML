@@ -140,7 +140,7 @@ public class StdPIPResponse extends Wrapper<PIPResponse> implements PIPResponse 
 				listAttributeValuesMatching.add(attributeValue);
 			}
 		}
-		if (listAttributeValuesMatching.size() == 0) {
+		if (listAttributeValuesMatching.isEmpty()) {
 			return null;
 		} else {
 			return listAttributeValuesMatching;
@@ -154,14 +154,14 @@ public class StdPIPResponse extends Wrapper<PIPResponse> implements PIPResponse 
 	 * 
 	 * @param pipRequest
 	 * @param pipResponse
-	 * @return
+	 * @return PIPResponse
 	 * @throws PIPException
 	 */
 	public static PIPResponse getMatchingResponse(PIPRequest pipRequest, PIPResponse pipResponse) throws PIPException {
 		/*
 		 * Error responses should not contain any attributes, so just return the error response as is.  Likewise for empty responses
 		 */
-		if (!pipResponse.getStatus().isOk() || pipResponse.getAttributes().size() == 0) {
+		if (!pipResponse.getStatus().isOk() || pipResponse.getAttributes().isEmpty()) {
 			return pipResponse;
 		}
 		
@@ -175,7 +175,7 @@ public class StdPIPResponse extends Wrapper<PIPResponse> implements PIPResponse 
 			Attribute attributeResponse	= pipResponse.getAttributes().iterator().next();
 			if (matches(pipRequest, attributeResponse)) {
 				Collection<AttributeValue<?>> attributeValues	= attributeResponse.getValues();
-				if (attributeValues == null || attributeValues.size() == 0) {
+				if (attributeValues == null || attributeValues.isEmpty()) {
 					return pipResponse;
 				} else {
 					AttributeValue<?> attributeValueResponse	= attributeResponse.getValues().iterator().next();
@@ -224,7 +224,7 @@ public class StdPIPResponse extends Wrapper<PIPResponse> implements PIPResponse 
 	 * @return
 	 */
 	private static List<Attribute> simplifyAttribute(Attribute attribute) {
-		List<Attribute> listAttributes	= new ArrayList<Attribute>();
+		List<Attribute> listAttributes	= new ArrayList<>();
 		if (attribute.getValues() == null || attribute.getValues().size() <= 1) {
 			listAttributes.add(attribute);
 		} else {
@@ -246,7 +246,7 @@ public class StdPIPResponse extends Wrapper<PIPResponse> implements PIPResponse 
 		if (listAttributes.size() <= 0) {
 			return listAttributes;
 		}
-		Map<PIPRequest, StdMutableAttribute> map	= new HashMap<PIPRequest, StdMutableAttribute>();
+		Map<PIPRequest, StdMutableAttribute> map	= new HashMap<>();
 		for (Attribute attribute : listAttributes) {
 			PIPRequest pipRequest	= new StdPIPRequest(attribute);
 			if (map.containsKey(pipRequest)) {
@@ -274,11 +274,11 @@ public class StdPIPResponse extends Wrapper<PIPResponse> implements PIPResponse 
 	 * @throws PIPException if there is an error splitting the response
 	 */
 	public static Map<PIPRequest,PIPResponse> splitResponse(PIPResponse pipResponse) throws PIPException {
-		Map<PIPRequest,PIPResponse> map	= new HashMap<PIPRequest,PIPResponse>();
+		Map<PIPRequest,PIPResponse> map	= new HashMap<>();
 		if (!pipResponse.getStatus().isOk() || pipResponse.isSimple()) {
 			map.put(new StdPIPRequest(pipResponse.getAttributes().iterator().next()), pipResponse);
 		} else {
-			List<Attribute> listAllAttributesSimple	= new ArrayList<Attribute>();
+			List<Attribute> listAllAttributesSimple	= new ArrayList<>();
 			for (Iterator<Attribute> iterAttributes = pipResponse.getAttributes().iterator() ; iterAttributes.hasNext() ; ) {
 				Attribute attribute	= iterAttributes.next();
 				List<Attribute> listAttributesSplit	= simplifyAttribute(attribute);
@@ -311,7 +311,7 @@ public class StdPIPResponse extends Wrapper<PIPResponse> implements PIPResponse 
 			stringBuilder.append(this.getStatus().toString());
 			needsComma = true;
 		}
-		if (this.getAttributes().isEmpty() == false) {
+		if (! this.getAttributes().isEmpty()) {
 			if (needsComma) {
 				stringBuilder.append(",");
 			}

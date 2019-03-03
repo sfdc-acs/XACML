@@ -56,7 +56,7 @@ public class XPathDayTimeDuration extends ISO8601Duration implements Comparable<
 	 * it only contains days, hours, minutes, and seconds components.
 	 * 
 	 * @param iso8601DurationString
-	 * @return
+	 * @return XPathDayTimeDuration
 	 * @throws ParseException
 	 */
 	public static XPathDayTimeDuration newInstance(String iso8601DurationString) throws ParseException {
@@ -68,7 +68,7 @@ public class XPathDayTimeDuration extends ISO8601Duration implements Comparable<
 	 * that it only contains the day and time components.
 	 * 
 	 * @param iso8601Duration
-	 * @return
+	 * @return XPathDayTimeDuration
 	 * @throws ParseException
 	 */
 	public static XPathDayTimeDuration newInstance(ISO8601Duration iso8601Duration) throws ParseException {

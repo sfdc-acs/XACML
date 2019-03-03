@@ -25,6 +25,7 @@ public interface PDPEngine {
 	 * 
 	 * @param pepRequest the <code>Request</code> to evaluate
 	 * @return a {@link com.att.research.xacml.api.Response} indicating the decision
+	 * @throws PDPException PDP Exception
 	 */
 	public Response decide(Request pepRequest) throws PDPException;
 	

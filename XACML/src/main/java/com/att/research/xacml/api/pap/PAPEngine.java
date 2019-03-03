@@ -23,7 +23,7 @@ public interface PAPEngine {
 	
 	public PDPGroup					getGroup(String id) throws PAPException;
 	
-	public void						newGroup(String name, String description) throws PAPException, NullPointerException;
+	public void						newGroup(String name, String description) throws PAPException;
 	
 	public void						updateGroup(PDPGroup group) throws PAPException;
 	
@@ -33,7 +33,7 @@ public interface PAPEngine {
 	 * @throws PAPException
 	 * @throws NullPointerException
 	 */
-	public void						removeGroup(PDPGroup group, PDPGroup newGroup) throws PAPException, NullPointerException;
+	public void						removeGroup(PDPGroup group, PDPGroup newGroup) throws PAPException;
 
 	public PDPGroup					getPDPGroup(PDP pdp) throws PAPException;
 	
@@ -41,6 +41,9 @@ public interface PAPEngine {
 	
 	/**
 	 * Special case - for REST this contacts the PDP for status Details, but the non-RESTful version is never called
+	 * @param pdp PDP
+	 * @return PDPStatus object
+	 * @throws PAPException PAP Exception
 	 */
 	public PDPStatus				getStatus(PDP pdp) throws PAPException;
 	
@@ -52,7 +55,7 @@ public interface PAPEngine {
 	
 	public PDP						getPDP(String pdpId) throws PAPException;
 	
-	public void						newPDP(String id, PDPGroup group, String name, String description) throws PAPException, NullPointerException;
+	public void						newPDP(String id, PDPGroup group, String name, String description) throws PAPException;
 	
 	public void						movePDP(PDP pdp, PDPGroup newGroup) throws PAPException;
 	

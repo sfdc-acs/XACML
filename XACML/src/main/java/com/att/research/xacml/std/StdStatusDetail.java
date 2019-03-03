@@ -36,7 +36,7 @@ public class StdStatusDetail extends Wrapper<StatusDetail> implements StatusDeta
 	}
 	
 	/**
-	 * Creates a new immutable <code>StdStatusDetail</code> with the given <code>Collection</code> of {@link com.att.research.xamcl.api.MissingAttributeDetail}s.
+	 * Creates a new immutable <code>StdStatusDetail</code> with the given <code>Collection</code> of {@link com.att.research.xacml.api.MissingAttributeDetail} objects.
 	 * 
 	 * @param missingAttributeDetailsIn the <code>Collection</code> of <code>MissingAttributeDetail</code>s for the new <code>StdStatusDetail</code>.
 	 */

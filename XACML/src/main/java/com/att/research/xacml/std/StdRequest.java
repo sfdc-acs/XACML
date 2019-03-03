@@ -53,7 +53,7 @@ public class StdRequest extends Wrapper<Request> implements Request {
 	}
 	
 	/**
-	 * Creates a new <code>StdMutableRequest</code> with the given parameters and a default {@link com.att.research.xacmo.api.Status} of OK.
+	 * Creates a new <code>StdMutableRequest</code> with the given parameters and a default {@link com.att.research.xacml.api.Status} of OK.
 	 * 
 	 * @param requestDefaultsIn the {@link com.att.research.xacml.api.RequestDefaults} representing the XACML RequestDefaults
 	 * @param returnPolicyIdListIn a boolean indicating whether XACML PolicyId and PolicySetIds should be returned with the Results

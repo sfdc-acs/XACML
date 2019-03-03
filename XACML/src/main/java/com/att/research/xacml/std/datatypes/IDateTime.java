@@ -11,7 +11,7 @@ package com.att.research.xacml.std.datatypes;
  * @author car
  * @version $Revision$
  * 
- * @param T the data type of the object implementing the interface
+ * @param <T> the data type of the object implementing the interface
  */
 public interface IDateTime<T> {
 	/**

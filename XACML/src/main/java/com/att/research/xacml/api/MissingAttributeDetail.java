@@ -64,7 +64,7 @@ public interface MissingAttributeDetail {
 	 * 			{@code m1.getIssuer() == null && m2.getIssuer() == null} OR {@code m1.getIssuer().equals(m2.getIssuer())} AND
 	 * 			{@code m1.getAttributeValues()} is pairwise equal to {@code m2.getAttributeValues()}
 	 * @param obj
-	 * @return
+	 * @return true if equals
 	 */
 	@Override
 	public boolean equals(Object obj);

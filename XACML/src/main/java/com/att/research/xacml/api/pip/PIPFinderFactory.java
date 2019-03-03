@@ -62,13 +62,16 @@ public abstract class PIPFinderFactory {
 	 * Gets an instance of the configured <code>PIPFinder</code> class.
 	 * 
 	 * @return an instance of the configured <code>PIPFinder</code>
+	 * @throws PIPException PIP Exception
 	 */
-	abstract public PIPFinder getFinder() throws PIPException ;
+	public abstract PIPFinder getFinder() throws PIPException ;
 
 	/**
 	 * Gets an instance of the configured <code>PIPFinder</code> class.
+	 * @param properties Properties object
 	 * 
 	 * @return an instance of the configured <code>PIPFinder</code>
+	 * @throws PIPException The PIP Exception
 	 */
-	abstract public PIPFinder getFinder(Properties properties) throws PIPException ;
+	public abstract PIPFinder getFinder(Properties properties) throws PIPException ;
 }

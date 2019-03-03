@@ -50,7 +50,7 @@ public interface PIPEngine {
 	 * 
 	 * @param pipRequest the <code>PIPRequest</code> defining which <code>Attribute</code>s should be retrieved
 	 * @param pipFinder the <code>PIPFinder</code> to use for retrieving supporting attribute values
-	 * @return a {@link com.att.research.xacml.pip.PIPResponse} with the results of the request
+	 * @return a {@link com.att.research.xacml.api.pip.PIPResponse} with the results of the request
 	 * @throws PIPException if there is an error retrieving the <code>Attribute</code>s.
 	 */
 	public PIPResponse getAttributes(PIPRequest pipRequest, PIPFinder pipFinder) throws PIPException;

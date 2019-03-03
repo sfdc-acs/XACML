@@ -38,6 +38,8 @@ public class NullTraceEngine implements TraceEngine {
 	/**
 	 * Gets the single instance of the <code>NullTraceEngine</code> class.
 	 * 
+	 * @param properties 
+	 * 
 	 * @return the single instance of the <code>NullTraceEngine</code> class.
 	 */
 	public static NullTraceEngine newInstance(Properties properties) {

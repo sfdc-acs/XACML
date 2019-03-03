@@ -130,6 +130,7 @@ public class ISO8601Duration implements SemanticString {
 	 * 
 	 * @param iso8601DurationString the ISO8601 duration <code>String</code>
 	 * @return a new <code>ISO8601Duration</code> parsed from the given <code>String</code>
+	 * @throws ParseException 
 	 */
 	public static ISO8601Duration newInstance(String iso8601DurationString) throws ParseException {
 		if (iso8601DurationString == null || iso8601DurationString.length() == 0) {

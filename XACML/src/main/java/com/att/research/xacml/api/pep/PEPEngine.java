@@ -22,6 +22,7 @@ public interface PEPEngine {
 	 * 
 	 * @param pepRequest the <code>Request</code> to evaluate
 	 * @return a {@link com.att.research.xacml.api.Response} indicating the decision
+	 * @throws PEPException PEP Exception
 	 */
 	public Response decide(Request pepRequest) throws PEPException;
 }

@@ -11,7 +11,7 @@ import com.att.research.xacml.api.DataTypeException;
 import com.att.research.xacml.api.XACML1;
 
 /**
- * DataTypeRFC822Name extends {@link com.att.research.xacml.common.datatypes.DataTypeBase> for the XACML rfc822Name data type.
+ * DataTypeRFC822Name extends {@link com.att.research.xacml.std.datatypes.DataTypeBase} for the XACML rfc822Name data type.
  * 
  * @author car
  * @version $Revision: 1.1 $

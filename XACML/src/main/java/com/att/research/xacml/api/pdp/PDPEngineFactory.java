@@ -14,7 +14,7 @@ import com.att.research.xacml.util.FactoryFinder;
 import com.att.research.xacml.util.XACMLProperties;
 
 /**
- * PDPEngineFactory provides the interface for creating {@link com.att.research.xacml.pep.PDPEngine} instances.
+ * PDPEngineFactory provides the interface for creating {@link com.att.research.xacml.api.pdp.PDPEngine} instances.
  * 
  * @author car
  * @version ${Revision}
@@ -61,6 +61,7 @@ public abstract class PDPEngineFactory {
 	 * various places to determine the class to instantiate and return.
 	 * 
 	 * @return an instance of an object that extends <code>PDPEngineFactory</code> to use in creating <code>PDPEngine</code> objects.
+	 * @throws FactoryException FactoryException
 	 */
 	public static PDPEngineFactory newInstance() throws FactoryException {
 		PDPEngineFactory pdpEngineFactory	= FactoryFinder.find(FACTORYID, DEFAULT_FACTORY_CLASSNAME, PDPEngineFactory.class);
@@ -75,7 +76,10 @@ public abstract class PDPEngineFactory {
 	 * Creates a new <code>PDPEngineFactory</code> instance by examining initialization resources from
 	 * various places to determine the class to instantiate and return.
 	 * 
+	 * @param properties Properties object
+	 * 
 	 * @return an instance of an object that extends <code>PDPEngineFactory</code> to use in creating <code>PDPEngine</code> objects.
+	 * @throws FactoryException FactoryException
 	 */
 	public static PDPEngineFactory newInstance(Properties properties) throws FactoryException {
 		PDPEngineFactory pdpEngineFactory	= FactoryFinder.find(FACTORYID, DEFAULT_FACTORY_CLASSNAME, PDPEngineFactory.class, properties);
@@ -93,6 +97,7 @@ public abstract class PDPEngineFactory {
 	 * @param factoryClassName the <code>String</code> name of the factory class to instantiate
 	 * @param classLoader the <code>ClassLoader</code> to use to load the factory class
 	 * @return an instance of an object that extends <code>PDPEngineFactory</code> to use in creating <code>PDPEngine</code> objects.
+	 * @throws FactoryException FactoryException
 	 */
 	public static PDPEngineFactory newInstance(String factoryClassName, ClassLoader classLoader) throws FactoryException {
 		PDPEngineFactory pdpEngineFactory	=  FactoryFinder.newInstance(factoryClassName, PDPEngineFactory.class, classLoader, false);
@@ -108,6 +113,7 @@ public abstract class PDPEngineFactory {
 	 * 
 	 * @param factoryClassName the <code>String</code> name of the factory class to instantiate
 	 * @return an instance of an object that extends <code>PDPEngineFactory</code> to use in creating <code>PDPEngine</code> objects.
+	 * @throws FactoryException FactoryException
 	 */
 	public static PDPEngineFactory newInstance(String factoryClassName) throws FactoryException {
 		PDPEngineFactory pdpEngineFactory	= FactoryFinder.newInstance(factoryClassName, PDPEngineFactory.class, null, true);
@@ -122,13 +128,17 @@ public abstract class PDPEngineFactory {
 	 * Creates a new <code>PDPEngine</code> using the default policy set and {@link com.att.research.xacml.api.pip.PIPFinder}.
 	 * 
 	 * @return a new <code>PDPEngine</code>
+	 * @throws FactoryException FactoryException
 	 */
 	public abstract PDPEngine newEngine() throws FactoryException;
 	
 	/**
 	 * Creates a new <code>PDPEngine</code> using the default policy set and {@link com.att.research.xacml.api.pip.PIPFinder}.
 	 * 
+	 * @param properties Properties object 
+	 * 
 	 * @return a new <code>PDPEngine</code>
+	 * @throws FactoryException FactoryException
 	 */
 	public abstract PDPEngine newEngine(Properties properties) throws FactoryException;
 	

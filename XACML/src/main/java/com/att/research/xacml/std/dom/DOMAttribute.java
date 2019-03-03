@@ -33,9 +33,10 @@ public class DOMAttribute {
 	/**
 	 * Creates a new <code>DOMAttribute</code> by parsing the given {@link org.w3c.dom.Node}.
 	 * 
-	 * @param category the {@link com.att.research.xacml.common.Identfier} for the category of the new <code>DOMAttribute</code>.
+	 * @param category the {@link com.att.research.xacml.api.Identifier} for the category of the new <code>DOMAttribute</code>.
 	 * @param nodeAttribute the <code>Node</code> for the <code>DOMAttribute</code>
 	 * @return a new <code>DOMAttribute</code> parsed from the given <code>Node</code>.
+	 * @throws DOMStructureException 
 	 * @throws IllegalArgumentException if there is an error converting the <code>Node</code> to a <code>DOMAttribute</code>
 	 */
 	public static Attribute newInstance(Identifier category, Node nodeAttribute) throws DOMStructureException {

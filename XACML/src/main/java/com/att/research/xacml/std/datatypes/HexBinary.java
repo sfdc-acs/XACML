@@ -36,6 +36,7 @@ public class HexBinary implements SemanticString {
 	 * 
 	 * @param stringHexBinary the <code>String</code> to convert
 	 * @return a new <code>HexBinary</code> from the converted <code>String</code>.
+	 * @throws DecoderException 
 	 */
 	public static HexBinary newInstance(String stringHexBinary) throws DecoderException {
 		if (stringHexBinary == null) {

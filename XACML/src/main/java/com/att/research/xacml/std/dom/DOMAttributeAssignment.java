@@ -32,6 +32,7 @@ public class DOMAttributeAssignment {
 	 * 
 	 * @param nodeAttributeAssignment the root <code>Node</code> of the AttributeAssignment element
 	 * @return a new <code>DOMAttributeAssignment</code> parsed from the given AttributeAssignment <code>Node</code>
+	 * @throws DOMStructureException 
 	 * @throws IllegalArgumentException
 	 */
 	public static AttributeAssignment newInstance(Node nodeAttributeAssignment) throws DOMStructureException {

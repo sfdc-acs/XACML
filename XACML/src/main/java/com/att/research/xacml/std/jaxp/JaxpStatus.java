@@ -12,7 +12,7 @@ import com.att.research.xacml.api.StatusDetail;
 import com.att.research.xacml.std.StdMutableStatus;
 
 /**
- * JaxpStatus extends {@link com.att.research.StdMutableStatus.common.std.StdStatus} with methods for creation from
+ * JaxpStatus extends {@link com.att.research.xacml.std.StdMutableStatus} with methods for creation from
  * JAXP elements.
  * 
  * @author car

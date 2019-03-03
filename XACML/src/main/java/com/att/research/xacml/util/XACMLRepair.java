@@ -34,7 +34,7 @@ public class XACMLRepair {
 	
 	public static final String	PROP_DOCUMENT_REPAIR_CLASSNAME	= "xacml.documentRepairClassName";
 	
-	private List<File>	listInputFilesOrDirectories	= new ArrayList<File>();
+	private List<File>	listInputFilesOrDirectories	= new ArrayList<>();
 	private File outputFileOrDirectory;
 	private boolean forceOutput;
 	private String documentRepairClassName;
@@ -225,7 +225,7 @@ public class XACMLRepair {
 	}
 	
 	private void run() throws Exception {
-		if (this.listInputFilesOrDirectories.size() == 0) {
+		if (this.listInputFilesOrDirectories.isEmpty()) {
 			this.run(System.in, (File)null);
 		} else {
 			for (File inputFile: this.listInputFilesOrDirectories) {
@@ -235,6 +235,7 @@ public class XACMLRepair {
 	}
 	
 	public XACMLRepair() {
+		super();
 	}
 
 	public static void main(String[] args) {
@@ -246,7 +247,7 @@ public class XACMLRepair {
 		} catch (Exception ex) {
 			System.err.println("Exception: " + ex.getMessage());
 			ex.printStackTrace(System.err);
-			System.exit(1);;
+			System.exit(1);
 		}
 		System.exit(0);
 	}

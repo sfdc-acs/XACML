@@ -17,7 +17,7 @@ import com.att.research.xacml.api.XACML3;
 import com.att.research.xacml.std.StdStatusCode;
 
 /**
- * DOMStatusCode extends {@link com.att.research.xacml.comomon.std.StdStatusCode} with methods for creation from
+ * DOMStatusCode extends {@link com.att.research.xacml.std.StdStatusCode} with methods for creation from
  * DOM {@link org.w3c.dom.Node}s.
  * 
  * @author car

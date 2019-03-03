@@ -20,7 +20,7 @@ import com.att.research.xacml.util.ListUtil;
 import com.att.research.xacml.util.ObjUtil;
 
 /**
- * Mutable implementation of the {@link com.att.research.xacml.Attribute} interface.
+ * Mutable implementation of the {@link com.att.research.xacml.api.Attribute} interface.
  *  
  * @author Christopher A. Rath
  * @version $Revision: 1.1 $
@@ -35,15 +35,15 @@ public class StdMutableAttribute implements Attribute {
 	private boolean includeInResults;
 	
 	/**
-	 * Creates a new <code>StdMutableAttribute</code> with an empty list of {@link com.att.research.xacom.api.AttributeValue}s.
+	 * Creates a new <code>StdMutableAttribute</code> with an empty list of {@link com.att.research.xacml.api.AttributeValue}s.
 	 */
 	public StdMutableAttribute() {
 		this.values	= EMPTY_ATTRIBUTE_VALUE_LIST;
 	}
 	
 	/**
-	 * Creates a new <code>StdMutableAttribute</code> with the given {@link com.att.research.xacml.Identifier}s for the XACML 3.0 Category and AttributeId properties,
-	 * and the given <code>Collection</code> of {@link com.att.research.xacml.AttributeValue}s.  The <code>String</code> issuer may be null.
+	 * Creates a new <code>StdMutableAttribute</code> with the given {@link com.att.research.xacml.api.Identifier}s for the XACML 3.0 Category and AttributeId properties,
+	 * and the given <code>Collection</code> of {@link com.att.research.xacml.api.AttributeValue}s.  The <code>String</code> issuer may be null.
 	 * 
 	 * @param categoryIdIn the <code>Identifier</code> for the XACML 3.0 Category of the new <code>StdMutableAttribute</code>
 	 * @param attributeIdIn the <code>Identifier</code> for the XACML 3.0 AttributeId of the new <code>StdMutableAttribute</code>
@@ -65,8 +65,8 @@ public class StdMutableAttribute implements Attribute {
 	}
 	
 	/**
-	 * Creates a new <code>StdMutableAttribute</code> with the given {@link com.att.research.xacml.Identifier}s for the XACML 3.0 Category and AttributeId properties,
-	 * and the given {@link com.att.research.xacml.AttributeValue} as its only value.  The <code>String</code> issuer may be null.
+	 * Creates a new <code>StdMutableAttribute</code> with the given {@link com.att.research.xacml.api.Identifier}s for the XACML 3.0 Category and AttributeId properties,
+	 * and the given {@link com.att.research.xacml.api.AttributeValue} as its only value.  The <code>String</code> issuer may be null.
 	 * 
 	 * @param categoryIdIn the <code>Identifier</code> for the XACML 3.0 Category of the new <code>StdMutableAttribute</code>
 	 * @param attributeIdIn the <code>Identifier</code> for the XACML 3.0 AttributeId of the new <code>StdMutableAttribute</code>
@@ -86,8 +86,8 @@ public class StdMutableAttribute implements Attribute {
 	}
 	
 	/**
-	 * Creates a new <code>StdMutableAttribute</code> with the given {@link com.att.research.xacml.Identifier}s for the XACML 3.0 Category and AttributeId properties
-	 * and the given {@link com.att.research.xacml.AttributeValue} as its only value.  The issuer is null and the <code>StdMutableAttribute</code> will not be
+	 * Creates a new <code>StdMutableAttribute</code> with the given {@link com.att.research.xacml.api.Identifier}s for the XACML 3.0 Category and AttributeId properties
+	 * and the given {@link com.att.research.xacml.api.AttributeValue} as its only value.  The issuer is null and the <code>StdMutableAttribute</code> will not be
 	 * included in XACML 3.0 responses.
 	 * 
 	 * @param categoryIdIn the <code>Identifier</code> for the XACML 3.0 Category of the new <code>StdMutableAttribute</code>

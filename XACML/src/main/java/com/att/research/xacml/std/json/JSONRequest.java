@@ -561,7 +561,7 @@ public class JSONRequest {
 	 * 
 	 * @param xmlContent
 	 * @return Node
-	 * @throws Exception
+	 * @throws JSONStructureException 
 	 */
 	public static Node parseXML(String xmlContent) throws JSONStructureException {
     	
@@ -764,7 +764,7 @@ public class JSONRequest {
 	 * Parse and JSON string into a {@link com.att.research.xacml.api.Request} object.
 	 * 
 	 * @param jsonString
-	 * @return
+	 * @return Request
 	 * @throws JSONStructureException
 	 */
 	public static Request load(String jsonString) throws JSONStructureException {
@@ -794,7 +794,7 @@ public class JSONRequest {
 	 * In normal operation a Request arrives through the RESTful interface and is processed using <code>load(String jsonString)</code>.
 	 * 
 	 * @param fileRequest
-	 * @return
+	 * @return Request
 	 * @throws JSONStructureException
 	 */
 	public static Request load(File fileRequest) throws JSONStructureException {
@@ -812,7 +812,7 @@ public class JSONRequest {
 	 * Read characters from the given <code>InputStream</code> and parse them into an XACML {@link com.att.research.xacml.api.Request} object.
 	 * 
 	 * @param is
-	 * @return
+	 * @return Request
 	 * @throws JSONStructureException
 	 */
 	public static Request load(InputStream is) throws JSONStructureException {
@@ -1092,7 +1092,7 @@ public class JSONRequest {
 	 * This is used only for debugging.
 	 * 
 	 * @param request
-	 * @return
+	 * @return String JSON format
 	 * @throws Exception 
 	 */
 	public static String toString(Request request) throws Exception {
@@ -1103,9 +1103,9 @@ public class JSONRequest {
 	 * Convert the {@link com.att.research.xacml.api.Response} into an JSON string, pretty-printing is optional.
 	 * This is used only for debugging.
 	 * 
-	 * @param response
+	 * @param request
 	 * @param prettyPrint
-	 * @return
+	 * @return String JSON
 	 * @throws Exception 
 	 */
 	public static String toString(Request request, boolean prettyPrint) throws Exception {
@@ -1151,7 +1151,7 @@ public class JSONRequest {
 	 * @param outputStream
 	 * @param prettyPrint
 	 * @throws IOException
-	 * #throws JSONStructureException
+	 * @throws JSONStructureException
 	 */
 	public static void convert(Request request, OutputStream outputStream, boolean prettyPrint) throws IOException, JSONStructureException {
 		

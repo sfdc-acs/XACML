@@ -25,7 +25,6 @@ import com.att.research.xacml.util.FactoryException;
  * @author car
  * @version $Revision: 1.2 $
  * 
- * @param <T> the java class of the value type for the assignment
  */
 public class JaxpAttributeAssignment extends StdMutableAttributeAssignment {
 

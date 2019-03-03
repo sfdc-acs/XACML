@@ -62,6 +62,7 @@ public class DOMUtil {
 	 *  
 	 * @param node the <code>Node</code> to convert
 	 * @return the new <code>Node</code>
+	 * @throws DOMStructureException 
 	 */
 	public static Node getDirectDocumentChild(Node node) throws DOMStructureException {
 		Node nodeResult	= null;
@@ -218,7 +219,9 @@ public class DOMUtil {
 	 * @param node
 	 * @param nameSpace
 	 * @param localName
-	 * @return
+	 * @param bRequired 
+	 * @return Node
+	 * @throws DOMStructureException 
 	 */
 	public static Node getAttribute(Node node, String nameSpace, String localName, boolean bRequired) throws DOMStructureException {
 		Node nodeAttribute	= node.getAttributes().getNamedItemNS(nameSpace, localName);
@@ -238,7 +241,9 @@ public class DOMUtil {
 	 * 
 	 * @param node
 	 * @param localName
-	 * @return
+	 * @param bRequired 
+	 * @return Node
+	 * @throws DOMStructureException 
 	 */
 	public static Node getAttribute(Node node, String localName, boolean bRequired) throws DOMStructureException {
 		Node nodeAttribute	= node.getAttributes().getNamedItem(localName);
@@ -516,7 +521,7 @@ public class DOMUtil {
 	 * 
 	 * @param element
 	 * @param localName
-	 * @return
+	 * @return NodeList
 	 */
 	public static NodeList getNodes(Element element, String localName) {
 		return getNodes(element, NAMESPACES, localName);

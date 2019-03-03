@@ -36,8 +36,8 @@ public class StdMutableAdvice implements Advice {
 	}
 	
 	/**
-	 * Creates a new <code>StdMutableAdvice</code> with the given {@link com.att.research.xacml.Identifier} as its unique identifier, and
-	 * the given <code>Collection</code> of {@link com.att.research.xacml.AttributeAssignment}s.  A copy of the <code>AttributeAssignment</code>s
+	 * Creates a new <code>StdMutableAdvice</code> with the given {@link com.att.research.xacml.api.Identifier} as its unique identifier, and
+	 * the given <code>Collection</code> of {@link com.att.research.xacml.api.AttributeAssignment}s.  A copy of the <code>AttributeAssignment</code>s
 	 * is made.
 	 * 
 	 * @param idIn the <code>Identifier</code> that uniquely identifies this <code>StdMutableAdvice</code>.  Should not be null.
@@ -46,20 +46,20 @@ public class StdMutableAdvice implements Advice {
 	public StdMutableAdvice(Identifier idIn, Collection<AttributeAssignment> attributeAssignmentsIn) {
 		this();
 		this.id	= idIn;
-		this.attributeAssignments = new ArrayList<AttributeAssignment>();
+		this.attributeAssignments = new ArrayList<>();
 		if (attributeAssignmentsIn != null) {
 			this.addAttributeAssignments(attributeAssignmentsIn);
 		}
 	}
 	
 	/**
-	 * Creates a new <code>StdMutableAdvice</code> with the given {@link com.att.research.xacml.Identifier} as its unique identifier.
+	 * Creates a new <code>StdMutableAdvice</code> with the given {@link com.att.research.xacml.api.Identifier} as its unique identifier.
 	 * 
 	 * @param idIn the <code>Identifier</code> that uniquely identifies this <code>StdMutableAdvice</code>.  May be null.
 	 */
 	public StdMutableAdvice(Identifier idIn) {
 		this(idIn, null);
-		this.attributeAssignments = new ArrayList<AttributeAssignment>();
+		this.attributeAssignments = new ArrayList<>();
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public class StdMutableAdvice implements Advice {
 	 */
 	public void addAttributeAssignment(AttributeAssignment attributeAssignment) {
 		if (this.attributeAssignments == EMPTY_ATTRIBUTE_ASSIGNMENTS) {
-			this.attributeAssignments	= new ArrayList<AttributeAssignment>();
+			this.attributeAssignments	= new ArrayList<>();
 		}
 		this.attributeAssignments.add(attributeAssignment);
 	}
@@ -111,7 +111,7 @@ public class StdMutableAdvice implements Advice {
 	public void addAttributeAssignments(Collection<AttributeAssignment> listAttributeAssignments) {
 		if (listAttributeAssignments != null && listAttributeAssignments.size() > 0) {
 			if (this.attributeAssignments == EMPTY_ATTRIBUTE_ASSIGNMENTS) {
-				this.attributeAssignments	= new ArrayList<AttributeAssignment>();
+				this.attributeAssignments	= new ArrayList<>();
 			}
 			this.attributeAssignments.addAll(listAttributeAssignments);
 		}

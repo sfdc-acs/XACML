@@ -116,7 +116,7 @@ public class IPv4Address extends IPAddress {
 	 * So we take a guess here.
 	 * 
 	 * @param ipv4AddressString
-	 * @return
+	 * @return True if ipv4 address string
 	 */
 	public static boolean isIPv4Address(String ipv4AddressString) {
 		if (ipv4AddressString == null || ipv4AddressString.length() == 0) {

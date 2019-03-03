@@ -22,8 +22,9 @@ public abstract class IPAddress implements SemanticString {
 	 * The string may represent either an <code>IPv4Address</code> or an <code>IPv6Address</code>,
 	 * and may include a mask (for IPv4) or a prefix (for IPv6) and may also include a <code>PortRange</code>
 	 * 
-	 * @param addressString
-	 * @return
+	 * @param ipAddressString
+	 * @return IPAddress
+	 * @throws ParseException 
 	 */
 	public static IPAddress newInstance(String ipAddressString) throws ParseException {
 		if (ipAddressString == null || ipAddressString.length() == 0) {

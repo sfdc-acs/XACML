@@ -39,6 +39,7 @@ public abstract class PEPEngineFactory {
 	 * various places to determine the class to instantiate and return.
 	 * 
 	 * @return an instance of an object that extends <code>PEPEngineFactory</code> to use in creating <code>PEPEngine</code> objects.
+	 * @throws FactoryException Factory Exception
 	 */
 	public static PEPEngineFactory newInstance() throws FactoryException {
 		return FactoryFinder.find(FACTORYID, DEFAULT_FACTORY_CLASSNAME, PEPEngineFactory.class);
@@ -48,8 +49,10 @@ public abstract class PEPEngineFactory {
 	/**
 	 * Creates a new <code>PEPEngineFactory</code> instance by examining initialization resources from
 	 * various places to determine the class to instantiate and return.
+	 * @param properties 
 	 * 
 	 * @return an instance of an object that extends <code>PEPEngineFactory</code> to use in creating <code>PEPEngine</code> objects.
+	 * @throws FactoryException Factory Exception
 	 */
 	public static PEPEngineFactory newInstance(Properties properties) throws FactoryException {
 		return FactoryFinder.find(FACTORYID, DEFAULT_FACTORY_CLASSNAME, PEPEngineFactory.class, properties);
@@ -62,6 +65,7 @@ public abstract class PEPEngineFactory {
 	 * @param factoryClassName the <code>String</code> name of the factory class to instantiate
 	 * @param classLoader the <code>ClassLoader</code> to use to load the factory class
 	 * @return an instance of an object that extends <code>PEPEngineFactory</code> to use in creating <code>PEPEngine</code> objects.
+	 * @throws FactoryException Factory Exception
 	 */
 	public static PEPEngineFactory newInstance(String factoryClassName, ClassLoader classLoader) throws FactoryException {
 		return FactoryFinder.newInstance(factoryClassName, PEPEngineFactory.class, classLoader, false);
@@ -72,6 +76,7 @@ public abstract class PEPEngineFactory {
 	 * 
 	 * @param factoryClassName the <code>String</code> name of the factory class to instantiate
 	 * @return an instance of an object that extends <code>PEPEngineFactory</code> to use in creating <code>PEPEngine</code> objects.
+	 * @throws FactoryException Factory Exception
 	 */
 	public static PEPEngineFactory newInstance(String factoryClassName) throws FactoryException {
 		return FactoryFinder.newInstance(factoryClassName, PEPEngineFactory.class, null, true);
@@ -81,13 +86,16 @@ public abstract class PEPEngineFactory {
 	 * Creates a new <code>PEPEngine</code> based on the configured <code>PEPEngineFactory</code>.
 	 * 
 	 * @return a new <code>PEPEngine</code>
+	 * @throws PEPException PEP Exception
 	 */
 	public abstract PEPEngine newEngine() throws PEPException;
 	
 	/**
 	 * Creates a new <code>PEPEngine</code> based on the configured <code>PEPEngineFactory</code>.
+	 * @param properties Properties object
 	 * 
 	 * @return a new <code>PEPEngine</code>
+	 * @throws PEPException PEP Exception
 	 */
 	public abstract PEPEngine newEngine(Properties properties) throws PEPException;
 }

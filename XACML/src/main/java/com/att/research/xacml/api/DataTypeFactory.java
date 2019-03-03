@@ -77,6 +77,7 @@ public abstract class DataTypeFactory {
 	 * 
 	 * @param className the <code>String</code> class name of the <code>DataTypeFactory</code> to create
 	 * @return the <code>DataTypeFactory</code> for the given class name.
+	 * @throws FactoryException Factory Exception
 	 */
 	public static DataTypeFactory newInstance(String className) throws FactoryException {
 		return FactoryFinder.newInstance(className, DataTypeFactory.class, null, true);
@@ -88,6 +89,7 @@ public abstract class DataTypeFactory {
 	 * @param className the <code>String</code> class name of the <code>DataTypeFactory</code> to create
 	 * @param classLoader the <code>ClassLoader</code> to use to load the class with the given class name
 	 * @return the <code>DataTypeFactory</code> for the given class name
+	 * @throws FactoryException Factory Exception
 	 */
 	public static DataTypeFactory newInstance(String className, ClassLoader classLoader) throws FactoryException {
 		return FactoryFinder.newInstance(className, DataTypeFactory.class, classLoader, false);

@@ -27,7 +27,7 @@ import com.att.research.xacml.std.pip.StdPIPResponse;
 import com.att.research.xacml.std.pip.StdSinglePIPResponse;
 
 /**
- * EnvironmentEngine implements the {@link com.att.research.xacml.api.pip.PipEngine} interface to provide values
+ * EnvironmentEngine implements the {@link com.att.research.xacml.api.pip.PIPEngine} interface to provide values
  * for standard environment attributes.
  * 
  * @author car

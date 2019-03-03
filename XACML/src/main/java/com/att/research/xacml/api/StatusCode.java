@@ -13,7 +13,7 @@ package com.att.research.xacml.api;
  */
 public interface StatusCode {
 	/**
-	 * Retrieves the major status {@link com.att.research.xacmo.common.Identifier} for this <code>StatusCode</code>.
+	 * Retrieves the major status {@link com.att.research.xacml.api.Identifier} for this <code>StatusCode</code>.
 	 * 
 	 * @return the major status <code>Identifier</code> for this <code>StatusCode</code>
 	 */

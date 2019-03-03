@@ -27,7 +27,7 @@ public abstract class ExtendedNamespaceContext implements NamespaceContext {
 	 * Get an Iterator that returns all prefixes in use in the Namespace, including the default if defined.
 	 * The caller should use the returned values to call <code>getNamespaceURI(valueFromIterator)</code> to get the Namespace URIs associated with the prefix.
 	 * 
-	 * @return
+	 * @return Iterator
 	 */
 	public abstract Iterator<String> getAllPrefixes();
 	

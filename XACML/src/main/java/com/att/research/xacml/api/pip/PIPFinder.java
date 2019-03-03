@@ -22,8 +22,8 @@ public interface PIPFinder {
 	 * related <code>Attribute</code>s at once.
 	 * 
 	 * @param pipRequest the <code>PIPRequest</code> defining which <code>Attribute</code>s should be retrieved
-	 * @param excude the (optional) <code>PIPEngine</code> to exclude from searches for the given <code>PIPRequest</code>
-	 * @return a {@link com.att.research.xacml.pip.PIPResponse} with the results of the request
+	 * @param exclude the (optional) <code>PIPEngine</code> to exclude from searches for the given <code>PIPRequest</code>
+	 * @return a {@link com.att.research.xacml.api.pip.PIPResponse} with the results of the request
 	 * @throws PIPException if there is an error retrieving the <code>Attribute</code>s.
 	 */
 	public PIPResponse getAttributes(PIPRequest pipRequest, PIPEngine exclude) throws PIPException;
@@ -34,8 +34,8 @@ public interface PIPFinder {
 	 * with {@link com.att.research.xacml.api.AttributeValue}s whose data type matches the request.
 	 * 
 	 * @param pipRequest the <code>PIPRequest</code> defining which <code>Attribute</code>s should be retrieved
-	 * @param excude the (optional) <code>PIPEngine</code> to exclude from searches for the given <code>PIPRequest</code>
-	 * @return a {@link com.att.research.xacml.pip.PIPResponse} with the results of the request
+	 * @param exclude the (optional) <code>PIPEngine</code> to exclude from searches for the given <code>PIPRequest</code>
+	 * @return a {@link com.att.research.xacml.api.pip.PIPResponse} with the results of the request
 	 * @throws PIPException if there is an error retrieving the <code>Attribute</code>s.
 	 */
 	public PIPResponse getMatchingAttributes(PIPRequest pipRequest, PIPEngine exclude) throws PIPException;
@@ -48,7 +48,7 @@ public interface PIPFinder {
 	 * @param pipRequest
 	 * @param exclude
 	 * @param pipFinderParent
-	 * @return
+	 * @return a {@link com.att.research.xacml.api.pip.PIPResponse} with the results of the request
 	 * @throws PIPException
 	 */
 	public PIPResponse getAttributes(PIPRequest pipRequest, PIPEngine exclude, PIPFinder pipFinderParent) throws PIPException;
@@ -61,7 +61,7 @@ public interface PIPFinder {
 	 * @param pipRequest
 	 * @param exclude
 	 * @param pipFinderParent
-	 * @return
+	 * @return a {@link com.att.research.xacml.api.pip.PIPResponse} with the results of the request
 	 * @throws PIPException
 	 */
 	public PIPResponse getMatchingAttributes(PIPRequest pipRequest, PIPEngine exclude, PIPFinder pipFinderParent) throws PIPException;

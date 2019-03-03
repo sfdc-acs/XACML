@@ -37,8 +37,9 @@ public class XACMLPolicyWriter {
 	/**
 	 * Helper static class that does the work to write a policy set to a file on disk.
 	 * 
-	 * @author pameladragosh
-	 *
+	 * @param filename
+	 * @param policySet
+	 * @return Path to the file
 	 */
 	public static Path writePolicyFile(Path filename, PolicySetType policySet) {
 		JAXBElement<PolicySetType> policySetElement = new ObjectFactory().createPolicySet(policySet);		
@@ -64,8 +65,8 @@ public class XACMLPolicyWriter {
 	/**
 	 * Helper static class that does the work to write a policy set to an output stream.
 	 * 
-	 * @author pameladragosh
-	 *
+	 * @param os
+	 * @param policySet
 	 */
 	public static void writePolicyFile(OutputStream os, PolicySetType policySet) {
 		JAXBElement<PolicySetType> policySetElement = new ObjectFactory().createPolicySet(policySet);
@@ -82,8 +83,9 @@ public class XACMLPolicyWriter {
 	/**
 	 * Helper static class that does the work to write a policy to a file on disk.
 	 * 
-	 * @author pameladragosh
-	 *
+	 * @param filename
+	 * @param policy
+	 * @return Path to file
 	 */
 	public static Path writePolicyFile(Path filename, PolicyType policy) {
 		JAXBElement<PolicyType> policyElement = new ObjectFactory().createPolicy(policy);		
@@ -108,8 +110,8 @@ public class XACMLPolicyWriter {
 	/**
 	 * Helper static class that does the work to write a policy set to an output stream.
 	 * 
-	 * @author pameladragosh
-	 *
+	 * @param os
+	 * @param policy
 	 */
 	public static void writePolicyFile(OutputStream os, PolicyType policy) {
 		JAXBElement<PolicyType> policySetElement = new ObjectFactory().createPolicy(policy);		

@@ -42,8 +42,10 @@ public abstract class PAPEngineFactory {
 	 * Creates a new <code>PAPEngineFactory</code> instance by examining initialization resources from
 	 * various places to determine the class to instantiate and return.
 	 * 
+	 * @param properties Properties object
+	 * 
 	 * @return an instance of an object that extends <code>PAPEngineFactory</code> to use in creating <code>PAPEngine</code> objects.
-	 * @throws FactoryException
+	 * @throws FactoryException FactoryException
 	 */
 	public static PAPEngineFactory newInstance(Properties properties) throws FactoryException {
 		return FactoryFinder.find(FACTORYID, DEFAULT_FACTORY_CLASSNAME, PAPEngineFactory.class, properties);
@@ -56,6 +58,7 @@ public abstract class PAPEngineFactory {
 	 * @param factoryClassName the <code>String</code> name of the factory class to instantiate
 	 * @param classLoader the <code>ClassLoader</code> to use to load the factory class
 	 * @return an instance of an object that extends <code>PAPEngineFactory</code> to use in creating <code>PAPEngine</code> objects.
+	 * @throws FactoryException FactoryException
 	 */
 	public static PAPEngineFactory newInstance(String factoryClassName, ClassLoader classLoader) throws FactoryException {
 		return FactoryFinder.newInstance(factoryClassName, PAPEngineFactory.class, classLoader, false);
@@ -66,6 +69,7 @@ public abstract class PAPEngineFactory {
 	 * 
 	 * @param factoryClassName the <code>String</code> name of the factory class to instantiate
 	 * @return an instance of an object that extends <code>PAPEngineFactory</code> to use in creating <code>PAPEngine</code> objects.
+	 * @throws FactoryException FactoryException
 	 */
 	public static PAPEngineFactory newInstance(String factoryClassName) throws FactoryException {
 		return FactoryFinder.newInstance(factoryClassName, PAPEngineFactory.class, null, true);
@@ -75,6 +79,7 @@ public abstract class PAPEngineFactory {
 	 * Creates a new <code>PAPEngine</code> based on the configured <code>PAPEngineFactory</code>.
 	 * 
 	 * @return a new <code>PAPEngine</code>
+	 * @throws FactoryException FactoryException
 	 * @throws PAPException 
 	 */
 	public abstract PAPEngine newEngine() throws FactoryException, PAPException;
@@ -82,7 +87,10 @@ public abstract class PAPEngineFactory {
 	/**
 	 * Creates a new <code>PAPEngine</code> based on the configured <code>PAPEngineFactory</code>.
 	 * 
+	 * @param properties Properties object
+	 * 
 	 * @return a new <code>PAPEngine</code>
+	 * @throws FactoryException FactoryException
 	 * @throws PAPException 
 	 */
 	public abstract PAPEngine newEngine(Properties properties) throws FactoryException, PAPException;

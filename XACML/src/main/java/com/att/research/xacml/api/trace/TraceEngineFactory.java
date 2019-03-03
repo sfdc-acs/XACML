@@ -47,6 +47,8 @@ public abstract class TraceEngineFactory {
 	 * Gets an instance of the <code>TraceEngineFactory</code> class using standard factory lookup methods defined by
 	 * the {@link com.att.research.xacml.util.FactoryFinder} class.
 	 * 
+	 * @param properties 
+	 * 
 	 * @return an instance of the <code>TraceEngineFactory</code> class.
 	 * @throws FactoryException if there is an error finding a <code>TraceEngineFactory</code>
 	 */
@@ -87,6 +89,8 @@ public abstract class TraceEngineFactory {
 	
 	/**
 	 * Gets an instance of the {@link com.att.research.xacml.api.trace.TraceEngine} interface to use for posting {@link com.att.research.xacml.api.trace.TraceEvent}s.
+	 * 
+	 * @param properties 
 	 * 
 	 * @return an instance of the <code>TraceEngine</code> interface
 	 */

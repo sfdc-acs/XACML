@@ -33,8 +33,7 @@ public class ISO8601Time implements IDateTime<ISO8601Time>, Comparable<ISO8601Ti
 	/**
 	 * Creates a <code>ISO8601Time</code> object for the given instant of time in the given <code>ISO8601TimeZone</code>.
 	 * 
-	 * @param tzOffsetHours the signed offset in hours for the timezone of this time
-	 * @param tzOffsetMinutes the unsigned offset in minutes for the timezone of this time
+	 * @param timeZoneIn 
 	 * @param hourIn the hour
 	 * @param minuteIn the minute
 	 * @param secondIn the second
@@ -150,7 +149,7 @@ public class ISO8601Time implements IDateTime<ISO8601Time>, Comparable<ISO8601Ti
 	
 	/**
 	 * Creates a new <code>Time</code> object by parsing the <code>String</code> supplied which must conform to the
-	 * ISO8601 standard for time formats {@link http://www.w3.org/TR/NOTE-datetime}
+	 * ISO8601 standard for time formats {@link "http://www.w3.org/TR/NOTE-datetime"}
 	 * 
 	 * @param timeString the timeString to parse
 	 * @return a new <code>Time</code> representing the given <code>String</code>

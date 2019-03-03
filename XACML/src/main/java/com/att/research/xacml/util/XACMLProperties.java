@@ -121,9 +121,9 @@ public class XACMLProperties {
 	 * The caller determines whether it should include them or not and sets checkURLs appropriately.
 	 * If checkURLs is false and there are ".url" entries, they are put into the result set anyway.
 	 * 
-	 * @param current
-	 * @param checkURLs
-	 * @return
+	 * @param current properties object
+	 * @param checkURLs True to check .url entries
+	 * @return Properties object
 	 * @throws Exception
 	 */
 	public static Properties getPolicyProperties(Properties current, boolean checkURLs) throws Exception {
@@ -184,7 +184,7 @@ public class XACMLProperties {
 	/**
 	 * 	Used only when we want just xacml.rootPolicies and xacml.referencedPolicies without any ".url" entries.
 	 * 
-	 * @return
+	 * @return Properties object
 	 * @throws Exception
 	 */
 	public static Properties getPolicyProperties() throws Exception {

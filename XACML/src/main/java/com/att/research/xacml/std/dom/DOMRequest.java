@@ -50,7 +50,7 @@ public class DOMRequest {
 	 * Parse and XML string into a {@link com.att.research.xacml.api.Request} object.
 	 * 
 	 * @param xmlString
-	 * @return
+	 * @return Request
 	 * @throws DOMStructureException
 	 */
 	public static Request load(String xmlString) throws DOMStructureException {
@@ -79,7 +79,7 @@ public class DOMRequest {
 	 * In normal operation a Request arrives through the RESTful interface and is processed using <code>load(String xmlString)</code>.
 	 * 
 	 * @param fileRequest
-	 * @return
+	 * @return Request
 	 * @throws DOMStructureException
 	 */
 	public static Request load(File fileRequest) throws DOMStructureException {
@@ -105,7 +105,7 @@ public class DOMRequest {
 	 * Read characters from the given <code>InputStream</code> and parse them into an XACML {@link com.att.research.xacml.api.Request} object.
 	 * 
 	 * @param is
-	 * @return
+	 * @return Request
 	 * @throws DOMStructureException
 	 */
 	public static Request load(InputStream is) throws DOMStructureException {
@@ -239,7 +239,7 @@ public class DOMRequest {
 	 * Convert XACML2 into XACML3.
 	 * 
 	 * @param nodeRequest
-	 * @return
+	 * @return True if repair succeeded
 	 * @throws DOMStructureException
 	 */
 	public static boolean repair(Node nodeRequest) throws DOMStructureException {

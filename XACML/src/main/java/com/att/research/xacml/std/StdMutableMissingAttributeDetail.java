@@ -184,7 +184,7 @@ public class StdMutableMissingAttributeDetail implements MissingAttributeDetail 
 	}
 	
 	/**
-	 * Sets the {@link com.att.research.xacml.api.AtributeValue}s in this <code>StdMutableMissingAttributeDetail</code> to a copy of the given
+	 * Sets the {@link com.att.research.xacml.api.AttributeValue}s in this <code>StdMutableMissingAttributeDetail</code> to a copy of the given
 	 * <code>Collection</code>.  If the <code>Collection</code> is null or empty, the list of <code>AttributeValue</code>s in is set to the empty list.
 	 * 
 	 * @param attributeValuesIn the <code>Collection</code> of <code>AttributeValue</code>s to set in this <code>StdMutableMissingAttributeDetail</code>.

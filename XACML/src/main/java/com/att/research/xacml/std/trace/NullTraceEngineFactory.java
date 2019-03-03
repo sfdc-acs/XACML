@@ -26,6 +26,7 @@ public class NullTraceEngineFactory extends TraceEngineFactory {
 
 	/**
 	 * Creates a new <code>NullTraceEngineFactory</code>
+	 * @param properties 
 	 */
 	public NullTraceEngineFactory(Properties properties) {
 	}

@@ -26,6 +26,7 @@ public class LoggingTraceEngineFactory extends TraceEngineFactory {
 
 	/**
 	 * Creates a new <code>LoggingTraceEngineFactory</code>
+	 * @param properties 
 	 */
 	public LoggingTraceEngineFactory(Properties properties) {
 	}

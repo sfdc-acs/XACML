@@ -14,7 +14,7 @@ import java.util.Date;
  * @author Christopher A. Rath
  * @version $Revision$
  * 
- * @param T the java <code>Class</code> of the traced object wrapped by the <code>TraceEvent</code>
+ * @param <T> the java <code>Class</code> of the traced object wrapped by the <code>TraceEvent</code>
  */
 public interface TraceEvent<T> {
 	/**

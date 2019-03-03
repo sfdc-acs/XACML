@@ -52,11 +52,11 @@ public class StdPDPGroup extends StdPDPItemSetChangeNotifier implements PDPGroup
 	
 	private StdPDPGroupStatus status = new StdPDPGroupStatus(Status.UNKNOWN);
 	
-	private Set<PDP>	pdps = new HashSet<PDP>();
+	private Set<PDP>	pdps = new HashSet<>();
 	
-	private Set<PDPPolicy> policies = new HashSet<PDPPolicy>();
+	private Set<PDPPolicy> policies = new HashSet<>();
 	
-	private Set<PDPPIPConfig> pipConfigs = new HashSet<PDPPIPConfig>();
+	private Set<PDPPIPConfig> pipConfigs = new HashSet<>();
 	
 	@JsonIgnore
 	private  Path directory;
@@ -465,10 +465,7 @@ public class StdPDPGroup extends StdPDPItemSetChangeNotifier implements PDPGroup
 	 * that must be done all at once, so we just copy the file in preparation for a later "update whole group" operation.
 	 * 
 	 * @param id
-	 * @param name
-	 * @param isRoot
-	 * @param policy
-	 * @return
+	 * @param policy InputStream of Policy
 	 * @throws PAPException
 	 */
 	public void copyPolicyToFile(String id,  InputStream policy) throws PAPException {

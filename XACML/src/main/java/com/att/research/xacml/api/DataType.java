@@ -27,7 +27,7 @@ public interface DataType<T> {
 	 * 
 	 * @param source the source object to be converted
 	 * @return a <code>T</code> object
-	 * @throws UnsupportedOperationException if the given source object cannot be converted to a <code>T</code>
+	 * @throws DataTypeException if the given source object cannot be converted to a <code>T</code>
 	 */
 	public T convert(Object source) throws DataTypeException;
 	
@@ -46,7 +46,7 @@ public interface DataType<T> {
 	 * 
 	 * @param source the source object to be converted
 	 * @return a new {@link com.att.research.xacml.api.AttributeValue}
-	 * @throws UnsupportedOperationException if the given source object cannot be converted to a <code>T</code>
+	 * @throws DataTypeException if the given source object cannot be converted to a <code>T</code>
 	 */
 	public AttributeValue<T> createAttributeValue(Object source) throws DataTypeException;
 	
@@ -57,7 +57,7 @@ public interface DataType<T> {
 	 * @param source the source object to be converted
 	 * @param xpathCategory the <code>Identifier</code> for the XPathCategory of the new <code>AttributeValue</code>
 	 * @return a new {@link com.att.research.xacml.api.AttributeValue}
-	 * @throws UnsupportedOperationException if the given source object cannot be converted to a <code>T</code>
+	 * @throws DataTypeException if the given source object cannot be converted to a <code>T</code>
 	 */
 	public AttributeValue<T> createAttributeValue(Object source, Identifier xpathCategory) throws DataTypeException;
 	
@@ -67,7 +67,7 @@ public interface DataType<T> {
 	 * 
 	 * @param attributeValueFrom the <code>AttributeValue</code> to convert
 	 * @return an <code>AttributeValue</code> whose value is represented by an instance of class <code>T</code> if possible.
-	 * @throws UnsupportedOperationException
+	 * @throws DataTypeException
 	 */
 	public AttributeValue<T> convertAttributeValue(AttributeValue<?> attributeValueFrom) throws DataTypeException;	
 }

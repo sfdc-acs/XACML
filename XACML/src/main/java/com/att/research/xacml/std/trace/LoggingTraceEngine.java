@@ -44,6 +44,8 @@ public class LoggingTraceEngine implements TraceEngine {
 	/**
 	 * Gets the single instance of the <code>LoggingTraceEngine</code>.
 	 * 
+	 * @param properties 
+	 * 
 	 * @return the single instance of the <code>LoggingTraceEngine</code>.
 	 */
 	public static LoggingTraceEngine newInstance(Properties properties) {

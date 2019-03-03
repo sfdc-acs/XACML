@@ -71,7 +71,7 @@ public class StdMissingAttributeDetail extends Wrapper<MissingAttributeDetail> i
 	}
 	
 	/**
-	 * Creates a new <code>StdMissingAttributeDetail</code> that is a copy of the given {@link com.att.research.xacml.api.MissingAttributeDetail</code>.
+	 * Creates a new <code>StdMissingAttributeDetail</code> that is a copy of the given {@link com.att.research.xacml.api.MissingAttributeDetail}</code>.
 	 * 
 	 * @param missingAttributeDetail the <code>MissingAttributeDetail</code> to copy
 	 * @return a new <code>StdMissingAttributeDetail</code> that is a copy of the given <code>MissingAttributeDetail</code>.

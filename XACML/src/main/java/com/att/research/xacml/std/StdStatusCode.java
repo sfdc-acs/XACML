@@ -11,7 +11,7 @@ import com.att.research.xacml.api.XACML1;
 
 /**
  * Immutable implementation of the {@link com.att.research.xacml.api.StatusCode} interface to store the major
- * and minor {@link com.att.research.xacml.common.StatusCodeValues} objects associated with a XACML StatusCode element.
+ * and minor Status Code Values associated with a XACML StatusCode element.
  * 
  * @author car
  * @version $Revision: 1.1 $
@@ -40,7 +40,7 @@ public class StdStatusCode implements StatusCode {
 	/**
 	 * Creates a new <code>StdStatusCode</code> with the given {@link com.att.research.xacml.api.Identifier} representing the XACML StatusCode value
 	 * 
-	 * @param statusCodeValueIn the <code>Identifier</code> representing the XACML StatusCode value
+	 * @param majorStatusCodeValueIn the <code>Identifier</code> representing the XACML StatusCode value
 	 */
 	public StdStatusCode(Identifier majorStatusCodeValueIn) {
 		this(majorStatusCodeValueIn, null);

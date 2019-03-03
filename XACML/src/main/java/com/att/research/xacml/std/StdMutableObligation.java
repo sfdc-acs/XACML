@@ -46,7 +46,7 @@ public class StdMutableObligation implements Obligation {
 	public StdMutableObligation(Identifier idIn, Collection<AttributeAssignment> attributeAssignmentsIn) {
 		this.id	= idIn;
 		if (attributeAssignmentsIn != null) {
-			this.attributeAssignments	= new ArrayList<AttributeAssignment>();
+			this.attributeAssignments	= new ArrayList<>();
 			this.attributeAssignments.addAll(attributeAssignmentsIn);
 		} else {
 			this.attributeAssignments	= EMPTY_LIST;
@@ -84,7 +84,7 @@ public class StdMutableObligation implements Obligation {
 	}
 	
 	/**
-	 * Adds an {@link com.att.research.xacmo.api.AttributeAssignment} to this <code>StdMutableObligation</code>.
+	 * Adds an {@link com.att.research.xacml.api.AttributeAssignment} to this <code>StdMutableObligation</code>.
 	 * 
 	 * @param attributeAssignment the <code>AttributeAssignment</code> to add to this <code>StdMutableObligation</code>.
 	 */

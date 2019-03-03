@@ -49,7 +49,7 @@ public class IPv6Address extends IPAddress {
 	 * Is this address really an IPv4 address in IPv6 format?
 	 * 
 	 * @param addressBytes
-	 * @return
+	 * @return True if isIP v4 Address
 	 */
 	public static boolean isIPv4Address(short[] addressBytes) {
 		if (addressBytes == null || addressBytes.length < 8) {
@@ -69,7 +69,7 @@ public class IPv6Address extends IPAddress {
 	 * This accounts for the case of an IPv4-form address being represented in IPv6 format.
 	 * 
 	 * @param addressParts
-	 * @return
+	 * @return String formatted address
 	 */
 	public static String formatAddress(short[] addressParts) {
 		StringBuilder	stringBuilder	= new StringBuilder();
@@ -142,7 +142,7 @@ public class IPv6Address extends IPAddress {
 	 * where the 32 bits of the IPv4 address are encoded into the lower two shorts of the IPv6 address
 	 * 
 	 * @param ipv6Address
-	 * @return
+	 * @return array of 8 short representing 16-bit components
 	 * @throws ParseException
 	 */
 	protected static short[] getAddress(String ipv6Address) throws ParseException {
@@ -239,7 +239,7 @@ public class IPv6Address extends IPAddress {
 	 * To avoid problems in the future it seems safest to implement both of these formats.
 	 * 
 	 * @param ipv6AddressString
-	 * @return
+	 * @return IPv4Address
 	 * @throws ParseException
 	 */
 	public static IPv6Address newIPv6Instance(String ipv6AddressString) throws ParseException {
@@ -347,7 +347,7 @@ public class IPv6Address extends IPAddress {
 	 * So we take a guess here.
 	 * 
 	 * @param ipv4AddressString
-	 * @return
+	 * @return True if is IP v6 Address
 	 */
 	public static boolean isIPv6Address(String ipv4AddressString) {
 		if (ipv4AddressString == null || ipv4AddressString.length() == 0) {

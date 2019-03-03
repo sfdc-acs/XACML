@@ -182,6 +182,7 @@ public class XACMLPolicyScanner {
 		 * When an obligation has been encountered.
 		 * 
 		 * @param parent - The parent PolicySet/Policy/Rule for the obligation.
+		 * @param expression expression for obligation
 		 * @param obligation - The obligation.
 		 * @return CallbackResult - CONTINUE or STOP scanning the policy.
 		 */
@@ -192,6 +193,7 @@ public class XACMLPolicyScanner {
 		 * When an advice has been encountered.
 		 * 
 		 * @param parent - The parent PolicySet/Policy/Rule for the obligation.
+		 * @param expression expression for the advice
 		 * @param advice -  The advice.
 		 * @return CallbackResult - CONTINUE or STOP scanning the policy.
 		 */
@@ -370,7 +372,7 @@ public class XACMLPolicyScanner {
 	 * Saves the given callback object then calls the scan() method.
 	 * 
 	 * @param cb
-	 * @return
+	 * @return the object
 	 */
 	public Object scan(Callback cb) {
 		this.callback = cb;
@@ -415,7 +417,7 @@ public class XACMLPolicyScanner {
 	/**
 	 * @param parent
 	 * @param policySet
-	 * @return
+	 * @return CallbackResult object
 	 */
 	protected CallbackResult scanPolicySet(PolicySetType parent, PolicySetType policySet) {
 		if (logger.isTraceEnabled()) {
@@ -674,7 +676,7 @@ public class XACMLPolicyScanner {
 			return CallbackResult.CONTINUE;
 		}
 		List<AdviceExpressionType> expressions = adviceExpressionstype.getAdviceExpression();
-		if (expressions == null || expressions.size() == 0) {
+		if (expressions == null || expressions.isEmpty()) {
 			return CallbackResult.CONTINUE;
 		}
 		for (AdviceExpressionType expression : expressions) {
@@ -733,7 +735,7 @@ public class XACMLPolicyScanner {
 	 * 
 	 * @param rule
 	 * @param condition
-	 * @return
+	 * @return CallbackResult object
 	 */
 	protected CallbackResult scanConditions(RuleType rule, ConditionType condition) {
 		if (condition != null) {
@@ -819,7 +821,7 @@ public class XACMLPolicyScanner {
 	/**
 	 * readPolicy - does the work to read in policy data from a file.
 	 * 
-	 * @param policy - The path to the policy file.
+	 * @param is  Input Stream
 	 * @return - The policy data object. This *should* be either a PolicySet or a Policy.
 	 */
 	public static Object readPolicy(InputStream is) {
@@ -904,8 +906,9 @@ public class XACMLPolicyScanner {
 			} else {
 				if (logger.isDebugEnabled()) {
 					logger.debug("No root element contained in policy " + 
-								" Name: " + node.getNodeName() + " type: " + node.getNodeType() + 
-								" Value: " + node.getNodeValue());
+								" Name: " + (node == null ? "null" : node.getNodeName()) + 
+								" type: " + (node == null ? "null" : node.getNodeType()) + 
+								" Value: " + (node == null ? "null" : node.getNodeValue()));
 				}
 			}
 		} catch (Exception e) {
