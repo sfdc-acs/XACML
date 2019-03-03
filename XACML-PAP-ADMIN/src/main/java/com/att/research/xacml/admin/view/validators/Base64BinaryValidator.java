@@ -5,7 +5,6 @@
  */
 package com.att.research.xacml.admin.view.validators;
 
-import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 
 import com.vaadin.data.Validator;
