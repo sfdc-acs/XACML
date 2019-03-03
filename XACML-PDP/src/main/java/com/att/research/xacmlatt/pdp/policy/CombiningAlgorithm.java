@@ -20,7 +20,6 @@ import com.att.research.xacmlatt.pdp.eval.EvaluationResult;
  * @version $Revision: 1.1 $
  *
  * @param <T> the type of object to be combined
- * @param <U> the type of the identifier for <code>T</code>
  */
 public interface CombiningAlgorithm<T extends Evaluatable> {
 	/**

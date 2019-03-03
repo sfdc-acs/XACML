@@ -13,7 +13,7 @@ import com.att.research.xacmlatt.pdp.eval.Evaluatable;
 import com.att.research.xacmlatt.pdp.eval.Matchable;
 
 /**
- * PolicySetChild extends {@link com.att.research.xacmlatt.pdp.PolicyComponent} to represent XACML 3.0 Policies, PolicySets, PolicyReferences,
+ * PolicySetChild extends {@link com.att.research.xacmlatt.pdp.policy.PolicyComponent} to represent XACML 3.0 Policies, PolicySets, PolicyReferences,
  * and PolicySetReferences.
  * 
  * @author car

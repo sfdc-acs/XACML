@@ -20,6 +20,8 @@ import com.att.research.xacmlatt.pdp.eval.MatchResult;
  * 
  * @author car
  * @version $Revision: 1.1 $
+ * 
+ * @param <T> PolicyDef
  */
 public abstract class PolicyIdReferenceBase<T extends PolicyDef> extends PolicySetChild {
 	private IdReferenceMatch	idReferenceMatch;

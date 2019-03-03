@@ -48,7 +48,7 @@ public abstract class EvaluationContextFactory {
 	}
 	
 	/**
-	 * Gets a new {@link com.att.research.xacml.pdp.eval.EvaluationContext} for the given {@link com.att.research.xacml.api.Request}.
+	 * Gets a new {@link com.att.research.xacmlatt.pdp.eval.EvaluationContext} for the given {@link com.att.research.xacml.api.Request}.
 	 * 
 	 * @param request the <code>Request</code> for the new <code>EvaluationContext</code>
 	 * @return a new <code>EvaluationContext</code> for the given <code>Request</code>

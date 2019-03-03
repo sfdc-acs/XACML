@@ -62,6 +62,7 @@ public interface EvaluationContext extends PIPFinder, TraceEngine {
 	 * 
 	 * @param pipRequest the <code>PIPRequest</code> specifying which <code>Attribute</code>s to retrieve
 	 * @return the <code>PIPResponse</code> containing the {@link com.att.research.xacml.api.Status} and <code>Attribute</code>s
+	 * @throws PIPException 
 	 * @throws EvaluationException if there is an error retrieving the <code>Attribute</code>s
 	 */
 	public PIPResponse getAttributes(PIPRequest pipRequest) throws PIPException;

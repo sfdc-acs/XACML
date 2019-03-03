@@ -62,7 +62,7 @@ public class ConvertedArgument<I> {
 	/**
 	 * Get the Status object
 	 * 
-	 * @return
+	 * @return Status object
 	 */
 	public Status getStatus() {
 		return status;
@@ -72,7 +72,7 @@ public class ConvertedArgument<I> {
 	/**
 	 * Convenience method that directly returns the isOk() state from the status object.
 	 * 
-	 * @return
+	 * @return Status isOK state
 	 */
 	public boolean isOk() {
 		return status.isOk();
@@ -82,7 +82,7 @@ public class ConvertedArgument<I> {
 	/**
 	 * Get the value object.  This may be a Bag.
 	 * 
-	 * @return
+	 * @return Value object - possibly a bag
 	 */
 	public I getValue() {
 		return value;
@@ -92,7 +92,7 @@ public class ConvertedArgument<I> {
 	/**
 	 * Get the value as a Bag. (convenience method)
 	 * 
-	 * @return
+	 * @return The value as a bag.
 	 */
 	public Bag getBag() {
 		return (Bag)value;
@@ -104,11 +104,11 @@ public class ConvertedArgument<I> {
 	 * This is a simple convenience method to reduce code bloat.
 	 * 
 	 * @param identifier expected to have '#' in it, and if no '#' should have ":data-type:"
-	 * @return
+	 * @return String Shortened version of DataType Id
 	 */
 	public String getShortDataTypeId(Identifier identifier) {
 		String idString = identifier.stringValue();
-		int index = idString.indexOf("#");
+		int index = idString.indexOf('#');
 		if (index < 0) {
 			index = idString.indexOf(":data-type:");
 			if (index < 0) {
@@ -135,11 +135,9 @@ public class ConvertedArgument<I> {
 	 * Note that the object may be a bag if that is what the caller expected.
 	 * </UL>
 	 * 
-	 * 
-	 * @param listFunctionArguments the <code>List</code> of <code>FunctionArgument</code>s to validate
-	 * @param convertedValues the <code>List</code> of <code>U</code> that the converted value is added to.
-	 * @return a {@link com.att.research.xacml.api.Status} indication with an error if the arguments are not valid,
-	 * 			or an object of the correct DataType containing the value.
+	 * @param functionArgument Given function argument
+	 * @param expectedDataType The expected data type
+	 * @param expectBag Whether to expect a bag
 	 */
 	@SuppressWarnings("unchecked")	// to suppress warning on bag conversion
 	public ConvertedArgument(FunctionArgument functionArgument, DataType<I> expectedDataType, boolean expectBag) {

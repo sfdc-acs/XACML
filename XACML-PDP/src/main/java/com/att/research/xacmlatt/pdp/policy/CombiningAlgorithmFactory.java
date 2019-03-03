@@ -49,6 +49,7 @@ public abstract class CombiningAlgorithmFactory {
 	 * Creates an instance of the <code>CombiningAlgorithmFactory</code> using default configuration information.
 	 * 
 	 * @return the default <code>CombiningAlgorithmFactory</code>
+	 * @throws FactoryException 
 	 */
 	public static CombiningAlgorithmFactory newInstance() throws FactoryException {
 		return FactoryFinder.find(FACTORYID, DEFAULT_FACTORY_CLASSNAME, CombiningAlgorithmFactory.class);
@@ -56,8 +57,10 @@ public abstract class CombiningAlgorithmFactory {
 	
 	/**
 	 * Creates an instance of the <code>CombiningAlgorithmFactory</code> using default configuration information.
+	 * @param properties Properties object
 	 * 
 	 * @return the default <code>CombiningAlgorithmFactory</code>
+	 * @throws FactoryException 
 	 */
 	public static CombiningAlgorithmFactory newInstance(Properties properties) throws FactoryException {
 		return FactoryFinder.find(FACTORYID, DEFAULT_FACTORY_CLASSNAME, CombiningAlgorithmFactory.class, properties);
@@ -68,6 +71,7 @@ public abstract class CombiningAlgorithmFactory {
 	 * 
 	 * @param className the <code>String</code> class name of the <code>CombiningAlgorithmFactory</code> to create
 	 * @return the <code>CombiningAlgorithmFactory</code> for the given class name.
+	 * @throws FactoryException 
 	 */
 	public static CombiningAlgorithmFactory newInstance(String className) throws FactoryException {
 		return FactoryFinder.newInstance(className, CombiningAlgorithmFactory.class, null, true);
@@ -79,6 +83,7 @@ public abstract class CombiningAlgorithmFactory {
 	 * @param className the <code>String</code> class name of the <code>CombiningAlgorithmFactory</code> to create
 	 * @param classLoader the <code>ClassLoader</code> to use to load the class with the given class name
 	 * @return the <code>CombiningAlgorithmFactory</code> for the given class name
+	 * @throws FactoryException 
 	 */
 	public static CombiningAlgorithmFactory newInstance(String className, ClassLoader classLoader) throws FactoryException {
 		return FactoryFinder.newInstance(className, CombiningAlgorithmFactory.class, classLoader, false);

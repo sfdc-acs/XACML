@@ -28,7 +28,7 @@ import com.att.research.xacmlatt.pdp.eval.EvaluationException;
  * @version $Revision: 1.1 $
  */
 public class AdviceExpression extends PolicyComponent {
-	private List<AttributeAssignmentExpression>	listAttributeAssignmentExpressions	= new ArrayList<AttributeAssignmentExpression>();
+	private List<AttributeAssignmentExpression>	listAttributeAssignmentExpressions	= new ArrayList<>();
 	private Identifier adviceId;
 	private RuleEffect appliesTo;
 	
@@ -108,7 +108,7 @@ public class AdviceExpression extends PolicyComponent {
 			return null;
 		}
 		
-		List<AttributeAssignment> attributeAssignments	= new ArrayList<AttributeAssignment>();
+		List<AttributeAssignment> attributeAssignments	= new ArrayList<>();
 		Iterator<AttributeAssignmentExpression> iterAttributeAssignmentExpressions	= this.getAttributeAssignmentExpressions();
 		if (iterAttributeAssignmentExpressions != null) {
 			while (iterAttributeAssignmentExpressions.hasNext()) {
@@ -131,12 +131,13 @@ public class AdviceExpression extends PolicyComponent {
 	 * 
 	 * @param evaluationContext
 	 * @param policyDefaults
+	 * @param decision 
 	 * @param listAdviceExpressions
-	 * @return
+	 * @return list of Advice
 	 * @throws EvaluationException
 	 */
 	public static List<Advice> evaluate(EvaluationContext evaluationContext, PolicyDefaults policyDefaults, Decision decision, Collection<AdviceExpression> listAdviceExpressions) throws EvaluationException {
-		List<Advice> listAdvices	= new ArrayList<Advice>();
+		List<Advice> listAdvices	= new ArrayList<>();
 		Iterator<AdviceExpression> iterAdviceExpressions	= listAdviceExpressions.iterator();
 		while (iterAdviceExpressions.hasNext()) {
 			AdviceExpression adviceExpression	= iterAdviceExpressions.next();

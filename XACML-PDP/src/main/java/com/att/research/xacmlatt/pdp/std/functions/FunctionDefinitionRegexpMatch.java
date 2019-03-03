@@ -30,7 +30,7 @@ import com.att.research.xacmlatt.pdp.policy.FunctionArgument;
  * 		string-regexp-match
  * 		anyURI-regexp-match
  * 		x500Name-regexp-match
- * 		rfc822Name-regexp-match (in sub-class {@link com.att.research.xacmlatt.pdp.policy.FunctionDefinition.FunctionDefinitionRegexpMatchRFC822} )
+ * 		rfc822Name-regexp-match (in sub-class {@link com.att.research.xacmlatt.pdp.std.functions.FunctionDefinitionRFC822NameMatch} )
  * 		ipAddress-regexp-match
  * 		dnsName-regexp-match
  * 

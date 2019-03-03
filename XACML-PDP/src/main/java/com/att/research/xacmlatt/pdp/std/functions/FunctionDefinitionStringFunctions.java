@@ -68,7 +68,9 @@ public class FunctionDefinitionStringFunctions<O, I> extends FunctionDefinitionB
 	 * Constructor - need dataTypeArgs input because of java Generic type-erasure during compilation.
 	 * 
 	 * @param idIn
+	 * @param dataTypeIn 
 	 * @param dataTypeArgsIn
+	 * @param op 
 	 */
 	public FunctionDefinitionStringFunctions(Identifier idIn, DataType<O> dataTypeIn, DataType<I> dataTypeArgsIn, OPERATION op) {
 		super(idIn, dataTypeIn, dataTypeArgsIn, false);

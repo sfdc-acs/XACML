@@ -586,7 +586,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 	 * 
 	 * @param file - Request file. Eg. Request-01-Permit.json
 	 * @param group - This is the parsed out string of the request file that defines if it is a Permit/Deny/Generate etc.
-	 * @return
+	 * @return Request
 	 * @throws JSONStructureException
 	 * @throws DOMStructureException
 	 * @throws PEPException
@@ -624,7 +624,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 	 * Called to add in generated attributes into the request.
 	 * 
 	 * @param request
-	 * @return
+	 * @return Request
 	 */
 	protected Request onNextRequest(Request request) {
 		//
@@ -636,7 +636,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 		//
 		// Copy the request attributes
 		//
-		List<StdMutableRequestAttributes> attributes = new ArrayList<StdMutableRequestAttributes>();
+		List<StdMutableRequestAttributes> attributes = new ArrayList<>();
 		for (RequestAttributes a : request.getRequestAttributes()) {
 			attributes.add(new StdMutableRequestAttributes(a));
 		}
@@ -745,8 +745,8 @@ public class TestBase extends SimpleFileVisitor<Path> {
 	/**
 	 * This makes an HTTP POST call to a running PDP RESTful servlet to get a decision.
 	 * 
-	 * @param file
-	 * @return
+	 * @param is InputStream object
+	 * @return Response
 	 */
 	protected Response callRESTfulPDP(InputStream is) {
 		Response response = null;

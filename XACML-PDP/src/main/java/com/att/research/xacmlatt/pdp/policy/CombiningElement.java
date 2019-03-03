@@ -16,7 +16,7 @@ import com.att.research.xacmlatt.pdp.eval.EvaluationException;
 import com.att.research.xacmlatt.pdp.eval.EvaluationResult;
 
 /**
- * CombiningElement wraps an {@link com.att.research.xacmlatt.pdp.evl.Evaluatable} with a set of
+ * CombiningElement wraps an {@link com.att.research.xacmlatt.pdp.eval.Evaluatable} with a set of
  * {@link com.att.research.xacmlatt.pdp.policy.TargetedCombinerParameter}s for use with a 
  * {@link com.att.research.xacmlatt.pdp.policy.CombiningAlgorithm} to get a combined {@link com.att.research.xacmlatt.pdp.eval.EvaluationResult}
  * 
@@ -39,7 +39,7 @@ public class CombiningElement<T extends Evaluatable> {
 	public CombiningElement(T evaluatableIn, Collection<CombinerParameter> targetedCombinerParametersIn) {
 		this.evaluatable	= evaluatableIn;
 		if (targetedCombinerParametersIn != null) {
-			this.targetedCombinerParameters	= new ArrayList<CombinerParameter>();
+			this.targetedCombinerParameters	= new ArrayList<>();
 			this.targetedCombinerParameters.addAll(targetedCombinerParametersIn);
 		}
 	}

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TargetedCombinerParameterMap is a utility for maintaining a collection of {@link com.att.research.xacmlatt.policy.TargetedCombinerParameter}
+ * TargetedCombinerParameterMap is a utility for maintaining a collection of {@link com.att.research.xacmlatt.pdp.policy.TargetedCombinerParameter}
  * objects with the mappings to their targets.
  * 
  * @author car

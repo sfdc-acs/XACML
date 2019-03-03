@@ -29,7 +29,7 @@ import com.att.research.xacmlatt.pdp.policy.ExpressionResult;
 import com.att.research.xacmlatt.pdp.policy.PolicyDefaults;
 
 /**
- * AttributeDesignator extends {@link com.att.research.xacmlatt.pdp.policy.expression.AttributeRetrievalBase} to represent the
+ * AttributeDesignator extends {@link com.att.research.xacmlatt.pdp.policy.expressions.AttributeRetrievalBase} to represent the
  * XACML AttributeDesignator element.
  * 
  * @author car

@@ -34,7 +34,7 @@ public class ObligationExpression extends PolicyComponent {
 	
 	protected List<AttributeAssignmentExpression> getAttributeAssignmentExpressionList(boolean bNoNull) {
 		if (this.attributeAssignmentExpressions == null && bNoNull) {
-			this.attributeAssignmentExpressions	= new ArrayList<AttributeAssignmentExpression>();
+			this.attributeAssignmentExpressions	= new ArrayList<>();
 		}
 		return this.attributeAssignmentExpressions;
 	}
@@ -107,7 +107,7 @@ public class ObligationExpression extends PolicyComponent {
 		if (!this.validate()) {
 			return null;
 		}
-		List<AttributeAssignment> listAttributeAssignments							= new ArrayList<AttributeAssignment>();
+		List<AttributeAssignment> listAttributeAssignments							= new ArrayList<>();
 		Iterator<AttributeAssignmentExpression> iterAttributeAssignmentExpressions	= this.getAttributeAssignmentExpressions();
 		if (iterAttributeAssignmentExpressions != null) {
 			while (iterAttributeAssignmentExpressions.hasNext()) {
@@ -129,12 +129,13 @@ public class ObligationExpression extends PolicyComponent {
 	 * 
 	 * @param evaluationContext
 	 * @param policyDefaults
+	 * @param decision 
 	 * @param listObligationExpressions
-	 * @return
+	 * @return List of Obligation objects
 	 * @throws EvaluationException
 	 */
 	public static List<Obligation> evaluate(EvaluationContext evaluationContext, PolicyDefaults policyDefaults, Decision decision, Collection<ObligationExpression> listObligationExpressions) throws EvaluationException {
-		List<Obligation> listObligations	= new ArrayList<Obligation>();
+		List<Obligation> listObligations	= new ArrayList<>();
 		Iterator<ObligationExpression> iterObligationExpressions	= listObligationExpressions.iterator();
 		while (iterObligationExpressions.hasNext()) {
 			ObligationExpression obligationExpression	= iterObligationExpressions.next();

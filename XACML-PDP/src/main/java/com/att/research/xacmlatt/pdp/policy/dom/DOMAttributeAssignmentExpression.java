@@ -37,6 +37,7 @@ public class DOMAttributeAssignmentExpression extends AttributeAssignmentExpress
 	 * a XACML AttributeAssignmentExpression element.
 	 * 
 	 * @param nodeAttributeAssignmentExpression the <code>Node</code> representing the XACML AttributeAssignmentExpression element
+	 * @param policy Policy object
 	 * @return a new <code>AttributeAssignmentExpression</code> parsed from the given <code>Node</code>
 	 * @throws DOMStructureException if there is an error parsing the <code>Node</code>
 	 */

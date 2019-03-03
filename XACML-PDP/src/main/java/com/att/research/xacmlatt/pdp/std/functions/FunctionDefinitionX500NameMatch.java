@@ -38,8 +38,6 @@ public class FunctionDefinitionX500NameMatch extends FunctionDefinitionHomogeneo
 	 * Constructor
 	 * 
 	 * @param idIn
-	 * @param dataTypeArgsIn
-	 * @param op
 	 */
 	public FunctionDefinitionX500NameMatch(Identifier idIn) {
 		super(idIn, DataTypes.DT_BOOLEAN, DataTypes.DT_X500NAME, 2);
@@ -48,7 +46,7 @@ public class FunctionDefinitionX500NameMatch extends FunctionDefinitionHomogeneo
 
 	@Override
 	public ExpressionResult evaluate(EvaluationContext evaluationContext, List<FunctionArgument> arguments) {
-		List<X500Principal> convertedArguments	= new ArrayList<X500Principal>();
+		List<X500Principal> convertedArguments	= new ArrayList<>();
 		Status status				= this.validateArguments(arguments, convertedArguments);
 		
 		/*

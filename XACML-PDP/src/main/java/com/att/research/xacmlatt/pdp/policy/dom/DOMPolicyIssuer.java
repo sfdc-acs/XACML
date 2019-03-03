@@ -22,7 +22,7 @@ import com.att.research.xacml.std.dom.DOMUtil;
 import com.att.research.xacmlatt.pdp.policy.PolicyIssuer;
 
 /**
- * DOMPolicyIssuer extends {@link com.att.research.xacmlatt.pdp.policy.PolicyIsser} with methods for creation from
+ * DOMPolicyIssuer extends {@link com.att.research.xacmlatt.pdp.policy.PolicyIssuer} with methods for creation from
  * DOM {@link org.w3c.dom.Node}s.
  * 
  * @author car

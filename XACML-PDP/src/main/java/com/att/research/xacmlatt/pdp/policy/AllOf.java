@@ -20,7 +20,7 @@ import com.att.research.xacmlatt.pdp.eval.MatchResult;
 import com.att.research.xacmlatt.pdp.eval.Matchable;
 
 /**
- * AnyOf extends {@link com.att.research.xacmlatt.pdp.policy.PolicyComponent} and implements the {@link com.att.research.xacmlatt.pdp.policy.Matchable}
+ * AnyOf extends {@link com.att.research.xacmlatt.pdp.policy.PolicyComponent} and implements the {@link com.att.research.xacmlatt.pdp.eval.Matchable}
  * interface to represent XACML AllOf elements in a XACML Target.
  * 
  * @author car
@@ -31,7 +31,7 @@ public class AllOf extends PolicyComponent implements Matchable {
 	
 	protected List<Match> getMatchList(boolean bNoNulls) {
 		if (this.matches == null && bNoNulls) {
-			this.matches	= new ArrayList<Match>();
+			this.matches	= new ArrayList<>();
 		}
 		return this.matches;
 	}

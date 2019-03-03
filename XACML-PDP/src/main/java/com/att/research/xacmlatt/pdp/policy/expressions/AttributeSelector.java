@@ -116,7 +116,7 @@ public class AttributeSelector extends AttributeRetrievalBase {
 	 * ID, ensure they are <code>XPathExpression</code>s and return them.
 	 * 
 	 * @param requestAttributes
-	 * @return
+	 * @return List of XPathExpression objects
 	 */
 	protected List<XPathExpression> getContextSelectorValues(RequestAttributes requestAttributes) {
 		Identifier thisContextSelectorId	= this.getContextSelectorId();
@@ -131,7 +131,7 @@ public class AttributeSelector extends AttributeRetrievalBase {
 				Iterator<AttributeValue<XPathExpressionWrapper>> iterXPathExpressions	= attribute.findValues(DataTypes.DT_XPATHEXPRESSION);
 				if (iterXPathExpressions != null && iterXPathExpressions.hasNext()) {
 					if (listXPathExpressions == null) {
-						listXPathExpressions	= new ArrayList<XPathExpression>();
+						listXPathExpressions	= new ArrayList<>();
 					}
 					listXPathExpressions.add(iterXPathExpressions.next().getValue());
 				}
@@ -184,7 +184,7 @@ public class AttributeSelector extends AttributeRetrievalBase {
 			 */
 			Node nodeContentRoot	= requestAttributes.getContentRoot();
 			if (nodeContentRoot != null) {
-				List<Node> listNodesToQuery					= new ArrayList<Node>();
+				List<Node> listNodesToQuery					= new ArrayList<>();
 				List<XPathExpression> listXPathExpressions	= this.getContextSelectorValues(requestAttributes);
 				if (listXPathExpressions == null) {
 					listNodesToQuery.add(nodeContentRoot);

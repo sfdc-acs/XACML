@@ -38,8 +38,6 @@ public class FunctionDefinitionRFC822NameMatch extends FunctionDefinitionBase<Bo
 	 * Constructor
 	 * 
 	 * @param idIn
-	 * @param dataTypeArgsIn
-	 * @param op
 	 */
 	public FunctionDefinitionRFC822NameMatch(Identifier idIn) {
 		super(idIn, DataTypes.DT_BOOLEAN, DataTypes.DT_RFC822NAME, false);

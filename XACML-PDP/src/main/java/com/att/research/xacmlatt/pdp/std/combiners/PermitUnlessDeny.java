@@ -22,7 +22,6 @@ import com.att.research.xacmlatt.pdp.policy.CombiningElement;
  * @author car
  *
  * @param <T> the java class for the {@link com.att.research.xacmlatt.pdp.eval.Evaluatable}
- * @param <U> the java class for the identifier
  */
 public class PermitUnlessDeny<T extends com.att.research.xacmlatt.pdp.eval.Evaluatable> extends CombiningAlgorithmBase<T> {
 

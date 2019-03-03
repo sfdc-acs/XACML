@@ -45,8 +45,6 @@ public class FunctionDefinitionURIStringConcatenate extends FunctionDefinitionBa
 	 * Constructor
 	 * 
 	 * @param idIn
-	 * @param dataTypeArgsIn
-	 * @param op
 	 */
 	public FunctionDefinitionURIStringConcatenate(Identifier idIn) {
 		super(idIn, DataTypes.DT_ANYURI, DataTypes.DT_ANYURI, false);

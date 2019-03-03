@@ -53,6 +53,7 @@ public class DOMPolicy {
 	 * Creates a new <code>DOMPolicy</code> by parsing the given <code>Node</code> representing a XACML Policy element.
 	 * 
 	 * @param nodePolicy the <code>Node</code> representing the Policy element
+	 * @param policySetParent PolicySet parent
 	 * @param policyDefaultsParent the <code>PolicyDefaults</code> of the parent element of the Policy element or null if this is the root
 	 * @return a new <code>DOMPolicy</code> parsed from the given <code>Node</code>
 	 * @throws DOMStructureException if there is an error parsing the <code>Node</code>

@@ -76,7 +76,7 @@ public class FunctionDefinitionXPath<O> extends FunctionDefinitionHomogeneousSim
 	 * Constructor
 	 * 
 	 * @param idIn
-	 * @param dataTypeArgsIn
+	 * @param dataTypeIn 
 	 * @param op
 	 */
 	public FunctionDefinitionXPath(Identifier idIn, DataType<O> dataTypeIn, OPERATION op) {
@@ -89,9 +89,9 @@ public class FunctionDefinitionXPath<O> extends FunctionDefinitionHomogeneousSim
 	@Override
 	public ExpressionResult evaluate(EvaluationContext evaluationContext, List<FunctionArgument> arguments) {
 
-		List<NodeList> nodeListList = new ArrayList<NodeList>();
+		List<NodeList> nodeListList = new ArrayList<>();
 
-		List<XPathExpressionWrapper> convertedArguments	= new ArrayList<XPathExpressionWrapper>();
+		List<XPathExpressionWrapper> convertedArguments	= new ArrayList<>();
 		Status status				= this.validateArguments(arguments, convertedArguments);
 
 		/*

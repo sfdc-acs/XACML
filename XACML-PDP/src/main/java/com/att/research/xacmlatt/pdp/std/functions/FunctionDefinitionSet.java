@@ -68,7 +68,9 @@ public class FunctionDefinitionSet<O,I> extends FunctionDefinitionBase<O, I> {
 	 * Constructor - need dataType input because of java Generic type-erasure during compilation.
 	 * 
 	 * @param idIn
+	 * @param dataTypeIn 
 	 * @param dataTypeArgsIn
+	 * @param opIn 
 	 */
 	public FunctionDefinitionSet(Identifier idIn, DataType<O> dataTypeIn, DataType<I> dataTypeArgsIn, OPERATION opIn) {
 		super(idIn, dataTypeIn, dataTypeArgsIn, ((opIn == OPERATION.INTERSECTION || opIn == OPERATION.UNION) ? true : false) );

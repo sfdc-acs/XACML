@@ -20,7 +20,6 @@ import com.att.research.xacmlatt.pdp.policy.FunctionDefinition;
  * The child classes derived from this are of two types:
  * <UL>
  * <LI> Functions returning a single simple value of a type defined in {@link com.att.research.xacml.std.datatypes.DataTypes}.
- * 	These functions will all derive from {@link com.att.research.xacmlatt.pdp.std.functions.FunctionDefinitionSimple}.
  * <LI> Functions returning a single bag with elements of a single type.
  * <UL>
  * <P>
@@ -79,7 +78,7 @@ public abstract class FunctionDefinitionBase<O,I> implements FunctionDefinition 
 	 * Returns a shortened version of the Id for this function, primarilly for use with error messages to prevent them from becoming too long.
 	 * This is a simple convenience method to reduce code bloat.
 	 * 
-	 * @return
+	 * @return String short function id
 	 */
 	public String getShortFunctionId() {
 		return this.getId().getUri().toString().substring(this.getId().getUri().toString().indexOf("function:"));
@@ -90,11 +89,11 @@ public abstract class FunctionDefinitionBase<O,I> implements FunctionDefinition 
 	 * This is a simple convenience method to reduce code bloat.
 	 * 
 	 * @param identifier expected to have '#' in it, and if no '#' should have ":data-type:"
-	 * @return
+	 * @return String get short data type id
 	 */
 	public String getShortDataTypeId(Identifier identifier) {
 		String idString = identifier.stringValue();
-		int index = idString.indexOf("#");
+		int index = idString.indexOf('#');
 		if (index < 0) {
 			index = idString.indexOf(":data-type:");
 			if (index < 0) {
@@ -111,8 +110,8 @@ public abstract class FunctionDefinitionBase<O,I> implements FunctionDefinition 
 	 * Return a new Status that includes the name of this function in front of the original status' message.
 	 * This is a convenience method to reduce code bloat.
 	 * 
-	 * @param originalStatu
-	 * @return
+	 * @param originalStatus
+	 * @return Status object
 	 */
 	public Status getFunctionStatus(Status originalStatus) {
 		return new StdStatus(originalStatus.getStatusCode(), getShortFunctionId() + " " + originalStatus.getStatusMessage());
@@ -144,7 +143,7 @@ public abstract class FunctionDefinitionBase<O,I> implements FunctionDefinition 
 	/**
 	 * Return the Identifier for the Input Argument(s) DataType.
 	 * 
-	 * @return
+	 * @return DataType<I> identifier
 	 */
 	public DataType<I> getDataTypeArgs() {
 		return this.dataTypeArgs;
@@ -154,7 +153,5 @@ public abstract class FunctionDefinitionBase<O,I> implements FunctionDefinition 
 	public boolean returnsBag() {
 		return returnsBag;
 	}
-	
-	
 	
 }

@@ -94,8 +94,9 @@ public class Condition extends PolicyComponent {
 	 * and validates that the result is a boolean.
 	 * 
 	 * @param evaluationContext the <code>EvaluationContext</code> in which to evaluate this <code>Expression</code>
-	 * @param policyDefaults the {@link com.att.research.xacml.pdp.policy.PolicyDefaults} to use in evaluating this <code>Expression</code>
+	 * @param policyDefaults the {@link com.att.research.xacmlatt.pdp.policy.PolicyDefaults} to use in evaluating this <code>Expression</code>
 	 * @return a {@link com.att.research.xacmlatt.pdp.policy.ExpressionResult}
+	 * @throws EvaluationException 
 	 */
 	public ExpressionResultBoolean evaluate(EvaluationContext evaluationContext, PolicyDefaults policyDefaults) throws EvaluationException {
 		if (!this.validate()) {

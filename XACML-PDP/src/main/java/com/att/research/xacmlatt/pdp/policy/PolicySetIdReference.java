@@ -11,7 +11,7 @@ import com.att.research.xacmlatt.pdp.eval.EvaluationException;
 
 /**
  * PolicySetIdReference extends {@link com.att.research.xacmlatt.pdp.policy.PolicyIdReferenceBase} for
- * {@link com.att.research.xacmlatt.pdp.PolicySet} objects to implement the <code>ensureReferencee</code>
+ * {@link com.att.research.xacmlatt.pdp.policy.PolicySet} objects to implement the <code>ensureReferencee</code>
  * method to find <code>PolicySet</code>s.
  * 
  * @author car

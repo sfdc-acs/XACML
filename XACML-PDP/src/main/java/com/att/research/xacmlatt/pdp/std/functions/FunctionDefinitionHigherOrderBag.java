@@ -75,7 +75,9 @@ public class FunctionDefinitionHigherOrderBag<O,I> extends FunctionDefinitionBas
 	 * Constructor - need dataType input because of java Generic type-erasure during compilation.
 	 * 
 	 * @param idIn
+	 * @param dataTypeIn 
 	 * @param dataTypeArgsIn
+	 * @param opIn 
 	 */
 	public FunctionDefinitionHigherOrderBag(Identifier idIn, DataType<O> dataTypeIn, DataType<I> dataTypeArgsIn, OPERATION opIn) {
 		super(idIn, dataTypeIn, dataTypeArgsIn, ((opIn == OPERATION.MAP) ? true : false) );

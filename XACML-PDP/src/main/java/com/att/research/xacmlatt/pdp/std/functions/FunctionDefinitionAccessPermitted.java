@@ -58,7 +58,6 @@ public class FunctionDefinitionAccessPermitted extends FunctionDefinitionBase<Bo
 	 * Constructor - need dataTypeArgs input because of java Generic type-erasure during compilation.
 	 * 
 	 * @param idIn
-	 * @param dataTypeArgsIn
 	 */
 	public FunctionDefinitionAccessPermitted(Identifier idIn) {
 		super(idIn, DataTypes.DT_BOOLEAN, DataTypes.DT_ANYURI, false);

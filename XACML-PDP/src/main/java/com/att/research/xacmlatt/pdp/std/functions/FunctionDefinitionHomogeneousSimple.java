@@ -15,7 +15,7 @@ import com.att.research.xacml.std.StdStatusCode;
 import com.att.research.xacmlatt.pdp.policy.FunctionArgument;
 
 /**
- * FunctionDefinitionHomogeneousSimple extends {@link com.att.research.xacmlatt.pdp.std.functions.FunctionDefinitionSimple}
+ * FunctionDefinitionHomogeneousSimple extends {@link com.att.research.xacmlatt.pdp.std.functions.FunctionDefinitionBase}
  * with utility methods for ensuring the types of the arguments passed in the <code>evaluate</code> method matches the parameterized
  * type, and the number of arguments is correct.
  * When evaluated the resulting arguments must be simple data types, not bags.
@@ -74,6 +74,7 @@ public abstract class FunctionDefinitionHomogeneousSimple<O,I> extends FunctionD
 	 * This combines both the argument list length check and the evaluation of all arguments on that list.
 	 * 
 	 * @param listFunctionArguments the <code>List</code> of <code>FunctionArgument</code>s to validate
+	 * @param convertedValues List of converted values
 	 * @return a {@link com.att.research.xacml.api.Status} indication with an error if the arguments are not valid
 	 */
 	public Status validateArguments(List<FunctionArgument> listFunctionArguments, List<I> convertedValues) {
@@ -94,8 +95,7 @@ public abstract class FunctionDefinitionHomogeneousSimple<O,I> extends FunctionD
 			ConvertedArgument<I> argument = new ConvertedArgument<I>(functionArgument, getDataTypeArgs(), false);
 			if ( ! argument.isOk()) {
 				// when a Status is returned that indicates an error, tell caller which arg had problem
-				Status decoratedStatus = new StdStatus(argument.getStatus().getStatusCode(), argument.getStatus().getStatusMessage() + " at arg index " + i  );
-				return decoratedStatus;
+				return new StdStatus(argument.getStatus().getStatusCode(), argument.getStatus().getStatusMessage() + " at arg index " + i  );
 			}
 			if (convertedValues != null) {
 				convertedValues.add(argument.getValue());

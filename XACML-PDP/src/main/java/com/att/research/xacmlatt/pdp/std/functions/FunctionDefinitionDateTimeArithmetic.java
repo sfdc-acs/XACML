@@ -61,7 +61,9 @@ public class FunctionDefinitionDateTimeArithmetic<O extends IDateTime<O>, I exte
 	 * Constructor - need dataTypeArgs input because of java Generic type-erasure during compilation.
 	 * 
 	 * @param idIn
+	 * @param dataTypeIn 
 	 * @param dataTypeArgsIn
+	 * @param op 
 	 */
 	public FunctionDefinitionDateTimeArithmetic(Identifier idIn, DataType<O> dataTypeIn, DataType<I> dataTypeArgsIn, OPERATION op) {
 		super(idIn, dataTypeIn, dataTypeArgsIn, false);

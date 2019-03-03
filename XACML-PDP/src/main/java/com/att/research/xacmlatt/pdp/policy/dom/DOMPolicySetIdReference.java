@@ -29,6 +29,7 @@ public class DOMPolicySetIdReference {
 	 * Creates a new <code>PolicySetIdReference</code> parsed from the given <code>Node</code> representing a XACML PolicySetIdReference element.
 	 * 
 	 * @param nodePolicySetIdReference the <code>Node</code> representing the XACML PolicySetIdReference element
+	 * @param policySetParent PolicySet parent
 	 * @return a new <code>PolicySetIdReference</code> parsed from the given <code>Node</code>
 	 * @throws DOMStructureException if there is an error parsing the <code>Node</code>
 	 */

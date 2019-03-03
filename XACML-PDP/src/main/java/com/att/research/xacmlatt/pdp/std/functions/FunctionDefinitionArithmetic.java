@@ -73,6 +73,7 @@ public class FunctionDefinitionArithmetic<T extends Number> extends FunctionDefi
 	 * @param idIn
 	 * @param dataTypeArgsIn
 	 * @param op
+	 * @param nArgs 
 	 */
 	public FunctionDefinitionArithmetic(Identifier idIn, DataType<T> dataTypeArgsIn, OPERATION op, int nArgs) {
 		// for Arithmetic functions, the output type is the same as the input type (no mixing of Ints and Doubles!)

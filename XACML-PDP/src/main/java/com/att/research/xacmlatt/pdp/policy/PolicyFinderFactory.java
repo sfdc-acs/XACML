@@ -13,7 +13,7 @@ import com.att.research.xacmlatt.pdp.util.ATTPDPProperties;
 
 /**
  * PolicyFinderFactory provides methods for loading XACML 3.0 policies and policy sets that are used
- * by the {@link com.att.research.xacmlatt.pdp.PDPEngine} to evaluate requests.
+ * by the {@link com.att.research.xacml.api.pdp.PDPEngine} to evaluate requests.
  * 
  * @author car
  * @version $Revision: 1.3 $
@@ -48,13 +48,16 @@ public abstract class PolicyFinderFactory {
 	 * Gets the configured {@link com.att.research.xacmlatt.pdp.policy.PolicyFinder}.
 	 * 
 	 * @return the configured <code>PolicyFinder</code>
+	 * @throws FactoryException 
 	 */
-	abstract public PolicyFinder getPolicyFinder() throws FactoryException;
+	public abstract PolicyFinder getPolicyFinder() throws FactoryException;
 
 	/**
 	 * Gets the configured {@link com.att.research.xacmlatt.pdp.policy.PolicyFinder}.
+	 * @param properties 
 	 * 
 	 * @return the configured <code>PolicyFinder</code>
+	 * @throws FactoryException 
 	 */
-	abstract public PolicyFinder getPolicyFinder(Properties properties) throws FactoryException;
+	 public abstract PolicyFinder getPolicyFinder(Properties properties) throws FactoryException;
 }

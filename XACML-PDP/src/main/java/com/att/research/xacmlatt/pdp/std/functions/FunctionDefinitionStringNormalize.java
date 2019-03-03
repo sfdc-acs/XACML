@@ -56,7 +56,6 @@ public class FunctionDefinitionStringNormalize extends FunctionDefinitionHomogen
 	 * Constructor
 	 * 
 	 * @param idIn
-	 * @param dataTypeArgsIn
 	 * @param op
 	 */
 	public FunctionDefinitionStringNormalize(Identifier idIn,  OPERATION op) {
@@ -71,7 +70,7 @@ public class FunctionDefinitionStringNormalize extends FunctionDefinitionHomogen
 
 	@Override
 	public ExpressionResult evaluate(EvaluationContext evaluationContext, List<FunctionArgument> arguments) {
-		List<String> convertedArguments	= new ArrayList<String>();
+		List<String> convertedArguments	= new ArrayList<>();
 		Status status				= this.validateArguments(arguments, convertedArguments);
 		
 		/*
@@ -88,10 +87,10 @@ public class FunctionDefinitionStringNormalize extends FunctionDefinitionHomogen
 		
 		switch (operation) {
 		case SPACE:
-			result	= new StdAttributeValue<String>(XACML.ID_DATATYPE_STRING, convertedArguments.get(0).trim() );
+			result	= new StdAttributeValue<>(XACML.ID_DATATYPE_STRING, convertedArguments.get(0).trim() );
 			break;
 		case LOWER_CASE:
-			result	= new StdAttributeValue<String>(XACML.ID_DATATYPE_STRING, convertedArguments.get(0).toLowerCase() );
+			result	= new StdAttributeValue<>(XACML.ID_DATATYPE_STRING, convertedArguments.get(0).toLowerCase() );
 			break;
 		}
 		

@@ -41,6 +41,7 @@ public abstract class FunctionDefinitionFactory {
 	 * Creates an instance of the <code>FunctionDefinitionFactory</code> using default configuration information.
 	 * 
 	 * @return the default <code>FunctionDefinitionFactory</code>
+	 * @throws FactoryException 
 	 */
 	public static FunctionDefinitionFactory newInstance() throws FactoryException {
 		return FactoryFinder.find(FACTORYID, DEFAULT_FACTORY_CLASSNAME, FunctionDefinitionFactory.class);
@@ -48,8 +49,10 @@ public abstract class FunctionDefinitionFactory {
 	
 	/**
 	 * Creates an instance of the <code>FunctionDefinitionFactory</code> using default configuration information.
+	 * @param properties 
 	 * 
 	 * @return the default <code>FunctionDefinitionFactory</code>
+	 * @throws FactoryException 
 	 */
 	public static FunctionDefinitionFactory newInstance(Properties properties) throws FactoryException {
 		return FactoryFinder.find(FACTORYID, DEFAULT_FACTORY_CLASSNAME, FunctionDefinitionFactory.class, properties);
@@ -60,6 +63,7 @@ public abstract class FunctionDefinitionFactory {
 	 * 
 	 * @param className the <code>String</code> class name of the <code>FunctionDefinitionFactory</code> to create
 	 * @return the <code>FunctionDefinitionFactory</code> for the given class name.
+	 * @throws FactoryException 
 	 */
 	public static FunctionDefinitionFactory newInstance(String className) throws FactoryException {
 		return FactoryFinder.newInstance(className, FunctionDefinitionFactory.class, null, true);
@@ -71,6 +75,7 @@ public abstract class FunctionDefinitionFactory {
 	 * @param className the <code>String</code> class name of the <code>FunctionDefinitionFactory</code> to create
 	 * @param classLoader the <code>ClassLoader</code> to use to load the class with the given class name
 	 * @return the <code>FunctionDefinitionFactory</code> for the given class name
+	 * @throws FactoryException 
 	 */
 	public static FunctionDefinitionFactory newInstance(String className, ClassLoader classLoader) throws FactoryException {
 		return FactoryFinder.newInstance(className, FunctionDefinitionFactory.class, classLoader, false);

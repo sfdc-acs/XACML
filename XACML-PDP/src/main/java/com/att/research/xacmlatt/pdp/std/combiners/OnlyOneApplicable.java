@@ -27,7 +27,6 @@ import com.att.research.xacmlatt.pdp.policy.PolicySetChild;
  * @author car
  * @version $Revision: 1.1 $
  * 
- * @param <T> the java class of the object to be combined
  */
 public class OnlyOneApplicable extends CombiningAlgorithmBase<PolicySetChild> {
 

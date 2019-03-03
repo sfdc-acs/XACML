@@ -18,7 +18,7 @@ import com.att.research.xacmlatt.pdp.policy.ExpressionResult;
 /**
  * AttributeRetrievalBase extends {@link com.att.research.xacmlatt.pdp.policy.PolicyComponent} and
  * implements {@link com.att.research.xacmlatt.pdp.eval.Evaluatable} to serve as an abstract base class
- * for the {@link com.att.research.xacmlatt.pdp.policy.AttributeSelector} and {@link com.att.research.xacmlatt.pdp.policy.AttributeDesignator}
+ * for the {@link com.att.research.xacmlatt.pdp.policy.expressions.AttributeSelector} and {@link com.att.research.xacmlatt.pdp.policy.expressions.AttributeDesignator}
  * classes.
  * 
  * @author car

@@ -60,6 +60,7 @@ public class FunctionDefinitionComparison<I extends Comparable<I>> extends Funct
 	 * 
 	 * @param idIn
 	 * @param dataTypeArgsIn
+	 * @param opIn 
 	 */
 	public FunctionDefinitionComparison(Identifier idIn, DataType<I> dataTypeArgsIn, OPERATION opIn) {
 		super(idIn, DataTypes.DT_BOOLEAN, dataTypeArgsIn, 2);
