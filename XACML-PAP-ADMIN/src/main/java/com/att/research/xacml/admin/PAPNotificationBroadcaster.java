@@ -77,8 +77,6 @@ public class PAPNotificationBroadcaster implements Serializable {
     
     /**
      * Tell all listeners about an update.
-     * 
-     * @param message
      */
     public static synchronized void updateAllGroups() {
         for (final PAPNotificationBroadcastListener listener: listeners) {

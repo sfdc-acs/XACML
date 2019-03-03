@@ -514,7 +514,7 @@ public class PolicyContainer extends ItemSetChangeNotifier implements Container.
 	 * 
 	 * @param itemId
 	 * @param parent
-	 * @return
+	 * @return Item
 	 * @throws UnsupportedOperationException
 	 */
 	public Item addItem(Object itemId, Object parent) throws UnsupportedOperationException {

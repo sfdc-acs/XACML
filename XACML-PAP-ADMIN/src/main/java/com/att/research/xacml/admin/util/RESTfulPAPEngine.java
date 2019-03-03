@@ -55,6 +55,9 @@ public class RESTfulPAPEngine extends StdPDPItemSetChangeNotifier implements PAP
 	
 	/**
 	 * Set up link with PAP Servlet and get our initial set of Groups
+	 * @param myURLString 
+	 * @throws PAPException 
+	 * @throws IOException 
 	 * @throws Exception 
 	 */
 	public RESTfulPAPEngine (String myURLString) throws PAPException, IOException  {
@@ -134,7 +137,6 @@ public class RESTfulPAPEngine extends StdPDPItemSetChangeNotifier implements PAP
 	 * Update the configuration on the PAP for a single Group.
 	 * 
 	 * @param group
-	 * @return
 	 * @throws PAPException
 	 */
 	public void updateGroup(PDPGroup group) throws PAPException {
@@ -258,7 +260,6 @@ public class RESTfulPAPEngine extends StdPDPItemSetChangeNotifier implements PAP
 	 * @param policyId
 	 * @param group
 	 * @param policy
-	 * @return
 	 * @throws PAPException
 	 */
 	public void copyFile(String policyId, PDPGroup group, InputStream policy) throws PAPException {
@@ -303,13 +304,12 @@ public class RESTfulPAPEngine extends StdPDPItemSetChangeNotifier implements PAP
 	 * to get detailed status info.
 	 * 
 	 * @param pdp
-	 * @return
+	 * @return PDPStatus object
 	 * @throws PAPException 
 	 */
 	@Override
 	public PDPStatus getStatus(PDP pdp) throws PAPException {
-		StdPDPStatus status = (StdPDPStatus)sendToPAP("GET", pdp, null, StdPDPStatus.class);
-		return status;
+		return (StdPDPStatus)sendToPAP("GET", pdp, null, StdPDPStatus.class);
 	}
 	
 	
@@ -332,7 +332,7 @@ public class RESTfulPAPEngine extends StdPDPItemSetChangeNotifier implements PAP
 	 * @param collectionTypeClass
 	 * @param responseContentClass
 	 * @param parameters
-	 * @return
+	 * @return Object
 	 * @throws Exception
 	 */
 	private Object sendToPAP(String method, Object content, Class collectionTypeClass, Class responseContentClass, String... parameters ) throws PAPException {

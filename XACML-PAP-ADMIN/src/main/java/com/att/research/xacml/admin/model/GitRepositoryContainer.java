@@ -148,6 +148,7 @@ public class GitRepositoryContainer extends ItemSetChangeNotifier implements Con
     /**
      * Constructs a new <code>FileSystemContainer</code> with the specified file
      * as the root of the filesystem. The files are included recursively.
+     * @param repository 
      * 
      * @param root
      *            the root file for the new file-system container. Null values
@@ -165,6 +166,7 @@ public class GitRepositoryContainer extends ItemSetChangeNotifier implements Con
     /**
      * Constructs a new <code>FileSystemContainer</code> with the specified file
      * as the root of the filesystem. The files are included recursively.
+     * @param repository 
      * 
      * @param root
      *            the root file for the new file-system container.
@@ -180,6 +182,7 @@ public class GitRepositoryContainer extends ItemSetChangeNotifier implements Con
     /**
      * Constructs a new <code>FileSystemContainer</code> with the specified file
      * as the root of the filesystem.
+     * @param repository 
      * 
      * @param root
      *            the root file for the new file-system container.
@@ -199,6 +202,7 @@ public class GitRepositoryContainer extends ItemSetChangeNotifier implements Con
     /**
      * Constructs a new <code>FileSystemContainer</code> with the specified root
      * and recursivity status.
+     * @param repository 
      * 
      * @param root
      *            the root file for the new file-system container.
