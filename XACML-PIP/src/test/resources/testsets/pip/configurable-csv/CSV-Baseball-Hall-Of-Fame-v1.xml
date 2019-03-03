@@ -28,7 +28,15 @@ A. A baseball player must have been active as a player in the Major Leagues at s
             <Target/>
             <Condition>
                 <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:and">
-                    <Description>debut within 20 years AND final game more than 5 years ago.</Description>
+                    <Description>debut within 20 years AND final game more than 5 years ago. Should have a final game.</Description>
+	                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:integer-greater-than-or-equal">
+	                    <Description>Has a final game.</Description>
+	                    <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:date-bag-size">
+	                        <Description>Count the final game - should only be one.</Description>
+                            <AttributeDesignator Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject" AttributeId="com:att:research:xacml:test:csv:subject:finalgame" DataType="http://www.w3.org/2001/XMLSchema#date" Issuer="com:att:research:xacml:test:csv" MustBePresent="false"/>
+	                    </Apply>
+	                    <AttributeValue DataType="http://www.w3.org/2001/XMLSchema#integer">1</AttributeValue>
+	                </Apply>
                     <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:date-less-than-or-equal">
                         <Description>Debut date &lt;= (today's date - 20 years)</Description>
                         <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:date-one-and-only">

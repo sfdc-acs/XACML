@@ -27,6 +27,11 @@
 			<artifactId>xacml</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.att.research.xacml</groupId>
+			<artifactId>xacml-pdp</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${version.h2}</version>
