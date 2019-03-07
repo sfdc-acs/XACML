@@ -17,8 +17,8 @@ import java.util.Map;
 
 import javax.security.auth.x500.X500Principal;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.xpath.XPathExpression;
 
@@ -51,7 +51,7 @@ import com.att.research.xacml.util.AttributeUtils;
 import com.att.research.xacml.util.FactoryException;
 
 public class RequestParser {
-	private static Log logger	= LogFactory.getLog(RequestParser.class);
+	private static final Logger logger	= LoggerFactory.getLogger(RequestParser.class);
 	
 	//
 	// Create our data type factory object. We could make this static
@@ -265,7 +265,7 @@ public class RequestParser {
 		//
 		Object fieldObject = field.get(object);
 		if (logger.isDebugEnabled()) {
-			logger.debug(fieldObject);
+			logger.debug("{}", fieldObject);
 		}
 		if (fieldObject == null) {
 			if (logger.isDebugEnabled()) {

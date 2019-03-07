@@ -3,6 +3,7 @@
  *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacmlatt.pdp.std;
 
 import java.io.InputStream;
@@ -17,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.IdReferenceMatch;
 import com.att.research.xacml.api.Identifier;
@@ -52,7 +53,7 @@ public class StdPolicyFinder implements PolicyFinder {
 	private static final PolicyFinderResult<PolicySet> PFR_POLICYSET_NOT_FOUND	= new StdPolicyFinderResult<PolicySet>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "No matching policy set found"));
 	private static final PolicyFinderResult<PolicySet> PFR_NOT_A_POLICYSET		= new StdPolicyFinderResult<PolicySet>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "Not a policy set"));	
 
-	private Log logger	= LogFactory.getLog(this.getClass());
+	private final Logger logger	= LoggerFactory.getLogger(this.getClass());
 	private List<PolicyDef> listRoots					= new ArrayList<>();
 	private Map<Identifier,List<PolicyDef>> mapPolicies	= new HashMap<Identifier,List<PolicyDef>>();
 	

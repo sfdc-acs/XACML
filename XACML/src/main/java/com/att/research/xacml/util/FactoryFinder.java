@@ -13,8 +13,9 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * FactoryFinder is a utility for finding various XACML Factory objects using a common search procedure:
@@ -24,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
  *
  */
 public class FactoryFinder {
-	private static final Log logger				= LogFactory.getLog(FactoryFinder.class);
+	private static final Logger logger				= LoggerFactory.getLogger(FactoryFinder.class);
 	
 	private FactoryFinder() {
 	}

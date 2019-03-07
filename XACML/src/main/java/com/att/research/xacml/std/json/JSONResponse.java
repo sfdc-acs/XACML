@@ -34,8 +34,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -104,7 +104,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  * @version $Revision: 1.2 $
  */
 public class JSONResponse {
-	private static final Log logger	= LogFactory.getLog(JSONResponse.class);
+	private static final Logger logger	= LoggerFactory.getLogger(JSONResponse.class);
 	
 	
 	/*

@@ -13,8 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.Attribute;
 import com.att.research.xacml.api.AttributeCategory;
@@ -30,8 +30,9 @@ import com.att.research.xacml.util.ObjUtil;
  */
 public class StdMutableAttributeCategory implements AttributeCategory {
 	private static final List<Attribute> EMPTY_LIST			= Collections.unmodifiableList(new ArrayList<Attribute>());
+
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	protected Log logger = LogFactory.getLog(this.getClass());
 	private Identifier category;
 	private List<Attribute> attributes 						= new ArrayList<Attribute>();
 	private Map<Identifier,List<Attribute>> attributesById	= new HashMap<Identifier,List<Attribute>>();

@@ -109,7 +109,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
-        <dependency>
+        <!-- dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <exclusions>
@@ -118,17 +118,19 @@
                     <artifactId>servlet-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        < / dependency -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-continuation</artifactId>
             <version>${jetty.version}</version>
         </dependency>
+        <!-- 
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>apache-log4j-extras</artifactId>
             <version>1.2.17</version>
         </dependency>
+         -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

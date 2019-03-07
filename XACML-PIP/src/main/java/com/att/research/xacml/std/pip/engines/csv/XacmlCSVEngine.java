@@ -3,6 +3,7 @@
  *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacml.std.pip.engines.csv;
 
 import java.io.BufferedReader;
@@ -21,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.Attribute;
 import com.att.research.xacml.api.AttributeValue;
@@ -52,7 +53,7 @@ public class XacmlCSVEngine implements ConfigurableEngine {
 	public static final String PROP_DESCRIPTION	= ".description";
 	public static final String PROP_FILE		= ".file";
 	
-	private static final Log logger	= LogFactory.getLog(XacmlCSVEngine.class);
+	private static final Logger logger	= LoggerFactory.getLogger(XacmlCSVEngine.class);
 	
 	private String name;
 	private String description;

@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.NodeList;
 
 import com.att.research.xacml.api.Attribute;
@@ -49,7 +49,7 @@ public class StdIndividualDecisionRequestGenerator {
 	private static final Status STATUS_NO_CATEGORY		= new StdStatus(StdStatusCode.STATUS_CODE_SYNTAX_ERROR, "No category");
 	private static final Status STATUS_NO_RESOURCE_ID	= new StdStatus(StdStatusCode.STATUS_CODE_SYNTAX_ERROR, "No " + XACML3.ID_RESOURCE_RESOURCE_ID.stringValue() + " attributes");
 	
-	private Log logger									= LogFactory.getLog(StdIndividualDecisionRequestGenerator.class);
+	private static final Logger logger									= LoggerFactory.getLogger(StdIndividualDecisionRequestGenerator.class);
 	private Request originalRequest;
 	private List<Request> individualDecisionRequests	= new ArrayList<Request>();
 	private ScopeResolver scopeResolver;
@@ -354,7 +354,7 @@ public class StdIndividualDecisionRequestGenerator {
 			try {
 				scopeResolverResult	= this.scopeResolver.resolveScope(attributeResourceId, scopeQualifier);
 			} catch (ScopeResolverException ex) {
-				this.logger.error("ScopeResolverException resolving " + attributeResourceId.toString() + ": " + ex.getMessage(), ex);
+				logger.error("ScopeResolverException resolving " + attributeResourceId.toString() + ": " + ex.getMessage(), ex);
 			}
 			if (scopeResolverResult.getStatus() != null && !scopeResolverResult.getStatus().isOk()) {
 				this.individualDecisionRequests.add(new StdMutableRequest(scopeResolverResult.getStatus()));
@@ -373,7 +373,7 @@ public class StdIndividualDecisionRequestGenerator {
 			}
 		}
 		if (!bAtLeastOne) {
-			this.logger.warn("No scopes expanded.  Using original resource ids");
+			logger.warn("No scopes expanded.  Using original resource ids");
 			iterAttributesResourceId	= requestAttributesResource.getAttributes(XACML3.ID_RESOURCE_RESOURCE_ID);
 			assert(iterAttributesResourceId != null);
 			while (iterAttributesResourceId.hasNext()) {

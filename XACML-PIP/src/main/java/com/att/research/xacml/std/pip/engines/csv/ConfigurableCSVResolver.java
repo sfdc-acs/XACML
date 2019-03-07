@@ -3,6 +3,7 @@
  *          Copyright (c) 2014,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacml.std.pip.engines.csv;
 
 import java.util.ArrayList;
@@ -12,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.Attribute;
 import com.att.research.xacml.api.AttributeValue;
@@ -54,7 +55,7 @@ public class ConfigurableCSVResolver implements CSVResolver {
 		}
 	}
 	
-	protected Log logger	= LogFactory.getLog(this.getClass());
+	protected Logger logger	= LoggerFactory.getLogger(this.getClass());
 
 	private String id;
 	private String defaultIssuer;

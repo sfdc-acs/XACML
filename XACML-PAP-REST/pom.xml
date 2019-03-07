@@ -26,10 +26,6 @@
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-        </dependency>
-        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
@@ -42,6 +38,7 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>
+    
     <build>
         <pluginManagement>
             <plugins>

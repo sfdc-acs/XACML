@@ -7,8 +7,8 @@ package com.att.research.xacml.std.pip;
 
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.pip.PIPException;
 import com.att.research.xacml.api.pip.PIPFinder;
@@ -19,7 +19,7 @@ import com.att.research.xacml.util.XACMLProperties;
 public class StdPIPFinderFactory extends PIPFinderFactory {
 	private PIPFinder pipFinder;
 	
-	private Log logger	= LogFactory.getLog(this.getClass());
+	private Logger logger	= LoggerFactory.getLogger(this.getClass());
 	
 	public StdPIPFinderFactory() {
 	}

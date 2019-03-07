@@ -3,10 +3,11 @@
  *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacmlatt.pdp.policy.dom;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -31,7 +32,7 @@ import com.att.research.xacmlatt.pdp.policy.expressions.VariableReference;
  * @version $Revision: 1.2 $
  */
 public abstract class DOMExpression extends Expression {
-	private static final Log logger	= LogFactory.getLog(DOMExpression.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMExpression.class);
 	
 	protected DOMExpression() {
 	}

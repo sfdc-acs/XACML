@@ -3,6 +3,7 @@
  *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacml.rest;
 
 import java.io.IOException;
@@ -14,8 +15,8 @@ import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.util.XACMLProperties;
 
@@ -27,7 +28,7 @@ import com.att.research.xacml.util.XACMLProperties;
  *
  */
 public class XACMLRest {
-	private static final Log logger	= LogFactory.getLog(XACMLRest.class);
+	private static final Logger logger	= LoggerFactory.getLogger(XACMLRest.class);
 	private static Properties restProperties = new Properties();
 	
 	/**

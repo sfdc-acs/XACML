@@ -37,8 +37,8 @@ import oasis.names.tc.xacml._3_0.core.schema.wd_17.RuleType;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.TargetType;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.VariableDefinitionType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -328,7 +328,7 @@ public class XACMLPolicyScanner {
 		
 	}
 	
-	private static final Log logger				= LogFactory.getLog(XACMLPolicyScanner.class);
+	private static final Logger logger				= LoggerFactory.getLogger(XACMLPolicyScanner.class);
 	private Object policyObject = null;
 	private Callback callback = null;
 	

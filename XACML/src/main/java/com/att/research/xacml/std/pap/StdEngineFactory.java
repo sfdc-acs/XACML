@@ -8,8 +8,8 @@ package com.att.research.xacml.std.pap;
 import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.pap.PAPEngine;
 import com.att.research.xacml.api.pap.PAPEngineFactory;
@@ -17,7 +17,7 @@ import com.att.research.xacml.api.pap.PAPException;
 import com.att.research.xacml.util.FactoryException;
 
 public class StdEngineFactory extends PAPEngineFactory {
-	private static Log	logger	= LogFactory.getLog(StdEngineFactory.class);
+	private static final Logger	logger	= LoggerFactory.getLogger(StdEngineFactory.class);
 	
 	@Override
 	public PAPEngine newEngine() throws FactoryException, PAPException {

@@ -3,6 +3,7 @@
  *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacmlatt.pdp.policy.dom;
 
 import java.io.File;
@@ -11,8 +12,8 @@ import java.util.Iterator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -41,7 +42,7 @@ import com.att.research.xacmlatt.pdp.policy.Rule;
  * @version $Revision: 1.4 $
  */
 public class DOMPolicy {
-	private static final Log logger	= LogFactory.getLog(DOMPolicy.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMPolicy.class);
 	
 	/**
 	 * Creates a new <code>DOMPolicy</code> to be configured from a DOM <code>Node</code>.

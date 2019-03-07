@@ -22,7 +22,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.logging.Log;
+import org.slf4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -555,7 +555,7 @@ public class DOMUtil {
 		}
 	}
 
-	public static boolean repairIdentifierAttribute(Element element, String attributeName, Identifier identifierDefault, Log logger) throws DOMStructureException {
+	public static boolean repairIdentifierAttribute(Element element, String attributeName, Identifier identifierDefault, Logger logger) throws DOMStructureException {
 		Identifier identifier	= getIdentifierAttribute(element, attributeName);
 		if (identifier == null) {
 			if (identifierDefault != null) {
@@ -570,11 +570,11 @@ public class DOMUtil {
 		return false;
 	}
 	
-	public static boolean repairIdentifierAttribute(Element element, String attributeName, Log logger) throws DOMStructureException {
+	public static boolean repairIdentifierAttribute(Element element, String attributeName, Logger logger) throws DOMStructureException {
 		return repairIdentifierAttribute(element, attributeName, null, logger);
 	}
 	
-	public static boolean repairIdentifierContent(Element element, Log logger) throws DOMStructureException {
+	public static boolean repairIdentifierContent(Element element, Logger logger) throws DOMStructureException {
 		Identifier identifier	= getIdentifierContent(element);
 		if (identifier == null) {
 			identifier	= IdentifierImpl.gensym();
@@ -585,7 +585,7 @@ public class DOMUtil {
 		return false;
 	}
 	
-	public static boolean repairBooleanAttribute(Element element, String attributeName, boolean bvalue, Log logger) throws DOMStructureException {
+	public static boolean repairBooleanAttribute(Element element, String attributeName, boolean bvalue, Logger logger) throws DOMStructureException {
 		Boolean booleanValue	= null;
 		try {
 			booleanValue	= getBooleanAttribute(element, attributeName);
@@ -602,7 +602,7 @@ public class DOMUtil {
 		return false;
 	}
 
-	public static boolean repairVersionMatchAttribute(Element element, String attributeName, Log logger) {
+	public static boolean repairVersionMatchAttribute(Element element, String attributeName, Logger logger) {
 		String versionString	= getStringAttribute(element, attributeName);
 		if (versionString == null) {
 			return false;
@@ -619,7 +619,7 @@ public class DOMUtil {
 		return false;
 	}
 	
-	public static boolean repairVersionAttribute(Element element, String attributeName, Log logger) {
+	public static boolean repairVersionAttribute(Element element, String attributeName, Logger logger) {
 		String versionString	= getStringAttribute(element, attributeName);
 		if (versionString == null) {
 			logger.warn("Adding default " + attributeName + " string 1.0");
@@ -638,7 +638,7 @@ public class DOMUtil {
 		return false;
 	}
 	
-	public static boolean repairStringAttribute(Element element, String attributeName, String defaultValue, Log logger) {
+	public static boolean repairStringAttribute(Element element, String attributeName, String defaultValue, Logger logger) {
 		String attributeValue	= getStringAttribute(element, attributeName);
 		if (attributeValue == null) {
 			if (defaultValue == null) {

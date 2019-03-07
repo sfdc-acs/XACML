@@ -7,8 +7,8 @@ package com.att.research.xacml.std.dom;
 
 import java.text.ParseException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -27,7 +27,7 @@ import com.att.research.xacml.std.StdVersion;
  * @version $Revision: 1.2 $
  */
 public class DOMIdReference extends StdIdReference {
-	private static Log logger	= LogFactory.getLog(DOMIdReference.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMIdReference.class);
 	protected DOMIdReference(Identifier idReferenceIn, Version versionIn) {
 		super(idReferenceIn, versionIn);
 	}

@@ -54,8 +54,6 @@ public class RequestFinder extends WrappingFinder {
 	
 	@Override
 	protected PIPResponse getAttributesInternal(PIPRequest pipRequest, PIPEngine exclude, PIPFinder pipFinderRoot) throws PIPException {
-		//long tStart = 0, tEnd = 0;
-		try {
 		/*
 		 * First try the RequestEngine
 		 */
@@ -63,9 +61,7 @@ public class RequestFinder extends WrappingFinder {
 		RequestEngine thisRequestEngine		= this.getRequestEngine();
 		Status status						= null;
 		if (thisRequestEngine != null && thisRequestEngine != exclude) {
-			//tStart	= System.nanoTime();
 			pipResponse	= thisRequestEngine.getAttributes(pipRequest, (pipFinderRoot == null ? this : pipFinderRoot));
-			//tEnd	= System.nanoTime();
 			if (pipResponse.getStatus() == null || pipResponse.getStatus().isOk()) {
 				/*
 				 * We know how the RequestEngine works.  It does not return multiple results
@@ -142,9 +138,6 @@ public class RequestFinder extends WrappingFinder {
 			return new StdPIPResponse(status);
 		} else {
 			return StdPIPResponse.PIP_RESPONSE_EMPTY;
-		}
-		} finally {
-			//System.out.println("RequestFinder.getAttributesInternal() = " + (tEnd - tStart));
 		}
 	}
 

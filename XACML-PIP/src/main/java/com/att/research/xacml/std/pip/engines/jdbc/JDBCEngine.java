@@ -22,8 +22,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.Attribute;
 import com.att.research.xacml.api.pip.PIPException;
@@ -59,7 +59,7 @@ public class JDBCEngine extends StdConfigurableEngine {
 	public static final String TYPE_JDBC			= "jdbc";
 	public static final String TYPE_JNDI			= "jndi";
 	
-	protected Log logger	= LogFactory.getLog(this.getClass());
+	protected Logger logger	= LoggerFactory.getLogger(this.getClass());
 	private String type;
 	private String jndiDataSource;
 	private String jdbcDriverClass;

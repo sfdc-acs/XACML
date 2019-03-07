@@ -14,8 +14,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import com.att.research.xacml.std.dom.DOMDocumentRepair;
@@ -30,7 +30,7 @@ import com.att.research.xacml.std.dom.DOMUtil;
  * @version $Revision: 1.1 $
  */
 public class XACMLRepair {
-	private static final Log logger	= LogFactory.getLog(XACMLRepair.class);
+	private static final Logger logger	= LoggerFactory.getLogger(XACMLRepair.class);
 	
 	public static final String	PROP_DOCUMENT_REPAIR_CLASSNAME	= "xacml.documentRepairClassName";
 	
@@ -56,7 +56,7 @@ public class XACMLRepair {
 					}
 					this.domDocumentRepair	= (DOMDocumentRepair)(classDocumentRepair.newInstance());
 				} catch (Exception ex) {
-					System.err.println("Warning: Could not find Class " + this.documentRepairClassName + ":" + ex.getMessage() + ": using " + DOMDocumentRepair.class.getCanonicalName());
+					logger.error("Warning: Could not find Class " + this.documentRepairClassName + ":" + ex.getMessage() + ": using " + DOMDocumentRepair.class.getCanonicalName());
 					this.domDocumentRepair	= new DOMDocumentRepair();
 				}
 			}
@@ -73,7 +73,7 @@ public class XACMLRepair {
 						this.listInputFilesOrDirectories.add(new File(args[i++]));
 					}
 				} else {
-					System.err.println("Missing argument to " + args[i] + " command line option");
+					logger.error("Missing argument to " + args[i] + " command line option");
 					return false;
 				}
 			} else if (args[i].equals("--output") || args[i].equals("-o")) {
@@ -81,7 +81,7 @@ public class XACMLRepair {
 					this.outputFileOrDirectory	= new File(args[i+1]);
 					i	+= 2;
 				} else {
-					System.err.println("Missing argument to " + args[i] + " command line option");
+					logger.error("Missing argument to " + args[i] + " command line option");
 					return false;
 				}
 			} else if (args[i].equals("--force") || args[i].equals("-f")) {
@@ -89,7 +89,7 @@ public class XACMLRepair {
 					this.forceOutput	= true;
 					i	+= 1;
 				} else {
-					System.err.println("Missing argument to " + args[i] + " command line option");
+					logger.error("Missing argument to " + args[i] + " command line option");
 					return false;					
 				}
 			} else if (args[i].equals("--repairClass")) {
@@ -97,14 +97,14 @@ public class XACMLRepair {
 					this.documentRepairClassName	= args[i+1];
 					i	+= 2;
 				} else {
-					System.err.println("Missing argument to " + args[i] + " command line option");
+					logger.error("Missing argument to " + args[i] + " command line option");
 					return false;
 				}
 			} else if (args[i].equals("--verbose") || args[i].equals("-i")) {
 				this.verbose	= true;
 				i	+= 1;
 			} else {
-				System.err.println("Unknown command line option " + args[i]);
+				logger.error("Unknown command line option " + args[i]);
 				return false;
 			}
 		}
@@ -115,19 +115,18 @@ public class XACMLRepair {
 	private boolean run(InputStream inputStream, File fileOrig, OutputStream outputStream, File fileDest) throws Exception {
 		String msg	= "Repairing " + (fileOrig == null ? "stdin" : fileOrig.getAbsoluteFile());
 		if (this.verbose) {
-			System.out.println(msg);
+			logger.info(msg);
 		}
-		logger.info(msg);
 		Document documentFile	= null;
 		try {
 			documentFile	= DOMUtil.loadDocument(inputStream);
 		} catch (DOMStructureException ex) {
-			System.err.println((msg = "Error loading " + (fileOrig == null ? "from stdin" : fileOrig.getAbsoluteFile()) + ": " + ex.getMessage()));
+			logger.error((msg = "Error loading " + (fileOrig == null ? "from stdin" : fileOrig.getAbsoluteFile()) + ": " + ex.getMessage()));
 			logger.error(msg);
 			return false;
 		}
 		if (documentFile == null) {
-			System.err.println((msg = "No document " + (fileOrig == null ? "from stdin" : fileOrig.getAbsoluteFile())));
+			logger.error((msg = "No document " + (fileOrig == null ? "from stdin" : fileOrig.getAbsoluteFile())));
 			logger.error(msg);
 			return false;
 		}
@@ -136,13 +135,13 @@ public class XACMLRepair {
 		try {
 			bUpdated	= domDocumentRepair.repair(documentFile);
 		} catch (DOMStructureException ex) {
-			System.err.println((msg = "Error repairing " + (fileOrig == null ? "from stdin" : fileOrig.getAbsoluteFile()) + ": " + ex.getMessage()));
+			logger.error((msg = "Error repairing " + (fileOrig == null ? "from stdin" : fileOrig.getAbsoluteFile()) + ": " + ex.getMessage()));
 			logger.error(msg);
 			return false;
 		} catch (DOMDocumentRepair.UnsupportedDocumentTypeException ex) {
 			msg	= "Unknown document type in " + (fileOrig == null ? "stdin" : fileOrig.getAbsoluteFile()) + ": skipping";
 			if (this.verbose) {
-				System.err.println(msg);
+				logger.error(msg);
 			}
 			logger.debug(msg);
 			return false;
@@ -150,12 +149,12 @@ public class XACMLRepair {
 		if (bUpdated) {
 			msg = "Repairs made in " + (fileOrig == null ? "stdin" : fileOrig.getAbsoluteFile());
 			if (verbose) {
-				System.out.println(msg);
+				logger.info(msg);
 			}
 			logger.debug(msg);
 		}
 		if (bUpdated || this.forceOutput) {
-			System.out.println((msg = "Writing to " + (fileDest == null ? "stdout" : fileDest.getAbsoluteFile())));
+			logger.info((msg = "Writing to " + (fileDest == null ? "stdout" : fileDest.getAbsoluteFile())));
 			logger.info(msg);
 			String newDocument	= DOMUtil.toString(documentFile);
 			outputStream.write(newDocument.getBytes());
@@ -202,7 +201,7 @@ public class XACMLRepair {
 	private void run(File inputFile) throws Exception {
 		String msg;
 		if (!inputFile.exists()) {
-			System.err.println((msg = "Input file " + inputFile.getAbsolutePath() + " does not exist."));
+			logger.error((msg = "Input file " + inputFile.getAbsolutePath() + " does not exist."));
 			logger.error(msg);
 			return;
 		} else if (inputFile.isDirectory()) {
@@ -245,8 +244,7 @@ public class XACMLRepair {
 				xacmlRepair.run();
 			}
 		} catch (Exception ex) {
-			System.err.println("Exception: " + ex.getMessage());
-			ex.printStackTrace(System.err);
+			logger.error("Exception: {}" + ex.getMessage(), ex);
 			System.exit(1);
 		}
 		System.exit(0);

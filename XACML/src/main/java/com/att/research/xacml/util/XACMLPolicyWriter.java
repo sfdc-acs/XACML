@@ -14,8 +14,8 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.ObjectFactory;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.PolicySetType;
@@ -28,7 +28,7 @@ import oasis.names.tc.xacml._3_0.core.schema.wd_17.PolicyType;
  *
  */
 public class XACMLPolicyWriter {
-	private static final Log logger				= LogFactory.getLog(XACMLPolicyWriter.class);
+	private static final Logger logger				= LoggerFactory.getLogger(XACMLPolicyWriter.class);
 	
 	private XACMLPolicyWriter() {
 		super();

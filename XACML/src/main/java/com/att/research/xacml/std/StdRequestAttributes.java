@@ -11,8 +11,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -28,7 +28,7 @@ import com.att.research.xacml.util.ObjUtil;
  * @version $Revision: 1.1 $
  */
 public class StdRequestAttributes extends StdAttributeCategory implements RequestAttributes {
-	private Log logger	= LogFactory.getLog(this.getClass());
+	private final Logger logger	= LoggerFactory.getLogger(this.getClass());
 	
 	private Node contentRoot;
 	private String xmlId;

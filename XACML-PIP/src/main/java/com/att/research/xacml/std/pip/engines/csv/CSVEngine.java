@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -41,7 +41,7 @@ import com.google.common.base.Splitter;
 
 public class CSVEngine extends StdConfigurableEngine {
 
-	protected Log logger	= LogFactory.getLog(this.getClass());
+	protected Logger logger	= LoggerFactory.getLogger(this.getClass());
 	/*
 	 * Files that are smaller than this number are read into memory during startup.
 	 * Larger files are read one line at a time as needed to avoid overloading the JVM memory limit.

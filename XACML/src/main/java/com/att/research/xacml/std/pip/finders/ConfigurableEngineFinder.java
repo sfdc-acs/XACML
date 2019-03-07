@@ -8,8 +8,8 @@ package com.att.research.xacml.std.pip.finders;
 import java.util.Collection;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.pip.PIPException;
 import com.att.research.xacml.api.pip.PIPRequest;
@@ -27,7 +27,7 @@ public class ConfigurableEngineFinder extends EngineFinder {
 	private static final String	PROP_PIP_ENGINES	= "xacml.pip.engines";
 	private static final String	CLASSNAME			= ".classname";
 	
-	private Log logger	= LogFactory.getLog(this.getClass());
+	private static final Logger logger	= LoggerFactory.getLogger(ConfigurableEngineFinder.class);
 	
 	/**
 	 * Creates an instance of the given <code>String</code> className for an object implementing the
@@ -69,16 +69,16 @@ public class ConfigurableEngineFinder extends EngineFinder {
 		 */
 		configurableEngine.configure(engineId, properties);
 		
-		if (this.logger.isDebugEnabled()) {
-			this.logger.debug("Engine " + engineId + " Provides: ");
+		if (logger.isDebugEnabled()) {
+			logger.debug("Engine " + engineId + " Provides: ");
 			Collection<PIPRequest> attributes = configurableEngine.attributesProvided();
 			for (PIPRequest attribute : attributes) {
-				this.logger.debug(System.lineSeparator() + AttributeUtils.prettyPrint(attribute));				
+				logger.debug(System.lineSeparator() + AttributeUtils.prettyPrint(attribute));				
 			}
-			this.logger.debug("Engine " + engineId + " Requires: ");
+			logger.debug("Engine " + engineId + " Requires: ");
 			attributes = configurableEngine.attributesRequired();
 			for (PIPRequest attribute : attributes) {
-				this.logger.debug(System.lineSeparator() + AttributeUtils.prettyPrint(attribute));				
+				logger.debug(System.lineSeparator() + AttributeUtils.prettyPrint(attribute));				
 			}
 		}
 		
@@ -119,7 +119,7 @@ public class ConfigurableEngineFinder extends EngineFinder {
 			try {
 				this.configureEngine(engineId, properties);
 			} catch (PIPException ex) {
-				this.logger.error("Exception configuring engine with id \"" + engineId + "\"", ex);
+				logger.error("Exception configuring engine with id \"" + engineId + "\"", ex);
 			}
 		}
 	}

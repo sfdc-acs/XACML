@@ -7,8 +7,8 @@ package com.att.research.xacml.std.pep;
 
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.Request;
 import com.att.research.xacml.api.Response;
@@ -28,7 +28,7 @@ import com.att.research.xacml.util.FactoryException;
  * @version $Revision: 1.2 $
  */
 public class StdEngine implements PEPEngine {
-	private Log	logger	= LogFactory.getLog(this.getClass());
+	private Logger	logger	= LoggerFactory.getLogger(this.getClass());
 	
 	protected Properties properties = null;
 	

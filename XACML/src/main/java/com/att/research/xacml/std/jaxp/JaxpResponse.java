@@ -20,8 +20,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.ResponseType;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.ResultType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -38,7 +38,7 @@ import com.att.research.xacml.std.StdMutableResponse;
  * @version $Revision: 1.1 $
  */
 public class JaxpResponse extends StdMutableResponse {
-	private static Log	logger	= LogFactory.getLog(JaxpResponse.class);
+	private static final Logger	logger	= LoggerFactory.getLogger(JaxpResponse.class);
 
 	protected JaxpResponse() {
 	}
@@ -117,7 +117,7 @@ public class JaxpResponse extends StdMutableResponse {
 			try {
 				jaxpResponse	= JaxpResponse.load(new File(fileName));
 			} catch (Exception ex) {
-				logger.fatal("Failed to load \"" + fileName + "\" as a JaxpResponse", ex);
+				logger.error("Failed to load \"" + fileName + "\" as a JaxpResponse", ex);
 				continue;
 			}
 			if (jaxpResponse == null) {

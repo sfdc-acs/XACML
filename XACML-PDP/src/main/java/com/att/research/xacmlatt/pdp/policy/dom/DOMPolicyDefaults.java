@@ -8,8 +8,8 @@ package com.att.research.xacmlatt.pdp.policy.dom;
 
 import java.net.URI;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -29,7 +29,7 @@ import com.att.research.xacmlatt.pdp.policy.PolicyDefaults;
  * @version $Revision: 1.2 $
  */
 public class DOMPolicyDefaults extends PolicyDefaults {
-	private static final Log logger	= LogFactory.getLog(DOMPolicyDefaults.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMPolicyDefaults.class);
 	
 	protected DOMPolicyDefaults(URI xpathVersionIn, PolicyDefaults policyDefaultsParentIn) {
 		super(xpathVersionIn, policyDefaultsParentIn);

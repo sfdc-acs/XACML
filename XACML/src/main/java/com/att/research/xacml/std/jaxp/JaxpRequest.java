@@ -21,8 +21,8 @@ import oasis.names.tc.xacml._3_0.core.schema.wd_17.AttributesType;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.RequestReferenceType;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.RequestType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -38,7 +38,7 @@ import com.att.research.xacml.std.StdMutableRequest;
  * @version $Revision: 1.1 $
  */
 public class JaxpRequest extends StdMutableRequest {
-	private static Log	logger	= LogFactory.getLog(JaxpRequest.class);
+	private static Logger	logger	= LoggerFactory.getLogger(JaxpRequest.class);
 	
 	public JaxpRequest() {
 	}
@@ -128,7 +128,7 @@ public class JaxpRequest extends StdMutableRequest {
 			try {
 				jaxpRequest	= JaxpRequest.load(new File(fileName));
 			} catch (Exception ex) {
-				logger.fatal("Failed to load \"" + fileName + "\" as a JaxpRequest", ex);
+				logger.error("Failed to load \"" + fileName + "\" as a JaxpRequest", ex);
 				continue;
 			}
 			if (jaxpRequest == null) {

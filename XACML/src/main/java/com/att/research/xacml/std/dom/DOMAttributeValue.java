@@ -5,8 +5,8 @@
  */
 package com.att.research.xacml.std.dom;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -30,7 +30,7 @@ import com.att.research.xacml.util.FactoryException;
  * @param <T> the Java type implementing the value for the Attribute
  */
 public class DOMAttributeValue<T> extends StdAttributeValue<T> {
-	private static Log logger	= LogFactory.getLog(DOMAttributeValue.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMAttributeValue.class);
 	
 	protected DOMAttributeValue(Identifier dataTypeIdIn, T valueIn) {
 		super(dataTypeIdIn, valueIn);

@@ -3,6 +3,7 @@
  *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacml.std.pip.engines.jdbc;
 
 import java.sql.Connection;
@@ -18,8 +19,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.Attribute;
 import com.att.research.xacml.api.AttributeValue;
@@ -55,7 +56,7 @@ public class ConfigurableJDBCResolver implements JDBCResolver {
 	public static final String PROP_SELECT_PARAMETERS	= "parameters";
 	public static final String PROP_SELECT_PARAMETER	= "parameter";
 	
-	private Log logger									= LogFactory.getLog(this.getClass());
+	private Logger logger								= LoggerFactory.getLogger(this.getClass());
 	private String defaultIssuer;
 	private Set<PIPRequest> supportedRequests			= new HashSet<PIPRequest>();
 	private Set<PIPRequest> supportedRequestsNoIssuer	= new HashSet<PIPRequest>();
@@ -68,7 +69,7 @@ public class ConfigurableJDBCResolver implements JDBCResolver {
 		try {
 			dataTypeFactory	= DataTypeFactory.newInstance();
 		} catch (Exception ex) {
-			LogFactory.getLog(ConfigurableJDBCResolver.class).error("Exception geting DataTypeFactory: " + ex.toString(), ex);
+			LoggerFactory.getLogger(ConfigurableJDBCResolver.class).error("Exception geting DataTypeFactory: " + ex.toString(), ex);
 		}
 	}
 	

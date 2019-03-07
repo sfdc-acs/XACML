@@ -3,10 +3,11 @@
  *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacmlatt.pdp.policy.dom;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -26,7 +27,7 @@ import com.att.research.xacmlatt.pdp.policy.Target;
  * @version $Revision: 1.3 $
  */
 public class DOMTarget extends Target {
-	private static final Log logger	= LogFactory.getLog(DOMTarget.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMTarget.class);
 	
 	/**
 	 * Creates an empty <code>DOMTarget</code>.

@@ -9,7 +9,12 @@ package com.att.research.xacml.util;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CalendarTest {
+	
+	private static final Logger logger	= LoggerFactory.getLogger(Calendar.class);
 
 	public CalendarTest() {
 		super();
@@ -46,27 +51,26 @@ public class CalendarTest {
 	};
 	
 	private static void dumpCalendar(Calendar calendar) {
-		System.out.println("Current timestamp=" + calendar.getTimeInMillis());
-		System.out.println("Current Date=" + calendar.getTime());
-		System.out.println("Current TimeZone=" + calendar.getTimeZone());
-		System.out.print("Fields=");
+		logger.debug("Current timestamp=" + calendar.getTimeInMillis());
+		logger.debug("Current Date=" + calendar.getTime());
+		logger.debug("Current TimeZone=" + calendar.getTimeZone());
+		StringBuilder message = new StringBuilder("Fields=");
 		boolean needsComma	= false;
 		for (CField cfield: calFields) {
 			if (needsComma) {
-				System.out.print(",");
+				message.append(",");
 			}
-			System.out.print(cfield.getFieldName() + "=" + calendar.get(cfield.getCalId()));
+			message.append(cfield.getFieldName() + "=" + calendar.get(cfield.getCalId()));
 			needsComma	= true;
 		}
-		System.out.println();
-		
+		logger.debug(message.toString());
 	}
 
 	public static void main(String[] args) {
 		Calendar calendar	= Calendar.getInstance();
 		calendar.setLenient(false);
 
-		System.out.println("Current Time");
+		logger.debug("Current Time");
 		dumpCalendar(calendar);
 		
 		/*
@@ -74,10 +78,10 @@ public class CalendarTest {
 		 */
 		try {
 			calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
-			System.out.println("GMT Time");
+			logger.debug("GMT Time");
 			dumpCalendar(calendar);
 		} catch (Exception ex) {
-			System.err.println("Exception using timezone GMT: " + ex);
+			logger.error("Exception using timezone GMT: " + ex);
 		}
 		
 		/*
@@ -85,10 +89,10 @@ public class CalendarTest {
 		 */
 		try {
 			calendar.setTimeZone(TimeZone.getTimeZone("GMT-06:00"));
-			System.out.println("GMT Time-06:00");
+			logger.debug("GMT Time-06:00");
 			dumpCalendar(calendar);
 		} catch (Exception ex) {
-			System.err.println("Exception using timezone GMT: " + ex);
+			logger.error("Exception using timezone GMT: " + ex);
 		}
 		
 		/*
@@ -96,10 +100,10 @@ public class CalendarTest {
 		 */
 		try {
 			calendar.setTimeZone(TimeZone.getTimeZone("GMT-06:10"));
-			System.out.println("GMT Time-06:10");
+			logger.debug("GMT Time-06:10");
 			dumpCalendar(calendar);
 		} catch (Exception ex) {
-			System.err.println("Exception using timezone GMT: " + ex);
+			logger.error("Exception using timezone GMT: " + ex);
 		}	
 		
 		/*
@@ -108,10 +112,10 @@ public class CalendarTest {
 		try {
 			calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
 			calendar.set(Calendar.YEAR, 10012);
-			System.out.println("GMT Time in 10012");
+			logger.debug("GMT Time in 10012");
 			dumpCalendar(calendar);
 		} catch (Exception ex) {
-			System.err.println("Exception setting year to 10012 " + ex);
+			logger.error("Exception setting year to 10012 " + ex);
 		}
 				
 		/*
@@ -120,10 +124,10 @@ public class CalendarTest {
 		try {
 			calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
 			calendar.set(Calendar.YEAR, 1812);
-			System.out.println("GMT Time in 1812");
+			logger.debug("GMT Time in 1812");
 			dumpCalendar(calendar);
 		} catch (Exception ex) {
-			System.err.println("Exception setting year to 1812 " + ex);
+			logger.error("Exception setting year to 1812 " + ex);
 		}
 		
 		/*
@@ -131,10 +135,10 @@ public class CalendarTest {
 		 */
 		try {
 			calendar.add(Calendar.DAY_OF_YEAR, 60);
-			System.out.println("GMT Time in 1812 + 60 days");
+			logger.debug("GMT Time in 1812 + 60 days");
 			dumpCalendar(calendar);
 		} catch (Exception ex) {
-			System.err.println("Exception adding 60 days " + ex);
+			logger.error("Exception adding 60 days " + ex);
 		}
 		
 		/*
@@ -142,10 +146,10 @@ public class CalendarTest {
 		 */
 		try {
 			calendar.add(Calendar.DAY_OF_YEAR, -900);
-			System.out.println("GMT Time in 1812 -900 days");
+			logger.debug("GMT Time in 1812 -900 days");
 			dumpCalendar(calendar);
 		} catch (Exception ex) {
-			System.err.println("Exception subtracting 900 days " + ex);
+			logger.error("Exception subtracting 900 days " + ex);
 		}
 		
 		/*
@@ -153,10 +157,10 @@ public class CalendarTest {
 		 */
 		try {
 			calendar.add(Calendar.MONTH, 11);
-			System.out.println("GMT Time in 1812 + 11 months");
+			logger.debug("GMT Time in 1812 + 11 months");
 			dumpCalendar(calendar);
 		} catch (Exception ex) {
-			System.err.println("Exception adding 11 months " + ex);
+			logger.error("Exception adding 11 months " + ex);
 		}
 		
 		
@@ -166,10 +170,10 @@ public class CalendarTest {
 		try {
 			calendar.set(Calendar.MONTH, 10);
 			calendar.set(Calendar.DATE, 31);
-			System.out.println("GMT Time for Nov 31, 1812");
+			logger.debug("GMT Time for Nov 31, 1812");
 			dumpCalendar(calendar);
 		} catch (Exception ex) {
-			System.err.println("Exception setting year to 1812 " + ex);
+			logger.error("Exception setting year to 1812 " + ex);
 		}
 		
 		/*
@@ -177,10 +181,10 @@ public class CalendarTest {
 		 */
 		try {
 			calendar.setTimeInMillis(-8888888888L);
-			System.out.println("GMT Time for -8888888888");
+			logger.debug("GMT Time for -8888888888");
 			dumpCalendar(calendar);
 		} catch (Exception ex) {
-			System.err.println("Exception setting time-in-millis to -8888888888 " + ex);
+			logger.error("Exception setting time-in-millis to -8888888888 " + ex);
 		}
 	}
 

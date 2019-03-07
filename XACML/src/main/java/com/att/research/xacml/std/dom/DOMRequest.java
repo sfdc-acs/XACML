@@ -15,8 +15,8 @@ import java.io.UnsupportedEncodingException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -38,7 +38,7 @@ import com.att.research.xacml.std.StdRequest;
  * @version $Revision: 1.3 $
  */
 public class DOMRequest {
-	private static final Log logger	= LogFactory.getLog(DOMRequest.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMRequest.class);
 	
 	/*
 	 * Prevent creation of instances - this class contains only static methods that return other object types.
@@ -318,13 +318,13 @@ public class DOMRequest {
 			for (String xmlFileName: args) {
 				File	fileXml	= new File(xmlFileName);
 				if (!fileXml.exists()) {
-					System.err.println("Input file \"" + fileXml.getAbsolutePath() + "\" does not exist.");
+					logger.error("Input file \"" + fileXml.getAbsolutePath() + "\" does not exist.");
 					continue;
 				} else if (!fileXml.canRead()) {
-					System.err.println("Permission denied reading input file \"" + fileXml.getAbsolutePath() + "\"");
+					logger.error("Permission denied reading input file \"" + fileXml.getAbsolutePath() + "\"");
 					continue;
 				}
-				System.out.println(fileXml.getAbsolutePath() + ":");
+				logger.debug(fileXml.getAbsolutePath() + ":");
 				try {
 					DocumentBuilder	documentBuilder	= documentBuilderFactory.newDocumentBuilder();
 					assert(documentBuilder.isNamespaceAware());
@@ -333,22 +333,21 @@ public class DOMRequest {
 					
 					NodeList children				= documentRequest.getChildNodes();
 					if (children == null || children.getLength() == 0) {
-						System.err.println("No Requests found in \"" + fileXml.getAbsolutePath() + "\"");
+						logger.error("No Requests found in \"" + fileXml.getAbsolutePath() + "\"");
 						continue;
 					} else if (children.getLength() > 1) {
-						System.err.println("Multiple Requests found in \"" + fileXml.getAbsolutePath() + "\"");
+						logger.error("Multiple Requests found in \"" + fileXml.getAbsolutePath() + "\"");
 					}
 					Node nodeRequest				= children.item(0);
 					if (!nodeRequest.getLocalName().equals(XACML3.ELEMENT_REQUEST)) {
-						System.err.println("\"" + fileXml.getAbsolutePath() + "\" is not a Request");
+						logger.error("\"" + fileXml.getAbsolutePath() + "\" is not a Request");
 						continue;
 					}
 					
 					Request domRequest			= DOMRequest.newInstance(nodeRequest);
-					System.out.println(domRequest.toString());
-					System.out.println();
+					logger.debug(domRequest.toString());
 				} catch (Exception ex) {
-					ex.printStackTrace(System.err);
+					logger.error("{}", ex);
 				}
 			}
 		}

@@ -3,12 +3,13 @@
  *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacmlatt.pdp.std;
 
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.Request;
 import com.att.research.xacml.api.pip.PIPFinder;
@@ -28,7 +29,7 @@ import com.att.research.xacmlatt.pdp.policy.PolicyFinderFactory;
  * @version $Revision: 1.1 $
  */
 public class StdEvaluationContextFactory extends EvaluationContextFactory {
-	private Log logger					= LogFactory.getLog(this.getClass());
+	private final Logger logger	= LoggerFactory.getLogger(this.getClass());
 	private PolicyFinder policyFinder;
 	private PIPFinder pipFinder;
 	private TraceEngine traceEngine;

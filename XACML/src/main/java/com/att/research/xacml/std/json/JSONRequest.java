@@ -37,8 +37,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -85,7 +85,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  * @version $Revision: 1.3 $
  */
 public class JSONRequest {
-	private static final Log logger	= LogFactory.getLog(JSONRequest.class);
+	private static final Logger logger	= LoggerFactory.getLogger(JSONRequest.class);
 	
 	/*
 	 * Map of Data Type Identifiers used to map shorthand notation for DataTypes into the full Identifer.

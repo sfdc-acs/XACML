@@ -16,8 +16,8 @@ import java.util.Set;
 
 import javax.xml.bind.JAXBElement;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.AdviceExpressionType;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.ApplyType;
@@ -71,7 +71,7 @@ import com.att.research.xacml.util.XACMLPolicyScanner.SimpleCallback;
  *
  */
 public class XACMLPolicyAggregator extends SimpleCallback  {
-	private static Log logger	= LogFactory.getLog(XACMLPolicyAggregator.class);
+	private static final Logger logger	= LoggerFactory.getLogger(XACMLPolicyAggregator.class);
 	//
 	// This holds all the attributes found within the policy
 	// Map<CATEGORY, MAP<DATATYPE, MAP<ATTRIBUTEID, SET<VALUES>>>

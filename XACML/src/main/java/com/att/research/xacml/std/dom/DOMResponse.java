@@ -26,8 +26,8 @@ import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -73,7 +73,7 @@ import com.att.research.xacml.std.json.JSONStructureException;
  * @version $Revision: 1.2 $
  */
 public class DOMResponse {
-	private static final Log logger	= LogFactory.getLog(DOMResponse.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMResponse.class);
 	
 	protected DOMResponse() {
 	}
@@ -817,13 +817,13 @@ public class DOMResponse {
 			for (String xmlFileName: args) {
 				File	fileXml	= new File(xmlFileName);
 				if (!fileXml.exists()) {
-					System.err.println("Input file \"" + fileXml.getAbsolutePath() + "\" does not exist.");
+					logger.error("Input file \"" + fileXml.getAbsolutePath() + "\" does not exist.");
 					continue;
 				} else if (!fileXml.canRead()) {
-					System.err.println("Permission denied reading input file \"" + fileXml.getAbsolutePath() + "\"");
+					logger.error("Permission denied reading input file \"" + fileXml.getAbsolutePath() + "\"");
 					continue;
 				}
-				System.out.println(fileXml.getAbsolutePath() + ":");
+				logger.debug(fileXml.getAbsolutePath() + ":");
 				try {
 					DocumentBuilder	documentBuilder	= documentBuilderFactory.newDocumentBuilder();
 					assert(documentBuilder.isNamespaceAware());
@@ -832,22 +832,21 @@ public class DOMResponse {
 					
 					NodeList children				= documentResponse.getChildNodes();
 					if (children == null || children.getLength() == 0) {
-						System.err.println("No Responses found in \"" + fileXml.getAbsolutePath() + "\"");
+						logger.error("No Responses found in \"" + fileXml.getAbsolutePath() + "\"");
 						continue;
 					} else if (children.getLength() > 1) {
-						System.err.println("Multiple Responses found in \"" + fileXml.getAbsolutePath() + "\"");
+						logger.error("Multiple Responses found in \"" + fileXml.getAbsolutePath() + "\"");
 					}
 					Node nodeResponse				= children.item(0);
 					if (!nodeResponse.getLocalName().equals(XACML3.ELEMENT_RESPONSE)) {
-						System.err.println("\"" + fileXml.getAbsolutePath() + "\" is not a Response");
+						logger.error("\"" + fileXml.getAbsolutePath() + "\" is not a Response");
 						continue;
 					}
 					
 					Response domResponse			= DOMResponse.newInstance(nodeResponse);
-					System.out.println(domResponse.toString());
-					System.out.println();
+					logger.debug(domResponse.toString());
 				} catch (Exception ex) {
-					ex.printStackTrace(System.err);
+					logger.error("{}", ex);
 				}
 			}
 		}

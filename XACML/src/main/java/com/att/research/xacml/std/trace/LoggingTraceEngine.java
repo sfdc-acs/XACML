@@ -7,8 +7,8 @@ package com.att.research.xacml.std.trace;
 
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.trace.TraceEngine;
 import com.att.research.xacml.api.trace.TraceEvent;
@@ -24,7 +24,7 @@ import com.att.research.xacml.api.trace.Traceable;
 public class LoggingTraceEngine implements TraceEngine {
 	private static final LoggingTraceEngine loggingTraceEngine	= new LoggingTraceEngine();
 	
-	private Log logger	= LogFactory.getLog(this.getClass());
+	private Logger logger	= LoggerFactory.getLogger(this.getClass());
 	
 	protected LoggingTraceEngine() {
 	}
@@ -63,7 +63,7 @@ public class LoggingTraceEngine implements TraceEngine {
 				);
 		Object traceObject	= traceEvent.getValue();
 		if (traceObject != null) {
-			this.logger.debug(traceObject);
+			this.logger.debug(traceObject.toString());
 		}
 	}
 

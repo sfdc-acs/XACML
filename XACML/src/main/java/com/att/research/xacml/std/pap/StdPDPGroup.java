@@ -21,8 +21,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.pap.PAPException;
 import com.att.research.xacml.api.pap.PDP;
@@ -40,7 +40,7 @@ import com.google.common.io.ByteStreams;
 
 public class StdPDPGroup extends StdPDPItemSetChangeNotifier implements PDPGroup, StdItemSetChangeListener, Comparable<Object>, Serializable {
 	private static final long serialVersionUID = 1L;
-	private static Log	logger	= LogFactory.getLog(StdPDPGroup.class);
+	private static final Logger	logger	= LoggerFactory.getLogger(StdPDPGroup.class);
 	
 	private String id;
 	
@@ -133,7 +133,7 @@ public class StdPDPGroup extends StdPDPItemSetChangeNotifier implements PDPGroup
 				Files.createDirectory(directory);
 				this.status.addLoadWarning("Group directory does NOT exist");
 			} catch (IOException e) {
-				logger.error(e);
+				logger.error("{}", e);
 				this.status.addLoadError("Group directory does NOT exist");
 				this.status.setStatus(PDPGroupStatus.Status.LOAD_ERRORS);
 			}
@@ -644,7 +644,7 @@ public class StdPDPGroup extends StdPDPItemSetChangeNotifier implements PDPGroup
 				fire = true;
 				this.status.addLoadWarning("Created missing group directory");
 			} catch (IOException e) {
-				logger.error(e);
+				logger.error("{}", e);
 				this.status.addLoadError("Failed to create missing Group directory.");
 				this.status.setStatus(PDPGroupStatus.Status.LOAD_ERRORS);
 			}
@@ -659,7 +659,7 @@ public class StdPDPGroup extends StdPDPItemSetChangeNotifier implements PDPGroup
 				fire = true;
 				this.status.addLoadWarning("Created missing PIP properties file");
 			} catch (IOException e) {
-				logger.error(e);
+				logger.error("{}", e);
 				this.status.addLoadError("Failed to create missing PIP properties file");
 				this.status.setStatus(PDPGroupStatus.Status.LOAD_ERRORS);
 			}
@@ -674,7 +674,7 @@ public class StdPDPGroup extends StdPDPItemSetChangeNotifier implements PDPGroup
 				fire = true;
 				this.status.addLoadWarning("Created missing Policy properties file");
 			} catch (IOException e) {
-				logger.error(e);
+				logger.error("{}", e);
 				this.status.addLoadError("Failed to create missing Policy properties file");
 				this.status.setStatus(PDPGroupStatus.Status.LOAD_ERRORS);
 			}

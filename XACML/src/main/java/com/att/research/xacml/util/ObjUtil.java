@@ -5,8 +5,8 @@
  */
 package com.att.research.xacml.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -19,7 +19,7 @@ import org.w3c.dom.NodeList;
  */
 public class ObjUtil {
 	
-	private static final Log logger	= LogFactory.getLog(ObjUtil.class);
+	private static final Logger logger	= LoggerFactory.getLogger(ObjUtil.class);
 
 	
 	protected ObjUtil() {

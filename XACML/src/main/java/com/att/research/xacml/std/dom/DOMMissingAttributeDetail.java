@@ -5,8 +5,8 @@
  */
 package com.att.research.xacml.std.dom;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -24,7 +24,7 @@ import com.att.research.xacml.std.StdMutableMissingAttributeDetail;
  * @version $Revision: 1.2 $
  */
 public class DOMMissingAttributeDetail {
-	private static final Log logger	= LogFactory.getLog(DOMMissingAttributeDetail.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMMissingAttributeDetail.class);
 	protected DOMMissingAttributeDetail() {
 	}
 	

@@ -3,13 +3,14 @@
  *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacmlatt.pdp.policy.dom;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,7 +31,7 @@ import com.att.research.xacmlatt.pdp.policy.CombinerParameter;
  * @version $Revision: 1.2 $
  */
 public class DOMCombinerParameter extends CombinerParameter {
-	private static final Log logger	= LogFactory.getLog(DOMCombinerParameter.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMCombinerParameter.class);
 	
 	protected DOMCombinerParameter() {
 		

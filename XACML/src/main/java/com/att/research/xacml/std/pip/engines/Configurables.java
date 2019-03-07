@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.pip.PIPException;
 import com.att.research.xacml.api.pip.PIPRequest;
@@ -32,7 +32,7 @@ public class Configurables {
 	public static final String PROP_CATEGORY		= "category";
 	public static final String PROP_ISSUER			= "issuer";
 	
-	private static Log logger		= LogFactory.getLog(Configurables.class);
+	private static final Logger logger		= LoggerFactory.getLogger(Configurables.class);
 
 	public static List<PIPRequest> getPIPRequestList(String prefix, String name, Properties properties, String defaultIssuer) throws PIPException {
 		String idxProp = properties.getProperty(prefix + "." + name);

@@ -7,8 +7,8 @@ package com.att.research.xacml.std.dom;
 
 import java.text.ParseException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -27,7 +27,7 @@ import com.att.research.xacml.std.StdVersionMatch;
  * @version $Revision: 1.2 $
  */
 public class DOMIdReferenceMatch extends StdIdReferenceMatch {
-	private static final Log logger	= LogFactory.getLog(DOMIdReferenceMatch.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMIdReferenceMatch.class);
 	
 	protected DOMIdReferenceMatch(Identifier idIn, VersionMatch versionIn, VersionMatch earliestVersionIn, VersionMatch latestVersionIn) {
 		super(idIn, versionIn, earliestVersionIn, latestVersionIn);

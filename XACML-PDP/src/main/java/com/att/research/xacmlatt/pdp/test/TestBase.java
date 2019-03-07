@@ -32,9 +32,9 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.http.entity.ContentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.AttributeValue;
 import com.att.research.xacml.api.DataType;
@@ -77,7 +77,7 @@ import com.google.common.collect.Lists;
  *
  */
 public class TestBase extends SimpleFileVisitor<Path> {
-	private static final Log logger	= LogFactory.getLog(TestBase.class);
+	private static final Logger logger	= LoggerFactory.getLogger(TestBase.class);
 	
 	public class HelpException extends Exception {
 		private static final long serialVersionUID = 1L;
@@ -113,7 +113,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 				try {
 					is = Files.newInputStream(file);
 				} catch (IOException e) {
-					logger.error(e);
+					logger.error("{}", e);
 					return null;
 				}
 			}
@@ -132,7 +132,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 					logger.debug(str);
 				}
 			} catch (IOException e) {
-				logger.error(e);
+				logger.error("{}", e);
 			}
 			return str;
 		}
@@ -480,7 +480,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 				//
 				this.sendRequest(file, group);
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error("{}", e);
 				e.printStackTrace();
 			}
 		}
@@ -514,7 +514,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 				logger.info("NULL request generated.");
 				break;
 			}
-			logger.info(request);
+			logger.info(request.toString());
 			//
 			// Call the PDP
 			//
@@ -570,7 +570,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 			try {
 				response = this.engine.decide(request);
 			} catch (PDPException e) {
-				logger.error(e);
+				logger.error("{}", e);
 			}
 			long lTimeEnd = System.currentTimeMillis();
 			logger.info("Elapsed Time: " + (lTimeEnd - lTimeStart) + "ms");
@@ -723,7 +723,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 						attributes.add(a);
 					}
 				} catch (DataTypeException e) {
-					logger.error(e);
+					logger.error("{}", e);
 					return null;
 				}
 			}
@@ -809,7 +809,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
             	logger.error(connection.getResponseCode() + " " + connection.getResponseMessage());
             }
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("{}", e);
 		}
 		
 		return response;
@@ -864,7 +864,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 			try {
 				Files.createDirectories(responseFile);
 			} catch (IOException e) {
-				logger.error(e);
+				logger.error("{}", e);
 				throw new Exception("Cannot proceed without an output directory.");
 			}
 		}
@@ -894,7 +894,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 			try {
 				Files.createDirectories(resultFile);
 			} catch (IOException e) {
-				logger.error(e);
+				logger.error("{}", e);
 				throw new Exception("Cannot proceed without an output directory.");
 			}
 		}
@@ -1039,7 +1039,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 			this.notapplicables != this.expectedNotApplicables ||
 			this.indeterminates != this.expectedIndeterminates ||
 			this.responseNotMatches > 0) {
-			logger.fatal(dump.toString());
+			logger.error(dump.toString());
 		} else {
 			logger.info(dump.toString());
 		}
@@ -1062,7 +1062,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 		try {
 			new TestBase(args).run();
 		} catch (ParseException | IOException | FactoryException e) {
-			logger.error(e);
+			logger.error("{}", e);
 		} catch (HelpException e) {
 		}		
 	}

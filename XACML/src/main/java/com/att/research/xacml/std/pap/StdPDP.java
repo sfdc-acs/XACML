@@ -11,8 +11,8 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.pap.PDP;
 import com.att.research.xacml.api.pap.PDPPIPConfig;
@@ -21,7 +21,7 @@ import com.att.research.xacml.api.pap.PDPStatus;
 
 public class StdPDP extends StdPDPItemSetChangeNotifier implements PDP, Comparable<StdPDP>, Serializable {
 	private static final long serialVersionUID = 1L;
-	private static Log	logger	= LogFactory.getLog(StdPDP.class);
+	private static final Logger	logger	= LoggerFactory.getLogger(StdPDP.class);
 	
 	private String id;
 	

@@ -26,8 +26,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.pap.PAPEngine;
 import com.att.research.xacml.api.pap.PAPException;
@@ -48,7 +48,7 @@ import com.google.common.collect.Sets;
  *
  */
 public class StdEngine extends StdPDPItemSetChangeNotifier implements PAPEngine {
-	private static Log	logger	= LogFactory.getLog(StdEngine.class);
+	private static final Logger	logger	= LoggerFactory.getLogger(StdEngine.class);
 
 	public static String	PROP_PAP_REPO = "xacml.pap.pdps";
 	public static String	PROP_PAP_GROUPS = "xacml.pap.groups";

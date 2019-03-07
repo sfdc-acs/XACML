@@ -15,8 +15,8 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Splitter;
 
@@ -27,7 +27,7 @@ import com.google.common.base.Splitter;
  * @version $Revision: 1.2 $
  */
 public class XACMLProperties {
-	private static final Log logger	= LogFactory.getLog(XACMLProperties.class);
+	private static final Logger logger	= LoggerFactory.getLogger(XACMLProperties.class);
 	
 	public static final String	XACML_PROPERTIES_NAME	= "xacml.properties";
 	public static final String	XACML_PROPERTIES_FILE	= System.getProperty("java.home") + File.separator + "lib" + File.separator + XACML_PROPERTIES_NAME;

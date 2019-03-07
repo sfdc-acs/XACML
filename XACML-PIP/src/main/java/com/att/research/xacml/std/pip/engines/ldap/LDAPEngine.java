@@ -3,6 +3,7 @@
  *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacml.std.pip.engines.ldap;
 
 import java.util.ArrayList;
@@ -21,8 +22,8 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.Attribute;
 import com.att.research.xacml.api.pip.PIPException;
@@ -53,7 +54,7 @@ public class LDAPEngine extends StdConfigurableEngine {
 	private static final String DEFAULT_CONTEXT_FACTORY	= "com.sun.jndi.ldap.LdapCtxFactory";
 	private static final String DEFAULT_SCOPE			= LDAP_SCOPE_SUBTREE;
 
-	private Log logger									= LogFactory.getLog(this.getClass());	
+	private Logger logger								= LoggerFactory.getLogger(this.getClass());	
 	private Hashtable<Object,Object> ldapEnvironment	= new Hashtable<Object,Object>();
 	private List<LDAPResolver> ldapResolvers 			= new ArrayList<LDAPResolver>();
 	private int ldapScope;
@@ -210,7 +211,7 @@ public class LDAPEngine extends StdConfigurableEngine {
 		} else {
 			if (this.logger.isDebugEnabled()) {
 				this.logger.debug("Returning " + mutablePIPResponse.getAttributes().size() + " attributes");
-				this.logger.debug(mutablePIPResponse.getAttributes());
+				this.logger.debug("Attributes: {}", mutablePIPResponse.getAttributes());
 			}
 			return new StdPIPResponse(mutablePIPResponse);
 		}

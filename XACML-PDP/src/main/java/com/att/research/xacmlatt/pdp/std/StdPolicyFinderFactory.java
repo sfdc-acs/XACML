@@ -3,6 +3,7 @@
  *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacmlatt.pdp.std;
 
 import java.io.File;
@@ -17,8 +18,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.std.IdentifierImpl;
 import com.att.research.xacml.std.StdStatusCode;
@@ -52,7 +53,7 @@ public class StdPolicyFinderFactory extends PolicyFinderFactory {
 	public static final String	PROP_FILE		= ".file";
 	public static final String	PROP_URL		= ".url";
 	
-	private Log logger							= LogFactory.getLog(this.getClass());
+	private final Logger logger	= LoggerFactory.getLogger(this.getClass());
 	private List<PolicyDef> rootPolicies;
 	private List<PolicyDef> referencedPolicies;
 	private boolean needsInit					= true;

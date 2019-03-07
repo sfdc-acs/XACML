@@ -17,8 +17,8 @@ import java.util.Properties;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.PolicySetType;
 import oasis.names.tc.xacml._3_0.core.schema.wd_17.PolicyType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.pap.PAPException;
 import com.att.research.xacml.api.pap.PDPPolicy;
@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
 
 public class StdPDPPolicy implements PDPPolicy, Serializable {
 	private static final long serialVersionUID = 1L;
-	private static Log	logger	= LogFactory.getLog(StdPDPPolicy.class);
+	private static final Logger	logger	= LoggerFactory.getLogger(StdPDPPolicy.class);
 	
 	private String id = null;
 	

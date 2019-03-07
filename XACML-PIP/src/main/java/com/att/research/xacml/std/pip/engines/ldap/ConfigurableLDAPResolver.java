@@ -3,6 +3,7 @@
  *          Copyright (c) 2014,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacml.std.pip.engines.ldap;
 
 import java.io.StringWriter;
@@ -21,8 +22,6 @@ import java.util.regex.Pattern;
 import javax.naming.NamingException;
 import javax.naming.directory.SearchResult;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.event.EventCartridge;
@@ -30,6 +29,8 @@ import org.apache.velocity.app.event.ReferenceInsertionEventHandler;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.Attribute;
 import com.att.research.xacml.api.AttributeValue;
@@ -63,7 +64,7 @@ public class ConfigurableLDAPResolver implements LDAPResolver {
 	}
 
 
-	private Log logger = LogFactory.getLog(this.getClass());
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private String defaultIssuer;
 	private String id;

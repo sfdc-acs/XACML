@@ -5,8 +5,8 @@
  */
 package com.att.research.xacml.std.dom;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -22,7 +22,7 @@ import com.att.research.xacml.std.StdMutableAttributeAssignment;
 import com.att.research.xacml.util.FactoryException;
 
 public class DOMAttributeAssignment {
-	private static final Log logger	= LogFactory.getLog(DOMAttributeAssignment.class);
+	private static final Logger logger	= LoggerFactory.getLogger(DOMAttributeAssignment.class);
 	
 	protected DOMAttributeAssignment() {
 	}
