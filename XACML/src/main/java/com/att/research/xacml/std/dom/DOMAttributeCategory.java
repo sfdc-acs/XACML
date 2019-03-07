@@ -45,7 +45,7 @@ public class DOMAttributeCategory {
 		boolean bLenient							= DOMProperties.isLenient();
 		
 		Identifier identifierCategory	= DOMUtil.getIdentifierAttribute(nodeAttributeCategory, XACML3.ATTRIBUTE_CATEGORY, !bLenient);
-		List<Attribute> listAttributes	= new ArrayList<Attribute>();
+		List<Attribute> listAttributes	= new ArrayList<>();
 		
 		NodeList children							= elementAttributeCategory.getChildNodes();
 		int numChildren;
@@ -89,12 +89,12 @@ public class DOMAttributeCategory {
 						if (XACML3.ELEMENT_ATTRIBUTE.equals(child.getLocalName())) {
 							result	= DOMAttribute.repair(child) || result;
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementAttributeCategory.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementAttributeCategory.removeChild(child);
 						result	= true;
 					}

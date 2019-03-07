@@ -20,7 +20,7 @@ public class DOMProperties {
 	private static final String	PROP_LENIENT			= "xacml.dom.lenient";
 	private static final String PROP_EXCEPTIONS			= "xacml.dom.exceptions";
 	
-	private static Map<String,Object> cachedProperties	= new HashMap<String,Object>();
+	private static Map<String,Object> cachedProperties	= new HashMap<>();
 	
 	protected static String getSourceProperty(String propertyName) {
 		String result	= System.getProperty(propertyName);

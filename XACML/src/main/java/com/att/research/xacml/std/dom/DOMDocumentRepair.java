@@ -31,6 +31,7 @@ public class DOMDocumentRepair {
 	}
 	
 	public DOMDocumentRepair() {
+		super();
 	}
 	
 	protected boolean repairRequest(Node nodeRequest) throws DOMStructureException {

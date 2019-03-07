@@ -60,7 +60,7 @@ public class Base64Binary implements SemanticString {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof Base64Binary)) {
+		if (! (obj instanceof Base64Binary)) {
 			return false;
 		} else if (obj == this) {
 			return true;

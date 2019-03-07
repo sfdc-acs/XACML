@@ -87,12 +87,12 @@ public class DOMObligation {
 						if (XACML3.ELEMENT_ATTRIBUTEASSIGNMENT.equals(child.getLocalName())) {
 							result	= DOMAttributeAssignment.repair(child) || result;
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementObligation.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementObligation.removeChild(child);
 						result	= true;
 					}
@@ -115,7 +115,7 @@ public class DOMObligation {
 		Element elementObligations			= DOMUtil.getElement(nodeObligations);
 		boolean bLenient					= DOMProperties.isLenient();
 		
-		List<Obligation> listObligations	= new ArrayList<Obligation>();
+		List<Obligation> listObligations	= new ArrayList<>();
 		
 		NodeList children					= elementObligations.getChildNodes();
 		int numChildren;
@@ -156,12 +156,12 @@ public class DOMObligation {
 						if (XACML3.ELEMENT_OBLIGATION.equals(child.getLocalName())) {
 							result	= result || DOMObligation.repair(child);
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementObligations.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementObligations.removeChild(child);
 						result	= true;
 					}

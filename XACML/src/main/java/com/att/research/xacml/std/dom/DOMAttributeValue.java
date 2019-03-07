@@ -87,13 +87,13 @@ public class DOMAttributeValue<T> extends StdAttributeValue<T> {
 				} else {
 					dataTypeExtended	= DataTypes.DT_STRING;
 				}
-				logger.warn("Changing unknown DataType " + identifierDataTypeId.stringValue() + " to " + dataTypeExtended.getId().stringValue());
+				logger.warn("Changing unknown DataType {} to {}", identifierDataTypeId.stringValue(), dataTypeExtended.getId().stringValue());
 				elementAttributeValue.setAttribute(XACML3.ATTRIBUTE_DATATYPE, dataTypeExtended.getId().stringValue());
 				result				= true;
 			}
 			dataTypeExtended.createAttributeValue(nodeAttributeValue);
 			
-			if (result == true) {
+			if (result) {
 				// reset the DataType attribute of the node
 				nodeAttributeValue.getAttributes().getNamedItem("DataType").setNodeValue(dataTypeExtended.getId().stringValue());
 			}

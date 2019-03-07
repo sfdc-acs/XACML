@@ -96,12 +96,12 @@ public class DOMAdvice {
 						if (XACML3.ELEMENT_ATTRIBUTEASSIGNMENT.equals(child.getLocalName())) {
 							result	=  DOMAttributeAssignment.repair(child) || result;
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementAdvice.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementAdvice.removeChild(child);
 						result	= true;
 					}
@@ -121,7 +121,7 @@ public class DOMAdvice {
 	 */
 	public static List<Advice> newList(Node nodeAssociatedAdvice) throws DOMStructureException {
 		Element elementAssociatedAdvice	= DOMUtil.getElement(nodeAssociatedAdvice);
-		List<Advice> listAdvice			= new ArrayList<Advice>();
+		List<Advice> listAdvice			= new ArrayList<>();
 		boolean bLenient				= DOMProperties.isLenient();
 		
 		NodeList children				= elementAssociatedAdvice.getChildNodes();
@@ -163,12 +163,12 @@ public class DOMAdvice {
 						if (XACML3.ELEMENT_ADVICE.equals(child.getLocalName())) {
 							result	= repair(child) || result;
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementAssociatedAdvice.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementAssociatedAdvice.removeChild(child);
 						result	= true;
 					}

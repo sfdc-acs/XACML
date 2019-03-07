@@ -75,7 +75,7 @@ public class DOMStatusDetail {
 					if (DOMUtil.isInNamespace(child, XACML3.XMLNS) && XACML3.ELEMENT_MISSINGATTRIBUTEDETAIL.equals(child.getLocalName())) {
 						result	= DOMMissingAttributeDetail.repair(child) || result;
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementStatusDetail.removeChild(child);
 						result	= true;
 					}

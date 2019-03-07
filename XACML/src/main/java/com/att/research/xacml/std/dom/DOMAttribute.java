@@ -101,12 +101,12 @@ public class DOMAttribute {
 							result	= DOMAttributeValue.repair(child) || result;
 							sawAttributeValue	= true;
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementAttribute.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementAttribute.removeChild(child);
 						result	= true;
 					}

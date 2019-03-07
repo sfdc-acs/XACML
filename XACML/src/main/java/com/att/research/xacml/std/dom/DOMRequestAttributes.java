@@ -47,7 +47,7 @@ public class DOMRequestAttributes {
 		Identifier identifierCategory	= DOMUtil.getIdentifierAttribute(elementRequestAttributes, XACML3.ATTRIBUTE_CATEGORY, !bLenient);
 		String xmlId					= DOMUtil.getXmlId(elementRequestAttributes);
 		Node nodeContentRoot			= null;
-		List<Attribute> listAttributes	= new ArrayList<Attribute>();
+		List<Attribute> listAttributes	= new ArrayList<>();
 		boolean sawContent				= false;
 		
 		NodeList children	= elementRequestAttributes.getChildNodes();
@@ -119,14 +119,15 @@ public class DOMRequestAttributes {
 						String childName	= child.getLocalName();
 						if (XACML3.ELEMENT_ATTRIBUTE.equals(childName)) {
 							result	= DOMAttribute.repair(child) || result;
-						} else if (XACML3.ELEMENT_CONTENT.equals(childName)) {
+						} else if (XACML3.ELEMENT_CONTENT.equals(childName)) { 
+							// do nothing
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementRequestAttributes.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementRequestAttributes.removeChild(child);
 						result	= true;
 					}

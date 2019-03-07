@@ -94,7 +94,7 @@ public class DOMAttributeAssignment {
 		Identifier identifierDataType	= DOMUtil.getIdentifierAttribute(elementAttributeAssignment, XACML3.ATTRIBUTE_DATATYPE);
 		DataType<?> dataType	= dataTypeFactory.getDataType(identifierDataType);
 		if (dataType == null) {
-			logger.warn("Changing unknown DataType " + identifierDataType.stringValue() + " to " + XACML3.ID_DATATYPE_STRING.stringValue());
+			logger.warn("Changing unknown DataType {} to {}", identifierDataType.stringValue(), XACML3.ID_DATATYPE_STRING.stringValue());
 			elementAttributeAssignment.setAttribute(XACML3.ATTRIBUTE_DATATYPE, XACML3.ID_DATATYPE_STRING.stringValue());
 			result	= true;
 		}

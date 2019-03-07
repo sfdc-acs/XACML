@@ -9,8 +9,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -55,19 +56,11 @@ public class DOMRequest {
 	 */
 	public static Request load(String xmlString) throws DOMStructureException {
 		Request request = null;
-		InputStream is = null;
-		try {
-			is = new ByteArrayInputStream(xmlString.getBytes("UTF-8"));
+		try (InputStream is = new ByteArrayInputStream(xmlString.getBytes(StandardCharsets.UTF_8))) {
 			request = DOMRequest.load(is);
-		} catch (UnsupportedEncodingException ex) {
-			throw new DOMStructureException("Exception loading String Request: " + ex.getMessage(), ex);
-		} finally {
-			try {
-				if (is != null) {
-					is.close();
-				}
-			} catch(Exception idontcare) {				
-			}
+		} catch (IOException e) {
+			logger.error("{}", e);
+			throw new DOMStructureException(e);
 		}
 		return request;
 	}
@@ -84,19 +77,10 @@ public class DOMRequest {
 	 */
 	public static Request load(File fileRequest) throws DOMStructureException {
 		Request request = null;
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(fileRequest);
+		try (FileInputStream fis = new FileInputStream(fileRequest)) {
 			request = DOMRequest.load(fis);
-		} catch (FileNotFoundException ex) {
+		} catch (IOException ex) {
 			throw new DOMStructureException("Exception loading File Request: " + ex.getMessage(), ex);
-		} finally {
-			try {
-				if (fis != null) {
-					fis.close();
-				}
-			} catch(Exception idontcare) {				
-			}
 		}
 		return request;
 	}
@@ -274,12 +258,12 @@ public class DOMRequest {
 											if (XACML3.ELEMENT_REQUESTREFERENCE.equals(grandchild.getLocalName())) {
 												result	= DOMRequestReference.repair(grandchild) || result;
 											} else {
-												logger.warn("Unexpected element " + grandchild.getNodeName());
+												logger.warn("Unexpected element {}", grandchild.getNodeName());
 												child.removeChild(grandchild);
 												result	= true;
 											}
 										} else {
-											logger.warn("Unexpected element " + grandchild.getNodeName());
+											logger.warn("Unexpected element {}", grandchild.getNodeName());
 											child.removeChild(grandchild);
 											result	= true;
 										}
@@ -287,12 +271,12 @@ public class DOMRequest {
 								}
 							}
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementRequest.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementRequest.removeChild(child);
 						result	= true;
 					}
@@ -318,13 +302,13 @@ public class DOMRequest {
 			for (String xmlFileName: args) {
 				File	fileXml	= new File(xmlFileName);
 				if (!fileXml.exists()) {
-					logger.error("Input file \"" + fileXml.getAbsolutePath() + "\" does not exist.");
+					logger.error("Input file \"{}\\\" does not exist.", fileXml.getAbsolutePath());
 					continue;
 				} else if (!fileXml.canRead()) {
-					logger.error("Permission denied reading input file \"" + fileXml.getAbsolutePath() + "\"");
+					logger.error("Permission denied reading input file \"{}\\\"", fileXml.getAbsolutePath());
 					continue;
 				}
-				logger.debug(fileXml.getAbsolutePath() + ":");
+				logger.debug("{}:", fileXml.getAbsolutePath());
 				try {
 					DocumentBuilder	documentBuilder	= documentBuilderFactory.newDocumentBuilder();
 					assert(documentBuilder.isNamespaceAware());
@@ -333,19 +317,19 @@ public class DOMRequest {
 					
 					NodeList children				= documentRequest.getChildNodes();
 					if (children == null || children.getLength() == 0) {
-						logger.error("No Requests found in \"" + fileXml.getAbsolutePath() + "\"");
+						logger.error("No Requests found in \"{}\\\"", fileXml.getAbsolutePath());
 						continue;
 					} else if (children.getLength() > 1) {
-						logger.error("Multiple Requests found in \"" + fileXml.getAbsolutePath() + "\"");
+						logger.error("Multiple Requests found in \"{}\\\"", fileXml.getAbsolutePath());
 					}
 					Node nodeRequest				= children.item(0);
 					if (!nodeRequest.getLocalName().equals(XACML3.ELEMENT_REQUEST)) {
-						logger.error("\"" + fileXml.getAbsolutePath() + "\" is not a Request");
+						logger.error("\"{}\\\" is not a Request", fileXml.getAbsolutePath());
 						continue;
 					}
 					
 					Request domRequest			= DOMRequest.newInstance(nodeRequest);
-					logger.debug(domRequest.toString());
+					logger.debug("{}", domRequest);
 				} catch (Exception ex) {
 					logger.error("{}", ex);
 				}

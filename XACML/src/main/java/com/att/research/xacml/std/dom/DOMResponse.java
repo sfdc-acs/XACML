@@ -140,7 +140,7 @@ public class DOMResponse {
 						result	= DOMResult.repair(child) || result;
 						sawResult	= true;
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementResponse.removeChild(child);
 						result	= true;
 					}
@@ -185,15 +185,13 @@ public class DOMResponse {
 	 * @throws DOMStructureException
 	 */
 	public static Response load(File fileResponse) throws DOMStructureException {
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(fileResponse));
-			String responseString = "";
+		try (BufferedReader br = new BufferedReader(new FileReader(fileResponse))) {
+			StringBuilder responseString = new StringBuilder();
 			String line;
 			while ((line = br.readLine()) != null) {
-				responseString += line;
+				responseString.append(line);
 			}
-			br.close();
-			return load(responseString);
+			return load(responseString.toString());
 		} catch (Exception e) {
 			throw new DOMStructureException("File: " + fileResponse.getName() + " " + e.getMessage());
 		}
@@ -303,20 +301,11 @@ public class DOMResponse {
 	 */
 	public static String toString(Response response, boolean prettyPrint) throws Exception {
 		String outputString = null;
-		ByteArrayOutputStream os = null;
-		try {
-			os = new ByteArrayOutputStream();
+		try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
 			DOMResponse.convert(response, os, prettyPrint);
 			outputString = new String( os.toByteArray(), "UTF-8");
 		} catch (Exception ex) {
 			throw ex;
-		} finally {
-			try {
-				if (os != null) {
-					os.close();
-				}
-			} catch(Exception idontcare) {				
-			}
 		}
 		return outputString;
 	}
@@ -330,12 +319,12 @@ public class DOMResponse {
 	 * @param tabCount
 	 * @param prettyPrint
 	 */
-	private static void outputStatusCode(StringBuffer sb, StatusCode statusCode, int tabCount, boolean prettyPrint) {
-		String prettyPrintString = "";
+	private static void outputStatusCode(StringBuilder sb, StatusCode statusCode, int tabCount, boolean prettyPrint) {
+		StringBuilder prettyPrintString = new StringBuilder();
 		if (prettyPrint) {
-			prettyPrintString = "\n";
+			prettyPrintString.append("\n");
 			for (int i = 0; i < tabCount; i++) {
-				prettyPrintString += "\t";
+				prettyPrintString.append("\t");
 			}
 		}
 		
@@ -409,10 +398,10 @@ public class DOMResponse {
 	 * @return
 	 */
 	private static String getNamespaces(Object valueObject) {
-		String returnString = "";
+		StringBuilder returnString = new StringBuilder();
 		if ( ! (valueObject instanceof XPathExpressionWrapper)) {
 			// value is not XPathExpression, so has no Namespace info in it
-			return returnString;
+			return returnString.toString();
 		}
 		XPathExpressionWrapper xw = (XPathExpressionWrapper) valueObject;
 		
@@ -424,14 +413,14 @@ public class DOMResponse {
 				String prefix = prefixIt.next();
 				String namespaceURI = namespaceContext.getNamespaceURI(prefix);
 				if (prefix == null ||  prefix.equals(XMLConstants.DEFAULT_NS_PREFIX)) {
-					returnString += " xmlns=\"" + namespaceURI + "\"";
+					returnString.append(" xmlns=\"" + namespaceURI + "\"");
 				} else {
-					returnString += " xmlns:" + prefix + "=\"" + namespaceURI + "\"";
+					returnString.append(" xmlns:" + prefix + "=\"" + namespaceURI + "\"");
 				}
 			}
 			
 		}
-		return returnString;
+		return returnString.toString();
 	}
 	
 	
@@ -468,13 +457,13 @@ public class DOMResponse {
 			throw new DOMStructureException("No Request in convert");
 		}
 		
-		if (response.getResults() == null || response.getResults().size() == 0) {
+		if (response.getResults() == null || response.getResults().isEmpty()) {
 			// must be at least one result
 			throw new DOMStructureException("No Result in Response");
 		}
 		
 		
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		
 		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		
@@ -605,7 +594,7 @@ public class DOMResponse {
 			}
 			
 			// Obligations
-			if (result.getObligations() != null && result.getObligations().size() > 0) {
+			if (result.getObligations() != null && ! result.getObligations().isEmpty()) {
 				if (prettyPrint) sb.append("\n\t\t");
 				sb.append("<Obligations>");
 				
@@ -642,7 +631,7 @@ public class DOMResponse {
 			}
 			
 			// AssociatedAdvice
-			if (result.getAssociatedAdvice() != null && result.getAssociatedAdvice().size() > 0) {
+			if (result.getAssociatedAdvice() != null && ! result.getAssociatedAdvice().isEmpty()) {
 				if (prettyPrint) sb.append("\n\t\t");
 				sb.append("<AssociatedAdvice>");
 				
@@ -679,7 +668,7 @@ public class DOMResponse {
 			}
 			
 			// Attributes
-			if (result.getAttributes() != null && result.getAttributes().size() > 0) {
+			if (result.getAttributes() != null && ! result.getAttributes().isEmpty()) {
 				// this may include attributes with IncludeInResult=false!
 
 				
@@ -691,7 +680,7 @@ public class DOMResponse {
 					sb.append("<Attributes Category=\"" + category.getCategory().stringValue() + "\">");
 					
 					for (Attribute attr : category.getAttributes()) {
-						if (attr.getIncludeInResults() == false) {
+						if (! attr.getIncludeInResults()) {
 							// skip this one - do not include in results
 							continue;
 						}
@@ -707,7 +696,7 @@ public class DOMResponse {
 							sb.append(" Issuer=\"" + attr.getIssuer() + "\">");
 						}
 						
-						if (attr.getValues().size() == 0) {
+						if (attr.getValues().isEmpty()) {
 							throw new DOMStructureException("Attribute '" + attr.getAttributeId() + "' must have at least one value");
 						}
 						for (AttributeValue<?> value : attr.getValues()) {
@@ -741,7 +730,7 @@ public class DOMResponse {
 			// PolicyIdentifierList
 			Collection<IdReference> policyIds = result.getPolicyIdentifiers();
 			Collection<IdReference> policySetIds = result.getPolicySetIdentifiers();
-			if (policyIds != null && policyIds.size() > 0 || policySetIds != null && policySetIds.size() > 0) {
+			if (policyIds != null && ! policyIds.isEmpty() || policySetIds != null && ! policySetIds.isEmpty()) {
 				if (prettyPrint) sb.append("\n\t\t\t");
 				sb.append("<PolicyIdentifierList>");
 				
@@ -817,13 +806,13 @@ public class DOMResponse {
 			for (String xmlFileName: args) {
 				File	fileXml	= new File(xmlFileName);
 				if (!fileXml.exists()) {
-					logger.error("Input file \"" + fileXml.getAbsolutePath() + "\" does not exist.");
+					logger.error("Input file \"{}\\\" does not exist.", fileXml.getAbsolutePath());
 					continue;
 				} else if (!fileXml.canRead()) {
-					logger.error("Permission denied reading input file \"" + fileXml.getAbsolutePath() + "\"");
+					logger.error("Permission denied reading input file \"{}\\\"", fileXml.getAbsolutePath());
 					continue;
 				}
-				logger.debug(fileXml.getAbsolutePath() + ":");
+				logger.debug("{}:", fileXml.getAbsolutePath());
 				try {
 					DocumentBuilder	documentBuilder	= documentBuilderFactory.newDocumentBuilder();
 					assert(documentBuilder.isNamespaceAware());
@@ -832,19 +821,19 @@ public class DOMResponse {
 					
 					NodeList children				= documentResponse.getChildNodes();
 					if (children == null || children.getLength() == 0) {
-						logger.error("No Responses found in \"" + fileXml.getAbsolutePath() + "\"");
+						logger.error("No Responses found in \"{}\\\"", fileXml.getAbsolutePath());
 						continue;
 					} else if (children.getLength() > 1) {
-						logger.error("Multiple Responses found in \"" + fileXml.getAbsolutePath() + "\"");
+						logger.error("Multiple Responses found in \"{}\\\"", fileXml.getAbsolutePath());
 					}
 					Node nodeResponse				= children.item(0);
 					if (!nodeResponse.getLocalName().equals(XACML3.ELEMENT_RESPONSE)) {
-						logger.error("\"" + fileXml.getAbsolutePath() + "\" is not a Response");
+						logger.error("\"{}\\\" is not a Response", fileXml.getAbsolutePath());
 						continue;
 					}
 					
 					Response domResponse			= DOMResponse.newInstance(nodeResponse);
-					logger.debug(domResponse.toString());
+					logger.debug("{}", domResponse);
 				} catch (Exception ex) {
 					logger.error("{}", ex);
 				}

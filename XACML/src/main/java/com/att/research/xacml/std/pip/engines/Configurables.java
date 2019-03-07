@@ -33,6 +33,10 @@ public class Configurables {
 	public static final String PROP_ISSUER			= "issuer";
 	
 	private static final Logger logger		= LoggerFactory.getLogger(Configurables.class);
+	
+	private Configurables() {
+		super();
+	}
 
 	public static List<PIPRequest> getPIPRequestList(String prefix, String name, Properties properties, String defaultIssuer) throws PIPException {
 		String idxProp = properties.getProperty(prefix + "." + name);
@@ -40,7 +44,7 @@ public class Configurables {
 			throw new PIPException("PIPRequest list definition not found (entry '" +
 									(prefix + "." + name) + "')");
 		}
-		ArrayList<PIPRequest> list = new ArrayList<PIPRequest>();
+		ArrayList<PIPRequest> list = new ArrayList<>();
 		if (idxProp.length() == 0) {
 			return list;
 		}
@@ -53,8 +57,6 @@ public class Configurables {
 				if (null == request)
 					throw new PIPException("PIPRequest list defines element " + idx + " but element specification is missing");
 				else {
-					//list.ensureCapacity(idx);
-					//list.set(idx-1, request);
 					list.add(request);
 				}
 			}
@@ -100,7 +102,7 @@ public class Configurables {
 			throw new PIPException("PIPRequest map definition not found (entry '" +
 									(prefix + "." + name) + "')");
 		}
-		HashMap<String,PIPRequest> map = new HashMap<String,PIPRequest>();
+		HashMap<String,PIPRequest> map = new HashMap<>();
 		if (idxProp.length() == 0) {
 			return map;
 		}

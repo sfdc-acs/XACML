@@ -157,12 +157,12 @@ public class DOMResult {
 											} else if (XACML3.ELEMENT_POLICYSETIDREFERENCE.equals(grandchildName)) {
 												result			= DOMIdReference.repair(grandchild) || result;
 											} else {
-												logger.warn("Unexpected element " + grandchild.getNodeName());
+												logger.warn("Unexpected element {}", grandchild.getNodeName());
 												child.removeChild(grandchild);
 												result	= true;
 											}
 										} else {
-											logger.warn("Unexpected element " + grandchild.getNodeName());
+											logger.warn("Unexpected element {}", grandchild.getNodeName());
 											child.removeChild(grandchild);
 											result	= true;
 										}
@@ -170,12 +170,12 @@ public class DOMResult {
 								}
 							}
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementResult.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementResult.removeChild(child);
 						result	= true;
 					}

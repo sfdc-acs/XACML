@@ -97,12 +97,12 @@ public class DOMStatus {
 						} else if (XACML3.ELEMENT_STATUSDETAIL.equals(childName)) {
 							result = DOMStatusDetail.repair(child) || result;
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementStatus.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementStatus.removeChild(child);
 						result	= true;
 					}

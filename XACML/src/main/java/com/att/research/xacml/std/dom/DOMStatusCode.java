@@ -89,7 +89,7 @@ public class DOMStatusCode {
 					if (DOMUtil.isInNamespace(child, XACML3.XMLNS)) {
 						result		= DOMStatusCode.repair(child) || result;
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementStatusCode.removeChild(child);
 						result	= true;
 					}

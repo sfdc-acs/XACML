@@ -70,15 +70,15 @@ public class ConfigurableEngineFinder extends EngineFinder {
 		configurableEngine.configure(engineId, properties);
 		
 		if (logger.isDebugEnabled()) {
-			logger.debug("Engine " + engineId + " Provides: ");
+			logger.debug("Engine {} Provides: ", engineId);
 			Collection<PIPRequest> attributes = configurableEngine.attributesProvided();
 			for (PIPRequest attribute : attributes) {
-				logger.debug(System.lineSeparator() + AttributeUtils.prettyPrint(attribute));				
+				logger.debug("{}{}", System.lineSeparator(), AttributeUtils.prettyPrint(attribute));				
 			}
-			logger.debug("Engine " + engineId + " Requires: ");
+			logger.debug("Engine {} Requires: ", engineId);
 			attributes = configurableEngine.attributesRequired();
 			for (PIPRequest attribute : attributes) {
-				logger.debug(System.lineSeparator() + AttributeUtils.prettyPrint(attribute));				
+				logger.debug("{}{}", System.lineSeparator(), AttributeUtils.prettyPrint(attribute));				
 			}
 		}
 		
@@ -89,6 +89,7 @@ public class ConfigurableEngineFinder extends EngineFinder {
 	}
 	
 	public ConfigurableEngineFinder() {
+		super();
 	}
 	
 	/**
