@@ -27,6 +27,7 @@ public class ATTPDPEngineFactory extends PDPEngineFactory {
 	private Log logger	= LogFactory.getLog(this.getClass());
 	
 	public ATTPDPEngineFactory() {
+		super();
 	}
 
 	@Override

@@ -70,7 +70,7 @@ public class TargetedCombinerParameterMap<T, U> {
 					}
 					List<CombinerParameter>	listCombinerParameters	= this.mapTargetToCombinerParameters.get(target);
 					if (listCombinerParameters == null) {
-						listCombinerParameters	= new ArrayList<CombinerParameter>();
+						listCombinerParameters	= new ArrayList<>();
 						this.mapTargetToCombinerParameters.put(target, listCombinerParameters);
 					}
 					listCombinerParameters.add(targetedCombinerParameter);
@@ -83,6 +83,7 @@ public class TargetedCombinerParameterMap<T, U> {
 	 * Creates a new <code>TargetedCombinerParameterMap</code>.
 	 */
 	public TargetedCombinerParameterMap() {
+		super();
 	}
 	
 	/**

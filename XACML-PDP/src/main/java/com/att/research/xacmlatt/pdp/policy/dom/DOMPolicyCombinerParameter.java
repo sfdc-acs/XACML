@@ -94,7 +94,7 @@ public class DOMPolicyCombinerParameter extends TargetedCombinerParameter<Identi
 				if (DOMUtil.isElement(child)) {
 					if (DOMUtil.isInNamespace(child, XACML3.XMLNS) && XACML3.ELEMENT_ATTRIBUTEVALUE.equals(child.getLocalName())) {
 						if (sawAttributeValue) {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementPolicyCombinerParameter.removeChild(child);
 							result	= true;
 						} else {
@@ -102,7 +102,7 @@ public class DOMPolicyCombinerParameter extends TargetedCombinerParameter<Identi
 							result				= DOMAttributeValue.repair(child) || result;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementPolicyCombinerParameter.removeChild(child);
 						result	= true;
 					}

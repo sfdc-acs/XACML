@@ -30,7 +30,7 @@ public class Target extends PolicyComponent implements Matchable {
 	
 	protected List<AnyOf> getAnyOfList(boolean bNoNull) {
 		if (this.anyOfs == null && bNoNull) {
-			this.anyOfs	= new ArrayList<AnyOf>();
+			this.anyOfs	= new ArrayList<>();
 		}
 		return this.anyOfs;
 	}

@@ -89,7 +89,7 @@ public class DOMAllOf extends AllOf {
 						result		= DOMMatch.repair(child) || result;
 						sawMatch	= true;
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementAllOf.removeChild(child);
 						result	= true;
 					}

@@ -98,7 +98,7 @@ public class DOMAdviceExpression extends AdviceExpression {
 					if (DOMUtil.isInNamespace(child, XACML3.XMLNS) && XACML3.ELEMENT_ATTRIBUTEASSIGNMENTEXPRESSION.equals(child.getLocalName())) {
 						result			= DOMAttributeAssignmentExpression.repair(child) || result; 
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						nodeAdviceExpression.removeChild(child);
 						result			= true;
 					}
@@ -111,7 +111,7 @@ public class DOMAdviceExpression extends AdviceExpression {
 		String stringRuleEffect	= DOMUtil.getStringAttribute(elementAdviceExpression, XACML3.ATTRIBUTE_APPLIESTO);
 		RuleEffect ruleEffect	= RuleEffect.getRuleEffect(stringRuleEffect);
 		if (ruleEffect == null) {
-			logger.warn("Setting invalid RuleEffect " + stringRuleEffect + " to " + RuleEffect.DENY.getName());
+			logger.warn("Setting invalid RuleEffect {} to {}", stringRuleEffect, RuleEffect.DENY.getName());
 			elementAdviceExpression.setAttribute(XACML3.ATTRIBUTE_APPLIESTO, RuleEffect.DENY.getName());
 			result	= true;
 		}
@@ -131,7 +131,7 @@ public class DOMAdviceExpression extends AdviceExpression {
 		Element elementAdviceExpressions	= DOMUtil.getElement(nodeAdviceExpressions);
 		boolean bLenient					= DOMProperties.isLenient();
 		
-		List<AdviceExpression> listAdviceExpressions	= new ArrayList<AdviceExpression>();
+		List<AdviceExpression> listAdviceExpressions	= new ArrayList<>();
 		
 		NodeList children	= elementAdviceExpressions.getChildNodes();
 		int numChildren;
@@ -148,7 +148,7 @@ public class DOMAdviceExpression extends AdviceExpression {
 			}
 		}
 		
-		if (listAdviceExpressions.size() == 0 && !bLenient) {
+		if (listAdviceExpressions.isEmpty() && !bLenient) {
 			throw DOMUtil.newMissingElementException(nodeAdviceExpressions, XACML3.XMLNS, XACML3.ELEMENT_ADVICEEXPRESSION);
 		}		
 		return listAdviceExpressions;
@@ -169,7 +169,7 @@ public class DOMAdviceExpression extends AdviceExpression {
 						sawAdviceExpression	= true;
 						result				= result || DOMAdviceExpression.repair(child);
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						nodeAdviceExpressions.removeChild(child);
 						result			= true;						
 					}

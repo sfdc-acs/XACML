@@ -92,7 +92,7 @@ public class DOMApply extends Apply {
 					} else if (DOMExpression.isExpression(child)) {
 						result	= DOMExpression.repair(child) || result;
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementApply.removeChild(child);
 						result	= true;
 					}

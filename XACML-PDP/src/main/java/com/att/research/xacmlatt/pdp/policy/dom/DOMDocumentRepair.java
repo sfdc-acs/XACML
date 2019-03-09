@@ -29,6 +29,7 @@ public class DOMDocumentRepair extends com.att.research.xacml.std.dom.DOMDocumen
 	}
 	
 	public DOMDocumentRepair() {
+		super();
 	}
 
 	/**

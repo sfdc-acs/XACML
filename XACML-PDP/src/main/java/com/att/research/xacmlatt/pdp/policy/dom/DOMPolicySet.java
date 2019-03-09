@@ -204,7 +204,7 @@ public class DOMPolicySet {
 						String childName	= child.getLocalName();
 						if (XACML3.ELEMENT_DESCRIPTION.equals(childName)) {
 							if (sawDescription) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementPolicySet.removeChild(child);
 								result	= true;
 							} else {
@@ -212,7 +212,7 @@ public class DOMPolicySet {
 							}
 						} else if (XACML3.ELEMENT_POLICYISSUER.equals(childName)) {
 							if (sawPolicyIssuer) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementPolicySet.removeChild(child);
 								result	= true;
 							} else {
@@ -221,7 +221,7 @@ public class DOMPolicySet {
 							}
 						} else if (XACML3.ELEMENT_POLICYSETDEFAULTS.equals(childName)) {
 							if (sawPolicyDefaults) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementPolicySet.removeChild(child);
 								result	= true;								
 							} else {
@@ -230,7 +230,7 @@ public class DOMPolicySet {
 							}
 						} else if (XACML3.ELEMENT_TARGET.equals(childName)) {
 							if (sawTarget) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementPolicySet.removeChild(child);
 								result	= true;
 							} else {
@@ -253,7 +253,7 @@ public class DOMPolicySet {
 							result	= DOMPolicySetCombinerParameter.repair(child) || result;
 						} else if (XACML3.ELEMENT_OBLIGATIONEXPRESSIONS.equals(childName)) {
 							if (sawObligationExprs) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementPolicySet.removeChild(child);
 								result	= true;
 							} else {
@@ -262,7 +262,7 @@ public class DOMPolicySet {
 							}
 						} else if (XACML3.ELEMENT_ADVICEEXPRESSIONS.equals(childName)) {
 							if (sawAdviceExprs) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementPolicySet.removeChild(child);
 								result	= true;
 							} else {
@@ -270,12 +270,12 @@ public class DOMPolicySet {
 								result			= DOMAdviceExpression.repairList(child) || result;
 							}
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementPolicySet.removeChild(child);
 							result	= true;
 						}
 					} else  {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementPolicySet.removeChild(child);
 						result	= true;
 					}
@@ -301,7 +301,7 @@ public class DOMPolicySet {
 			combiningAlgorithm	= null;
 		}
 		if (combiningAlgorithm == null) {
-			logger.warn("Setting invalid " + XACML3.ATTRIBUTE_POLICYCOMBININGALGID + " attribute " + identifier.stringValue() + " to " + XACML3.ID_POLICY_DENY_OVERRIDES.stringValue());
+			logger.warn("Setting invalid {} attribute {} to {}", XACML3.ATTRIBUTE_POLICYCOMBININGALGID, identifier.stringValue(), XACML3.ID_POLICY_DENY_OVERRIDES.stringValue());
 			elementPolicySet.setAttribute(XACML3.ATTRIBUTE_POLICYCOMBININGALGID, XACML3.ID_POLICY_DENY_OVERRIDES.stringValue());
 			result	= true;
 		}

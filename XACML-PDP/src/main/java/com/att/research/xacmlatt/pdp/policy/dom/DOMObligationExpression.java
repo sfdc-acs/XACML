@@ -100,7 +100,7 @@ public class DOMObligationExpression extends ObligationExpression {
 					if (DOMUtil.isInNamespace(child, XACML3.XMLNS) && XACML3.ELEMENT_ATTRIBUTEASSIGNMENTEXPRESSION.equals(child.getLocalName())) {
 						result	= DOMAttributeAssignmentExpression.repair(child) || result;
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementObligationExpression.removeChild(child);
 						result	= true;
 					}
@@ -114,7 +114,7 @@ public class DOMObligationExpression extends ObligationExpression {
 		String string			= DOMUtil.getStringAttribute(elementObligationExpression, XACML3.ATTRIBUTE_FULFILLON);
 		RuleEffect ruleEffectType	= RuleEffect.getRuleEffect(string);
 		if (ruleEffectType == null) {
-			logger.warn("Setting invalid RuleEffect " + string + " to " + RuleEffect.DENY.getName());
+			logger.warn("Setting invalid RuleEffect {} to {}", string, RuleEffect.DENY.getName());
 			elementObligationExpression.setAttribute(XACML3.ATTRIBUTE_FULFILLON, RuleEffect.DENY.getName());
 			result	= true;
 		}
@@ -135,7 +135,7 @@ public class DOMObligationExpression extends ObligationExpression {
 		Element elementObligationExpressions	= DOMUtil.getElement(nodeObligationExpressions);
 		boolean bLenient						= DOMProperties.isLenient();
 		
-		List<ObligationExpression> listObligationExpressions	= new ArrayList<ObligationExpression>();
+		List<ObligationExpression> listObligationExpressions	= new ArrayList<>();
 		
 		NodeList children	= elementObligationExpressions.getChildNodes();
 		int numChildren;
@@ -152,7 +152,7 @@ public class DOMObligationExpression extends ObligationExpression {
 			}
 		}
 		
-		if (listObligationExpressions.size() == 0 && !bLenient) {
+		if (listObligationExpressions.isEmpty() && !bLenient) {
 			throw DOMUtil.newMissingElementException(elementObligationExpressions, XACML3.XMLNS, XACML3.ELEMENT_OBLIGATIONEXPRESSION);
 		}
 		
@@ -174,7 +174,7 @@ public class DOMObligationExpression extends ObligationExpression {
 						result					= DOMObligationExpression.repair(child) || result;
 						sawObligationExpression	= true;
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementObligationExpressions.removeChild(child);
 						result	= true;
 					}

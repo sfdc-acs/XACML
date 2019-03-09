@@ -59,14 +59,14 @@ public class PolicyIssuer extends PolicyComponent {
 	
 	public void add(Attribute attribute) {
 		if (this.attributes == null) {
-			this.attributes	= new ArrayList<Attribute>();
+			this.attributes	= new ArrayList<>();
 		}
 		this.attributes.add(attribute);
 	}
 	
 	public void add(Collection<Attribute> listAttributes) {
 		if (this.attributes == null) {
-			this.attributes = new ArrayList<Attribute>();
+			this.attributes = new ArrayList<>();
 		}
 		this.attributes.addAll(listAttributes);
 	}

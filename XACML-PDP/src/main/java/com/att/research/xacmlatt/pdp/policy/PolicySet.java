@@ -38,7 +38,7 @@ public class PolicySet extends PolicyDef {
 	
 	private void ensureChildren() {
 		if (this.children == null) {
-			this.children	= new ArrayList<PolicySetChild>();
+			this.children	= new ArrayList<>();
 		}
 	}
 	

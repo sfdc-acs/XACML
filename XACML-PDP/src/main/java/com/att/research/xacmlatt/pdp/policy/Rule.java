@@ -42,8 +42,8 @@ public class Rule extends PolicyComponent implements Matchable, Evaluatable, Tra
 	private String 						description;
 	private Target						target;
 	private Condition					condition;
-	private List<ObligationExpression>	obligationExpressions	= new ArrayList<ObligationExpression>();
-	private List<AdviceExpression>		adviceExpressions		= new ArrayList<AdviceExpression>();
+	private List<ObligationExpression>	obligationExpressions	= new ArrayList<>();
+	private List<AdviceExpression>		adviceExpressions		= new ArrayList<>();
 	
 	protected List<ObligationExpression> getObligationExpressionList() {
 		return this.obligationExpressions;

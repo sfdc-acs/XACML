@@ -141,7 +141,7 @@ public class DOMRule extends Rule {
 						String childName	= child.getLocalName();
 						if (XACML3.ELEMENT_DESCRIPTION.equals(childName)) {
 							if (sawDescription) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementRule.removeChild(child);
 								result	= true;
 							} else {
@@ -149,7 +149,7 @@ public class DOMRule extends Rule {
 							}
 						} else if (XACML3.ELEMENT_TARGET.equals(childName)) {
 							if (sawTarget) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementRule.removeChild(child);
 								result	= true;
 							} else {
@@ -158,7 +158,7 @@ public class DOMRule extends Rule {
 							}
 						} else if (XACML3.ELEMENT_CONDITION.equals(childName)) {
 							if (sawCondition) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementRule.removeChild(child);
 								result	= true;
 							} else {
@@ -171,7 +171,7 @@ public class DOMRule extends Rule {
 							}
 						} else if (XACML3.ELEMENT_OBLIGATIONEXPRESSIONS.equals(childName)) {
 							if (sawObligationExpressions) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementRule.removeChild(child);
 								result	= true;
 							} else {
@@ -180,7 +180,7 @@ public class DOMRule extends Rule {
 							}
 						} else if (XACML3.ELEMENT_ADVICEEXPRESSIONS.equals(childName)) {
 							if (sawAdviceExpressions) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementRule.removeChild(child);
 								result	= true;
 							} else {
@@ -188,12 +188,12 @@ public class DOMRule extends Rule {
 								result					= DOMAdviceExpression.repairList(child) || result;
 							}
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementRule.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementRule.removeChild(child);
 						result	= true;
 					}

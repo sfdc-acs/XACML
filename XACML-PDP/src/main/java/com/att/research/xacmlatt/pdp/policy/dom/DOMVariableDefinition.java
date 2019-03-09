@@ -76,7 +76,7 @@ public class DOMVariableDefinition extends VariableDefinition {
 			if (DOMExpression.isExpression(elementExpression)) {
 				result	= result || DOMExpression.repair(elementExpression);
 			} else {
-				logger.warn("Unexpected element " + elementExpression.getNodeName());
+				logger.warn("Unexpected element {}", elementExpression.getNodeName());
 				elementVariableDefinition.removeChild(elementExpression);
 				result	= true;
 			}

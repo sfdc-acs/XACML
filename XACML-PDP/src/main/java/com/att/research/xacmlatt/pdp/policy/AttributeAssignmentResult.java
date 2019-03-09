@@ -34,7 +34,7 @@ public class AttributeAssignmentResult {
 	public AttributeAssignmentResult(Status statusIn, Collection<AttributeAssignment> listAttributeAssignmentsIn) {
 		this.status	= statusIn;
 		if (listAttributeAssignmentsIn != null && listAttributeAssignmentsIn.size() > 0) {
-			this.listAttributeAssignments	= new ArrayList<AttributeAssignment>();
+			this.listAttributeAssignments	= new ArrayList<>();
 			this.listAttributeAssignments.addAll(listAttributeAssignmentsIn);
 		}
 	}

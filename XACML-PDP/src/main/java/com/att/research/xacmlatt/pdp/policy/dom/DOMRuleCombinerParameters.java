@@ -93,7 +93,7 @@ public class DOMRuleCombinerParameters extends TargetedCombinerParameter<String,
 				if (DOMUtil.isElement(child)) {
 					if (DOMUtil.isInNamespace(child, XACML3.XMLNS) && XACML3.ELEMENT_ATTRIBUTEVALUE.equals(child.getLocalName())) {
 						if (sawAttributeValue) {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementRuleCombinerParameters.removeChild(child);
 							result	= true;
 						} else {
@@ -101,7 +101,7 @@ public class DOMRuleCombinerParameters extends TargetedCombinerParameter<String,
 							result				= result || DOMAttributeValue.repair(child);
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementRuleCombinerParameters.removeChild(child);
 						result	= true;
 					}

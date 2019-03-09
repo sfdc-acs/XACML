@@ -82,7 +82,7 @@ public class DOMAnyOf extends AnyOf {
 					if (DOMUtil.isInNamespace(child, XACML3.XMLNS) && (XACML3.ELEMENT_ALLOF.equals(child.getLocalName()))) {
 						result	= DOMAllOf.repair(child) || result;
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementAnyOf.removeChild(child);
 						result	= true;
 					}

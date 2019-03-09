@@ -27,17 +27,18 @@ public class VariableMap {
 	
 	private void ensureVariableDefinitions() {
 		if (this.variableDefinitions == null) {
-			this.variableDefinitions	= new ArrayList<VariableDefinition>();
+			this.variableDefinitions	= new ArrayList<>();
 		}
 	}
 	
 	private void ensureMap() {
 		if (this.mapVariableDefinitions == null) {
-			this.mapVariableDefinitions	= new HashMap<String, VariableDefinition>();
+			this.mapVariableDefinitions	= new HashMap<>();
 		}
 	}
 	
 	public VariableMap() {
+		super();
 	}
 
 	/**

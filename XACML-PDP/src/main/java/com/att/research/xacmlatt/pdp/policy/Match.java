@@ -102,7 +102,7 @@ public class Match extends PolicyComponent implements Matchable {
 	}
 
 	private static MatchResult match(EvaluationContext evaluationContext, FunctionDefinition functionDefinition, FunctionArgument arg1, FunctionArgument arg2) throws EvaluationException {
-		List<FunctionArgument> listArguments	= new ArrayList<FunctionArgument>(2);
+		List<FunctionArgument> listArguments	= new ArrayList<>(2);
 		listArguments.add(arg1);
 		listArguments.add(arg2);
 		

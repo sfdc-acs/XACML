@@ -85,7 +85,7 @@ public class DOMTarget extends Target {
 					if (DOMUtil.isInNamespace(child, XACML3.XMLNS) && XACML3.ELEMENT_ANYOF.equals(child.getLocalName())) {
 						result	= DOMAnyOf.repair(child) || result;
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}" + child.getNodeName());
 						elementTarget.removeChild(child);
 						result	= true;
 					}

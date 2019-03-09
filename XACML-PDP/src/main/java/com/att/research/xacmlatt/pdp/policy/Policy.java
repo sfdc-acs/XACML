@@ -30,9 +30,9 @@ import com.att.research.xacmlatt.pdp.eval.MatchResult;
  * @version $Revision: 1.2 $
  */
 public class Policy extends PolicyDef {
-	private TargetedCombinerParameterMap<String,Rule>		ruleCombinerParameters	= new TargetedCombinerParameterMap<String,Rule>();
+	private TargetedCombinerParameterMap<String,Rule>		ruleCombinerParameters	= new TargetedCombinerParameterMap<>();
 	private VariableMap										variableMap				= new VariableMap();
-	private List<Rule>										rules					= new ArrayList<Rule>();
+	private List<Rule>										rules					= new ArrayList<>();
 	private List<CombiningElement<Rule>>					combiningRules;
 	private CombiningAlgorithm<Rule>						ruleCombiningAlgorithm;
 	

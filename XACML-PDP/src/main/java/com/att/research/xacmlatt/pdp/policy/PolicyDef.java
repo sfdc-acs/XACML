@@ -48,19 +48,19 @@ public abstract class PolicyDef extends PolicySetChild {
 
 	private void ensureCombinerParameters() {
 		if (this.combinerParameters == null) {
-			this.combinerParameters	= new ArrayList<CombinerParameter>();
+			this.combinerParameters	= new ArrayList<>();
 		}
 	}
 	
 	private void ensureObligationExpressions() {
 		if (this.obligationExpressions == null) {
-			this.obligationExpressions	= new ArrayList<ObligationExpression>();
+			this.obligationExpressions	= new ArrayList<>();
 		}
 	}
 	
 	private void ensureAdviceExpressions() {
 		if (this.adviceExpressions == null) {
-			this.adviceExpressions	= new ArrayList<AdviceExpression>();
+			this.adviceExpressions	= new ArrayList<>();
 		}
 	}
 	

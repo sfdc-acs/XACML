@@ -97,7 +97,7 @@ public class DOMPolicyIssuer extends PolicyIssuer {
 						String childName	= child.getLocalName();
 						if (XACML3.ELEMENT_CONTENT.equals(childName)) {
 							if (sawContent) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementPolicyIssuer.removeChild(child);
 								result	= true;
 							} else {
@@ -106,7 +106,7 @@ public class DOMPolicyIssuer extends PolicyIssuer {
 						} else if (XACML3.ELEMENT_ATTRIBUTE.equals(childName)) {
 							result	= DOMAttribute.repair(child) || result;
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementPolicyIssuer.removeChild(child);
 							result	= true;
 						}

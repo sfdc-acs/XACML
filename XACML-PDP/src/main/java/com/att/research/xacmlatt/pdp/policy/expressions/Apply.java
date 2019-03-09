@@ -35,7 +35,7 @@ public class Apply extends Expression {
 	private Identifier functionId;
 	private FunctionDefinition functionDefinition;
 	private String description;
-	private List<Expression> arguments	= new ArrayList<Expression>();
+	private List<Expression> arguments	= new ArrayList<>();
 	
 	protected List<Expression> getArgumentList() {
 		return this.arguments;
@@ -137,7 +137,7 @@ public class Apply extends Expression {
 		/*
 		 * Get all of the arguments and convert them into FunctionArgument objects.
 		 */
-		List<FunctionArgument> listFunctionArguments	= new ArrayList<FunctionArgument>();
+		List<FunctionArgument> listFunctionArguments	= new ArrayList<>();
 		Iterator<Expression> iterExpressionArguments	= this.getArguments();
 		if (iterExpressionArguments != null) {
 			while (iterExpressionArguments.hasNext()) {

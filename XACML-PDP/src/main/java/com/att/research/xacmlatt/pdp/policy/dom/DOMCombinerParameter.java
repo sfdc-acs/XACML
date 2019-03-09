@@ -98,7 +98,7 @@ public class DOMCombinerParameter extends CombinerParameter {
 				if (DOMUtil.isElement(child)) {
 					if (DOMUtil.isInNamespace(child, XACML3.XMLNS) && XACML3.ELEMENT_ATTRIBUTEVALUE.equals(child.getLocalName())) {
 						if (sawAttributeValue) {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementCombinerParameter.removeChild(child);
 							result	= true;
 						} else {
@@ -106,7 +106,7 @@ public class DOMCombinerParameter extends CombinerParameter {
 							sawAttributeValue	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementCombinerParameter.removeChild(child);
 						result	= true;
 					}
@@ -135,7 +135,7 @@ public class DOMCombinerParameter extends CombinerParameter {
 		Element elementCombinerParameters	= DOMUtil.getElement(nodeCombinerParameters);
 		boolean bLenient					= DOMProperties.isLenient();
 		
-		List<CombinerParameter> listCombinerParameters	= new ArrayList<CombinerParameter>();
+		List<CombinerParameter> listCombinerParameters	= new ArrayList<>();
 		
 		NodeList children	= elementCombinerParameters.getChildNodes();
 		int numChildren;
@@ -167,7 +167,7 @@ public class DOMCombinerParameter extends CombinerParameter {
 					if (DOMUtil.isInNamespace(child, XACML3.XMLNS) && XACML3.ELEMENT_COMBINERPARAMETER.equals(child.getLocalName())) {
 						result	= DOMCombinerParameter.repair(child) || result;
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementCombinerParameters.removeChild(child);
 						result	= true;
 					}

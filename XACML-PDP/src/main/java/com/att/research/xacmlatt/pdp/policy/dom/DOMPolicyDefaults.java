@@ -80,12 +80,12 @@ public class DOMPolicyDefaults extends PolicyDefaults {
 						try {
 							DOMUtil.getURIContent(child);
 						} catch (DOMStructureException ex) {
-							logger.warn("Setting invalid " + XACML3.ELEMENT_XPATHVERSION + " attribute " + child.getTextContent() + " to " + XACML.XPATHVERSION_2_0);
+							logger.warn("Setting invalid {} attribute {} to {}", XACML3.ELEMENT_XPATHVERSION, child.getTextContent(), XACML.XPATHVERSION_2_0);
 							child.setTextContent(XACML.XPATHVERSION_2_0);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementPolicyDefaults.removeChild(child);
 						result	= true;
 					}

@@ -115,7 +115,7 @@ public class DOMMatch extends Match {
 						String childName	= child.getLocalName();
 						if (XACML3.ELEMENT_ATTRIBUTEVALUE.equals(childName)) {
 							if (sawAttributeValue) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementMatch.removeChild(child);
 								result	= true;
 							} else {
@@ -124,7 +124,7 @@ public class DOMMatch extends Match {
 							}
 						} else if (XACML3.ELEMENT_ATTRIBUTEDESIGNATOR.equals(childName)) {
 							if (sawAttributeRetrievalBase) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementMatch.removeChild(child);
 								result	= true;
 							} else {
@@ -133,7 +133,7 @@ public class DOMMatch extends Match {
 							}
 						} else if (XACML3.ELEMENT_ATTRIBUTESELECTOR.equals(childName)) {
 							if (sawAttributeRetrievalBase) {
-								logger.warn("Unexpected element " + child.getNodeName());
+								logger.warn("Unexpected element {}", child.getNodeName());
 								elementMatch.removeChild(child);
 								result	= true;
 							} else {
@@ -141,12 +141,12 @@ public class DOMMatch extends Match {
 								sawAttributeRetrievalBase	= true;
 							}
 						} else {
-							logger.warn("Unexpected element " + child.getNodeName());
+							logger.warn("Unexpected element {}", child.getNodeName());
 							elementMatch.removeChild(child);
 							result	= true;
 						}
 					} else {
-						logger.warn("Unexpected element " + child.getNodeName());
+						logger.warn("Unexpected element {}", child.getNodeName());
 						elementMatch.removeChild(child);
 						result	= true;
 					}
