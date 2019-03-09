@@ -108,7 +108,7 @@ public class FactoryFinder {
 		}
 		
 		if (logger.isDebugEnabled()) {
-			logger.debug("Found jar resource=" + serviceId + " using ClassLoader: " + cl);
+			logger.debug("Found jar resource={} using ClassLoader: {}", serviceId, cl);
 		}
 		
 		/*
@@ -140,7 +140,7 @@ public class FactoryFinder {
 		
 		if (factoryClassName != null && !"".equals(factoryClassName)) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Found in resource, value=" + factoryClassName);
+				logger.debug("Found in resource, value={}", factoryClassName);
 			}
 			return newInstance(factoryClassName, classExtends, cl, false, xacmlProperties);
 		}
@@ -193,7 +193,7 @@ public class FactoryFinder {
 	
 	public static <T> T find(String factoryId, String fallbackClassName, Class<T> classExtends, Properties xacmlProperties) throws FactoryException {
 		if (logger.isTraceEnabled()) {
-			logger.trace("Find factoryId=" + factoryId);
+			logger.trace("Find factoryId={}", factoryId);
 		}
 		/*
 		 * Check the system property first
@@ -201,7 +201,7 @@ public class FactoryFinder {
 		String systemProp	= System.getProperty(factoryId);
 		if (systemProp != null) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("Found system property, value=" + systemProp);
+				logger.debug("Found system property, value={}", systemProp);
 			}
 			return newInstance(systemProp, classExtends, null, true, xacmlProperties);
 		}
@@ -219,7 +219,7 @@ public class FactoryFinder {
 			}
 			if (factoryClassName != null) {
 				if (logger.isTraceEnabled()) {
-					logger.trace("Found factoryId xacml.properties, value=" + factoryClassName);
+					logger.trace("Found factoryId xacml.properties, value={}", factoryClassName);
 				}
 				return newInstance(factoryClassName, classExtends, null, true, xacmlProperties);
 			}
@@ -241,8 +241,8 @@ public class FactoryFinder {
 		if (fallbackClassName == null) {
 			throw new FactoryException("Provider for " + factoryId + " cannot be found", null);
 		}
-		if (logger.isDebugEnabled()) {
-			logger.debug("Loaded from fallback value: " + fallbackClassName);
+		if (logger.isTraceEnabled()) {
+			logger.trace("Loaded from fallback value: {}", fallbackClassName);
 		}
 		return newInstance(fallbackClassName, classExtends, null, true, xacmlProperties);
 	}
