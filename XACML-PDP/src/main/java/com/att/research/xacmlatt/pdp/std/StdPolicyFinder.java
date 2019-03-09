@@ -259,6 +259,7 @@ public class StdPolicyFinder implements PolicyFinder {
 	 * @param policyDef the <code>PolicyDef</code> to add
 	 */
 	private void updatePolicyMap(PolicyDef policyDef) {
+		logger.info("Updating policy map with policy {} version {}", policyDef.getIdentifier(), policyDef.getVersion());
 		this.storeInPolicyMap(policyDef);
 		if (policyDef instanceof PolicySet) {
 			Iterator<PolicySetChild> iterChildren	= ((PolicySet)policyDef).getChildren();
@@ -276,6 +277,7 @@ public class StdPolicyFinder implements PolicyFinder {
 	public StdPolicyFinder(Collection<PolicyDef> listRootPolicies, Collection<PolicyDef> referencedPolicyDefs) {
 		if (listRootPolicies != null) {
 			for (PolicyDef policyDef: listRootPolicies) {
+				logger.debug("Loading root policy {} version {}", policyDef.getIdentifier(), policyDef.getVersion());
 				this.listRoots.add(policyDef);
 				this.updatePolicyMap(policyDef);
 			}

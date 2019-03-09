@@ -71,12 +71,12 @@ public class StdPolicyFinderFactory extends PolicyFinderFactory {
 		if (propLocation != null) {
 			File fileLocation	= new File(propLocation);
 			if (!fileLocation.exists()) {
-				this.logger.error("Policy file " + fileLocation.getAbsolutePath() + " does not exist.");
+				this.logger.error("Policy file {} does not exist.", fileLocation.getAbsolutePath());
 			} else if (!fileLocation.canRead()) {
-				this.logger.error("Policy file " + fileLocation.getAbsolutePath() + " cannot be read.");
+				this.logger.error("Policy file {} cannot be read.", fileLocation.getAbsolutePath());
 			} else {
 				try {
-					this.logger.info("Loading policy file " + fileLocation);
+					this.logger.info("Loading policy file {}", fileLocation);
 					PolicyDef policyDef	= DOMPolicyDef.load(fileLocation);
 					if (policyDef != null) {
 						return policyDef;
@@ -93,7 +93,7 @@ public class StdPolicyFinderFactory extends PolicyFinderFactory {
 			try {
 				URL url						= new URL(propLocation);
 				URLConnection urlConnection	= url.openConnection();
-				this.logger.info("Loading policy file " + url.toString());
+				this.logger.info("Loading policy file {}", url.toString());
 				is = urlConnection.getInputStream();
 				PolicyDef policyDef			= DOMPolicyDef.load(is);
 				if (policyDef != null) {
@@ -117,7 +117,7 @@ public class StdPolicyFinderFactory extends PolicyFinderFactory {
 			}
 		}
 		
-		this.logger.error("No known location for Policy " + policyId);
+		this.logger.error("No known location for Policy {}", policyId);
 		return null;
 	}
 	
