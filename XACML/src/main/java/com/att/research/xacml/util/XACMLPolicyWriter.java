@@ -3,10 +3,10 @@
  *          Copyright (c) 2014,2019  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
+
 package com.att.research.xacml.util;
 
 import java.io.OutputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import javax.xml.bind.JAXBContext;
@@ -30,6 +30,8 @@ import oasis.names.tc.xacml._3_0.core.schema.wd_17.PolicyType;
 public class XACMLPolicyWriter {
 	private static final Logger logger				= LoggerFactory.getLogger(XACMLPolicyWriter.class);
 	
+	private static final String MSG_WRITE = "writePolicyFile failed: {}";
+	
 	private XACMLPolicyWriter() {
 		super();
 	}
@@ -49,7 +51,7 @@ public class XACMLPolicyWriter {
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			m.marshal(policySetElement, filename.toFile());
 			
-			if (Files.exists(filename)) {
+			if (filename.toFile().exists()) {
 				return filename;
 			} else {
 				logger.error("File does not exist after marshalling.");
@@ -57,7 +59,7 @@ public class XACMLPolicyWriter {
 			}
 			
 		} catch (JAXBException e) {
-			logger.error("writePolicyFile failed: " + e.getLocalizedMessage());
+			logger.error(MSG_WRITE, e);
 			return null;
 		}
 	}
@@ -76,7 +78,7 @@ public class XACMLPolicyWriter {
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			m.marshal(policySetElement, os);
 		} catch (JAXBException e) {
-			logger.error("writePolicyFile failed: " + e.getLocalizedMessage());
+			logger.error(MSG_WRITE, e);
 		}
 	}
 
@@ -95,7 +97,7 @@ public class XACMLPolicyWriter {
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			m.marshal(policyElement, filename.toFile());
 			
-			if (Files.exists(filename)) {
+			if (filename.toFile().exists()) {
 				return filename;
 			} else {
 				logger.error("File does not exist after marshalling.");
@@ -103,7 +105,7 @@ public class XACMLPolicyWriter {
 			}
 						
 		} catch (JAXBException e) {
-			logger.error("writePolicyFile failed: " + e.getLocalizedMessage());
+			logger.error(MSG_WRITE, e);
 			return null;
 		}		
 	}
@@ -121,7 +123,7 @@ public class XACMLPolicyWriter {
 			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			m.marshal(policySetElement, os);
 		} catch (JAXBException e) {
-			logger.error("writePolicyFile failed: " + e.getLocalizedMessage());
+			logger.error(MSG_WRITE, e);
 		}
 	}
 
