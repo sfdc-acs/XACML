@@ -11,9 +11,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,8 @@ public class XACMLProperties {
 	private static final Logger logger	= LoggerFactory.getLogger(XACMLProperties.class);
 	
 	private static final String LOG_MSG                 = "Missing property: ";
+    private static final String FILE_APPEND = ".file";
+
 	
 	public static final String	XACML_PROPERTIES_NAME	= "xacml.properties";
 	public static final String	XACML_PROPERTIES_FILE	= System.getProperty("java.home") + File.separator + "lib" + File.separator + XACML_PROPERTIES_NAME;
@@ -50,7 +54,8 @@ public class XACMLProperties {
 	public static final String 	PROP_PAP_PAPENGINEFACTORY 	= "xacml.PAP.papEngineFactory";
 	public static final String 	PROP_AC_PAPENGINEFACTORY 	= "xacml.AC.papEngineFactory";
 	
-	private static volatile Properties	properties	= new Properties();
+	private static Properties	properties	= new Properties();
+	private static final Object lock = new Object();
 	private static boolean 		needCache		= true;
 	
 	private static File getPropertiesFile() {
@@ -66,7 +71,7 @@ public class XACMLProperties {
 
 	public static Properties getProperties() throws IOException {
 		if (needCache) {
-			synchronized(properties) {
+			synchronized(lock) {
 				if (needCache) {
 					File fileProperties	= getPropertiesFile();
 					if (fileProperties.exists() && fileProperties.canRead()) {
@@ -87,7 +92,7 @@ public class XACMLProperties {
 	}
 	
 	public static void reloadProperties() {
-		synchronized(properties) {
+		synchronized(lock) {
 			properties = new Properties();
 			needCache = true;
 		}
@@ -203,6 +208,7 @@ public class XACMLProperties {
 		for (String id: policies) {
 			ids.add(id);
 		}
+		logger.debug("root policy ids: {}", ids);
 		return ids;
 	}
 
@@ -216,14 +222,85 @@ public class XACMLProperties {
 		for (String id: policies) {
 			ids.add(id);
 		}
+		logger.debug("referenced policy ids: {}", ids);
 		return ids;
 	}
 
 	public static Set<String>	getPolicyIDs(Properties props) {
 		Set<String> ids = XACMLProperties.getRootPolicyIDs(props);
 		ids.addAll(XACMLProperties.getReferencedPolicyIDs(props));
+		logger.debug("all policy ids: {}", ids);
 		return ids;
 	}
+
+    /**
+     * Set the properties to ensure it points to correct root policy file. This will overwrite
+     * any previous property set.
+     *
+     * @param properties Properties object that will get updated with root policy details
+     * @param rootPolicyPath Path to root Policy
+     * @return properties Properties object that was passed in
+     */
+    public static Properties setXacmlRootProperties(Properties properties, Path rootPolicyPath) {
+        //
+        // Clear out the old entries
+        //
+        clearPolicyProperties(properties, XACMLProperties.PROP_ROOTPOLICIES);
+        //
+        // Rebuild the list
+        //
+        properties.setProperty(XACMLProperties.PROP_ROOTPOLICIES, "root");
+        properties.setProperty("root.file", rootPolicyPath.toAbsolutePath().toString());
+        return properties;
+    }
+
+    /**
+     * Set the properties to ensure it points to correct referenced policy files. This will overwrite
+     * any previous properties set for referenced policies.
+     *
+     * @param properties Properties object that will get updated with referenced policy details
+     * @param referencedPolicies list of Paths to referenced Policies
+     * @return Properties object passed in
+     */
+    public static Properties setXacmlReferencedProperties(Properties properties, Path... referencedPolicies) {
+        //
+        // Clear out the old entries
+        //
+        clearPolicyProperties(properties, XACMLProperties.PROP_REFERENCEDPOLICIES);
+        //
+        // Rebuild the list
+        //
+        int id = 1;
+        StringJoiner joiner = new StringJoiner(",");
+        for (Path policy : referencedPolicies) {
+            String ref = "ref" + id++;
+            joiner.add(ref);
+            properties.setProperty(ref + FILE_APPEND, policy.toAbsolutePath().toString());
+        }
+        properties.setProperty(XACMLProperties.PROP_REFERENCEDPOLICIES, joiner.toString());
+        return properties;
+    }
+
+    /**
+     * Clear policy references from a Properties object.
+     *
+     * @param properties Properties object to clear
+     * @param strField Key field
+     * @return Properties object passed in
+     */
+    public static Properties clearPolicyProperties(Properties properties, String strField) {
+        String policyValue = properties.getProperty(strField);
+
+        String[] policies = policyValue.split("\\s*,\\s*");
+
+        for (String policy : policies) {
+            if (properties.containsKey(policy + FILE_APPEND)) {
+                properties.remove(policy + FILE_APPEND);
+            }
+        }
+
+        return properties;
+    }
 
 	public static Properties getPipProperties(Properties current) throws XacmlPropertyException {
 		Properties props = new Properties();
