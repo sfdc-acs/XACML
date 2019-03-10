@@ -29,6 +29,8 @@ import com.google.common.base.Splitter;
 public class XACMLProperties {
 	private static final Logger logger	= LoggerFactory.getLogger(XACMLProperties.class);
 	
+	private static final String LOG_MSG                 = "Missing property: ";
+	
 	public static final String	XACML_PROPERTIES_NAME	= "xacml.properties";
 	public static final String	XACML_PROPERTIES_FILE	= System.getProperty("java.home") + File.separator + "lib" + File.separator + XACML_PROPERTIES_NAME;
 	
@@ -69,13 +71,13 @@ public class XACMLProperties {
 					File fileProperties	= getPropertiesFile();
 					if (fileProperties.exists() && fileProperties.canRead()) {
 						if (logger.isDebugEnabled()) {
-							logger.debug("Loading properties from " + fileProperties.getAbsolutePath());
+							logger.debug("Loading properties from {}", fileProperties.getAbsolutePath());
 						}
 						try (InputStream is = new FileInputStream(fileProperties)) {
 							properties.load(is);
 						}
 					} else {
-						logger.warn("Properties file " + fileProperties.getAbsolutePath() + " cannot be read.");
+						logger.warn("Properties file {} cannot be read.", fileProperties.getAbsolutePath());
 					}
 					needCache	= false;
 				}
@@ -126,7 +128,7 @@ public class XACMLProperties {
 	 * @return Properties object
 	 * @throws Exception
 	 */
-	public static Properties getPolicyProperties(Properties current, boolean checkURLs) throws Exception {
+	public static Properties getPolicyProperties(Properties current, boolean checkURLs) throws XacmlPropertyException {
 		Properties props = new Properties();
 		String[] lists = new String[2];
 		lists[0] = current.getProperty(XACMLProperties.PROP_ROOTPOLICIES);
@@ -135,15 +137,15 @@ public class XACMLProperties {
 		if (lists[0] != null) {
 			props.setProperty(XACMLProperties.PROP_ROOTPOLICIES, lists[0]);
 		} else {
-			logger.error("Missing property: " + XACMLProperties.PROP_ROOTPOLICIES);
-			throw new Exception("Missing property: " + XACMLProperties.PROP_ROOTPOLICIES);
+			logger.error(LOG_MSG, XACMLProperties.PROP_ROOTPOLICIES);
+			throw new XacmlPropertyException(LOG_MSG + XACMLProperties.PROP_ROOTPOLICIES);
 		}
 		// require that PROP_REFERENCEDPOLICIES exist, even when it is empty
 		if (lists[1] != null) {
 			props.setProperty(XACMLProperties.PROP_REFERENCEDPOLICIES, lists[1]);
 		} else {
-			logger.error("Missing property: " + XACMLProperties.PROP_REFERENCEDPOLICIES);
-			throw new Exception("Missing property: " + XACMLProperties.PROP_REFERENCEDPOLICIES);
+			logger.error(LOG_MSG + XACMLProperties.PROP_REFERENCEDPOLICIES);
+			throw new XacmlPropertyException(LOG_MSG + XACMLProperties.PROP_REFERENCEDPOLICIES);
 		}
 		Set<Object> keys = current.keySet();
 		for (String list : lists) {
@@ -164,16 +166,16 @@ public class XACMLProperties {
 					// every policy must have a ".url" property
 					String urlString = (String) props.get(policy + ".url");
 					if (urlString == null) {
-						logger.error("Policy '" + policy + "' has no .url property");
-						throw new Exception("Policy '" + policy + "' has no .url property");
+						logger.error("Policy '{}' has no .url property", policy);
+						throw new XacmlPropertyException("Policy '" + policy + "' has no .url property");
 					}
 					// the .url must be a valid URL
 					try {
 						// if this does not throw an exception the URL is ok
 						new URL(urlString);
 					} catch (MalformedURLException e) {
-						logger.error("Policy '" + policy + "' has bad .url property");
-						throw new Exception("Policy '" + policy + "' has bad .url property");
+						logger.error("Policy '{}' has bad .url property", policy);
+						throw new XacmlPropertyException("Policy '" + policy + "' has bad .url property");
 					}
 				}
 			}
@@ -192,7 +194,7 @@ public class XACMLProperties {
 	}
 	
 	public static Set<String>	getRootPolicyIDs(Properties props) {
-		Set<String> ids = new HashSet<String>();
+		Set<String> ids = new HashSet<>();
 		String roots = props.getProperty(XACMLProperties.PROP_ROOTPOLICIES);
 		if (roots == null) {
 			return ids;
@@ -205,7 +207,7 @@ public class XACMLProperties {
 	}
 
 	public static Set<String>	getReferencedPolicyIDs(Properties props) {
-		Set<String> ids = new HashSet<String>();
+		Set<String> ids = new HashSet<>();
 		String refs = props.getProperty(XACMLProperties.PROP_REFERENCEDPOLICIES);
 		if (refs == null) {
 			return ids;
@@ -223,16 +225,16 @@ public class XACMLProperties {
 		return ids;
 	}
 
-	public static Properties getPipProperties(Properties current) throws Exception {
+	public static Properties getPipProperties(Properties current) throws XacmlPropertyException {
 		Properties props = new Properties();
 		String list = current.getProperty(XACMLProperties.PROP_PIP_ENGINES);
 		// require that PROP_PIP_ENGINES exist, even when it is empty
 		if (list != null) {
 			props.setProperty(XACMLProperties.PROP_PIP_ENGINES, list);
 		} else {
-			throw new Exception("Missing property: " + XACMLProperties.PROP_PIP_ENGINES);
+			throw new XacmlPropertyException(LOG_MSG + XACMLProperties.PROP_PIP_ENGINES);
 		}
-		if (list == null || list.length() == 0) {
+		if (list.length() == 0) {
 			return props;
 		}
 		Iterable<String> pips = Splitter.on(',').trimResults().omitEmptyStrings().split(list);
