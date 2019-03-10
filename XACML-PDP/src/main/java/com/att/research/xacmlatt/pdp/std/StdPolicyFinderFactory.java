@@ -157,7 +157,7 @@ public class StdPolicyFinderFactory extends PolicyFinderFactory {
 			String combiningAlgorithm = properties.getProperty(ATTPDPProperties.PROP_POLICYFINDERFACTORY_COMBINEROOTPOLICIES);
 			if (combiningAlgorithm != null) {
 				try {
-					logger.info("Combining root policies with " + combiningAlgorithm);
+					logger.info("Combining root policies with {}", combiningAlgorithm);
 					//
 					// Find the combining algorithm
 					//
@@ -185,12 +185,13 @@ public class StdPolicyFinderFactory extends PolicyFinderFactory {
 					this.rootPolicies = new ArrayList<>();
 					this.rootPolicies.add(root);
 				} catch (FactoryException | ParseException e) {
-					logger.error("Failed to load Combining Algorithm Factory: " + e.getLocalizedMessage());
+					logger.error("Failed to load Combining Algorithm Factory: {}", e.getLocalizedMessage());
 				}
 			} else {
+				logger.info("Loading root policies");
 				this.rootPolicies		= this.getPolicyDefs(XACMLProperties.PROP_ROOTPOLICIES, properties);
 			}
-			
+			logger.info("Loading referenced policies");
 			this.referencedPolicies	= this.getPolicyDefs(XACMLProperties.PROP_REFERENCEDPOLICIES, properties);
 			this.needsInit	= false;
 		}

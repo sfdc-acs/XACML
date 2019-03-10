@@ -314,6 +314,7 @@ public class StdPolicyFinder implements PolicyFinder {
 
 	@Override
 	public PolicyFinderResult<PolicyDef> getRootPolicyDef(EvaluationContext evaluationContext) {
+		logger.debug("getRootPolicyDef called");
 		PolicyDef policyDefFirstMatch			= null;
 		Iterator<PolicyDef> iterRootPolicies	= this.listRoots.iterator();
 		PolicyFinderResult<PolicyDef> firstIndeterminate	= null;
@@ -352,21 +353,25 @@ public class StdPolicyFinder implements PolicyFinder {
 				return PFR_NOT_FOUND;
 			}
 		} else {
+			logger.debug("Returning root policy first match {}", policyDefFirstMatch.getIdentifier());
 			return new StdPolicyFinderResult<>(policyDefFirstMatch);
 		}
 	}
 
 	@Override
 	public PolicyFinderResult<Policy> getPolicy(IdReferenceMatch idReferenceMatch) {
+		logger.debug("getPolicy {}", idReferenceMatch.getId());
 		return this.lookupPolicyByIdentifier(idReferenceMatch);
 	}
 
 	@Override
 	public PolicyFinderResult<PolicySet> getPolicySet(IdReferenceMatch idReferenceMatch) {
+		logger.debug("getPolicySet {}", idReferenceMatch.getId());
 		return this.lookupPolicySetByIdentifier(idReferenceMatch);
 	}
 	
 	public void addReferencedPolicy(PolicyDef policyDef) {
+		logger.debug("addReferencedPolicy {}", policyDef.getIdentifier());
 		this.updatePolicyMap(policyDef);
 	}
 }
