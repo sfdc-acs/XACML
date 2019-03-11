@@ -258,6 +258,7 @@ public class XACMLPolicyScanner {
 
 		@Override
 		public void onFinishScan(Object root) {
+			//
 		}
 
 		@Override
@@ -399,7 +400,7 @@ public class XACMLPolicyScanner {
 		} else if (this.policyObject instanceof PolicySetType) {
 			this.scanPolicySet(null, (PolicySetType) this.policyObject);
 		} else {
-			logger.error("Unknown class type: " + this.policyObject.getClass().getCanonicalName());
+			logger.error("Unknown class type: {}", this.policyObject.getClass().getCanonicalName());
 		}
 		if (this.callback != null) {
 			this.callback.onFinishScan(this.policyObject);
@@ -421,7 +422,7 @@ public class XACMLPolicyScanner {
 	 */
 	protected CallbackResult scanPolicySet(PolicySetType parent, PolicySetType policySet) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("scanning policy set: " + policySet.getPolicySetId() + " " + policySet.getDescription());
+			logger.trace("scanning policy set: {} {}", policySet.getPolicySetId(), policySet.getDescription());
 		}
 		if (this.callback != null) {
 			if (this.callback.onPreVisitPolicySet(parent, policySet) == CallbackResult.STOP) {
@@ -460,7 +461,7 @@ public class XACMLPolicyScanner {
 					
 				}
 			} else {
-				logger.warn("generating policy sets found unsupported element: " + element.getName().getNamespaceURI());
+				logger.warn("generating policy sets found unsupported element: {}", element.getName().getNamespaceURI());
 			}
 		}
 		if (this.callback != null) {
@@ -481,7 +482,7 @@ public class XACMLPolicyScanner {
 	 */
 	protected CallbackResult scanPolicy(PolicySetType parent, PolicyType policy) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("scanning policy: " + policy.getPolicyId() + " " + policy.getDescription());
+			logger.trace("scanning policy: {} {}", policy.getPolicyId(), policy.getDescription());
 		}
 		if (this.callback != null) {
 			if (this.callback.onPreVisitPolicy(parent, policy) == CallbackResult.STOP) {
@@ -511,7 +512,7 @@ public class XACMLPolicyScanner {
 			if (o instanceof RuleType) {
 				RuleType rule = (RuleType) o;
 				if (logger.isTraceEnabled()) {
-					logger.trace("scanning rule: " + rule.getRuleId() + " " + rule.getDescription());
+					logger.trace("scanning rule: {} {}", rule.getRuleId(), rule.getDescription());
 				}
 				if (this.callback != null) {
 					if (this.callback.onPreVisitRule(policy, rule) == CallbackResult.STOP) {
@@ -543,7 +544,7 @@ public class XACMLPolicyScanner {
 				}
 			} else {
 				if (logger.isDebugEnabled()) {
-					logger.debug("scanning policy rules found unsupported object:" + o.toString());
+					logger.debug("scanning policy rules found unsupported object: {}", o);
 				}
 			}
 		}
@@ -632,7 +633,7 @@ public class XACMLPolicyScanner {
 			return CallbackResult.CONTINUE;
 		}
 		List<ObligationExpressionType> expressions = obligationExpressionsType.getObligationExpression();
-		if (expressions == null || expressions.size() == 0) {
+		if (expressions == null || expressions.isEmpty()) {
 			return CallbackResult.CONTINUE;
 		}
 		for (ObligationExpressionType expression : expressions) {
@@ -785,7 +786,7 @@ public class XACMLPolicyScanner {
 				version = ((PolicyType)data).getVersion();
 			} else {
 				if (data != null) {
-					logger.error("Expecting a PolicySet/Policy/Rule object. Got: " + data.getClass().getCanonicalName());
+					logger.error("Expecting a PolicySet/Policy/Rule object. Got: {}", data.getClass().getCanonicalName());
 				}
 				return null;
 			}
@@ -795,7 +796,7 @@ public class XACMLPolicyScanner {
 				logger.warn("No version set in policy");
 			}
 		} catch (NumberFormatException e) {
-			logger.error("Invalid version contained in policy: " + version);
+			logger.error("Invalid version contained in policy: {}", version);
 			return null;
 		}
 		return null;
@@ -813,7 +814,7 @@ public class XACMLPolicyScanner {
 		} else if (data instanceof PolicyType) {
 			return ((PolicyType)data).getPolicyId();
 		} else {
-			logger.error("Expecting a PolicySet/Policy/Rule object. Got: " + data.getClass().getCanonicalName());
+			logger.error("Expecting a PolicySet/Policy/Rule object. Got: {}", data.getClass().getCanonicalName());
 			return null;
 		}
 	}
@@ -897,11 +898,11 @@ public class XACMLPolicyScanner {
 						return root.getValue();
 					} else {
 						if (logger.isDebugEnabled()) {
-							logger.debug("Not supported yet: " + e.getNodeName());
+							logger.debug("Not supported yet: {}", e.getNodeName());
 						}
 					}
 				} else {
-					logger.warn("unsupported namespace: " + e.getNamespaceURI());
+					logger.warn("unsupported namespace: {}", e.getNamespaceURI());
 				}
 			} else {
 				if (logger.isDebugEnabled()) {

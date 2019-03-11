@@ -93,7 +93,7 @@ public class StdPolicyFinderFactory extends PolicyFinderFactory {
 			try {
 				URL url						= new URL(propLocation);
 				URLConnection urlConnection	= url.openConnection();
-				this.logger.info("Loading policy file {}", url.toString());
+				this.logger.info("Loading policy file {}", url);
 				is = urlConnection.getInputStream();
 				PolicyDef policyDef			= DOMPolicyDef.load(is);
 				if (policyDef != null) {
@@ -139,7 +139,7 @@ public class StdPolicyFinderFactory extends PolicyFinderFactory {
 			return null;
 		}
 		
-		List<PolicyDef> listPolicyDefs	= new ArrayList<PolicyDef>();
+		List<PolicyDef> listPolicyDefs	= new ArrayList<>();
 		for (String policyId : policyIdArray) {
 			PolicyDef policyDef	= this.loadPolicyDef(policyId, properties);	
 			if (policyDef != null) {

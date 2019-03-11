@@ -45,13 +45,13 @@ import com.att.research.xacmlatt.pdp.policy.dom.DOMPolicyDef;
  * @version $Revision: 1.4 $
  */
 public class StdPolicyFinder implements PolicyFinder {
-	private static final PolicyFinderResult<PolicyDef> PFR_MULTIPLE				= new StdPolicyFinderResult<PolicyDef>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "Multiple applicable root policies"));
-	private static final PolicyFinderResult<PolicyDef> PFR_NOT_FOUND			= new StdPolicyFinderResult<PolicyDef>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "No matching root policy found"));
+	private static final PolicyFinderResult<PolicyDef> PFR_MULTIPLE				= new StdPolicyFinderResult<>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "Multiple applicable root policies"));
+	private static final PolicyFinderResult<PolicyDef> PFR_NOT_FOUND			= new StdPolicyFinderResult<>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "No matching root policy found"));
 	
-	private static final PolicyFinderResult<Policy>	PFR_POLICY_NOT_FOUND		= new StdPolicyFinderResult<Policy>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "No matching policy found"));
-	private static final PolicyFinderResult<Policy>	PFR_NOT_A_POLICY			= new StdPolicyFinderResult<Policy>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "Not a policy"));
-	private static final PolicyFinderResult<PolicySet> PFR_POLICYSET_NOT_FOUND	= new StdPolicyFinderResult<PolicySet>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "No matching policy set found"));
-	private static final PolicyFinderResult<PolicySet> PFR_NOT_A_POLICYSET		= new StdPolicyFinderResult<PolicySet>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "Not a policy set"));	
+	private static final PolicyFinderResult<Policy>	PFR_POLICY_NOT_FOUND		= new StdPolicyFinderResult<>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "No matching policy found"));
+	private static final PolicyFinderResult<Policy>	PFR_NOT_A_POLICY			= new StdPolicyFinderResult<>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "Not a policy"));
+	private static final PolicyFinderResult<PolicySet> PFR_POLICYSET_NOT_FOUND	= new StdPolicyFinderResult<>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "No matching policy set found"));
+	private static final PolicyFinderResult<PolicySet> PFR_NOT_A_POLICYSET		= new StdPolicyFinderResult<>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, "Not a policy set"));	
 
 	private final Logger logger	= LoggerFactory.getLogger(this.getClass());
 	private List<PolicyDef> listRoots					= new ArrayList<>();
@@ -142,17 +142,17 @@ public class StdPolicyFinder implements PolicyFinder {
 		PolicyDef policyDef	= null;
 		InputStream inputStream	= null;
 		try {
-			this.logger.info("Loading policy from URI " + uri.toString());
+			this.logger.info("Loading policy from URI {}", uri);
 			URL url	= uri.toURL();
-			this.logger.debug("Loading policy from URL " + url.toString());
+			this.logger.debug("Loading policy from URL {}", url);
 			
 			inputStream	= url.openStream();
 			policyDef	= DOMPolicyDef.load(inputStream);
 		} catch (MalformedURLException ex) {
-			this.logger.debug("Unknown protocol for URI " + uri.toString());
+			this.logger.debug("Unknown protocol for URI {}", uri);
 			return null;
 		} catch (Exception ex) {
-			this.logger.error("Exception loading policy definition", ex);
+			this.logger.error("Exception loading policy definition {}", ex);
 			throw new StdPolicyFinderException("Exception loading policy def from \"" + uri.toString() + "\": " + ex.getMessage(), ex);
 		} finally {
 			if (inputStream != null) {
@@ -175,38 +175,33 @@ public class StdPolicyFinder implements PolicyFinder {
 	 */
 	private PolicyFinderResult<Policy> lookupPolicyByIdentifier(IdReferenceMatch idReferenceMatch) {
 		List<Policy> listCachedPolicies	= this.getFromPolicyMap(idReferenceMatch, Policy.class);
-		if (listCachedPolicies == null) {
-			Identifier id	= idReferenceMatch.getId();
-			if (id != null) {
-				URI uri	= id.getUri();
-				if (uri != null && uri.isAbsolute()) {
-					PolicyDef policyDef	= null;
-					try {
-						policyDef	= this.loadPolicyDefFromURI(uri);
-					} catch (StdPolicyFinderException ex) {
-						return new StdPolicyFinderResult<>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, ex.getMessage()));
-					}
-					if (policyDef != null) {
-						if (policyDef instanceof Policy) {
-							List<PolicyDef> listPolicyDefs	= new ArrayList<>();
-							listPolicyDefs.add(policyDef);
-							this.mapPolicies.put(id, listPolicyDefs);
-							this.mapPolicies.put(policyDef.getIdentifier(), listPolicyDefs);
-							return new StdPolicyFinderResult<>((Policy)policyDef);
-						} else {
-							return PFR_NOT_A_POLICY;
-						}
-					} else {
-						return PFR_POLICY_NOT_FOUND;
-					}
-				}
-			}
-		}
 		if (listCachedPolicies != null) {
 			return new StdPolicyFinderResult<>(this.getBestMatch(listCachedPolicies));
-		} else {
-			return PFR_POLICY_NOT_FOUND;
 		}
+		Identifier id	= idReferenceMatch.getId();
+		if (id != null) {
+			URI uri	= id.getUri();
+			if (uri != null && uri.isAbsolute()) {
+				PolicyDef policyDef	= null;
+				try {
+					policyDef	= this.loadPolicyDefFromURI(uri);
+				} catch (StdPolicyFinderException ex) {
+					return new StdPolicyFinderResult<>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, ex.getMessage()));
+				}
+				if (policyDef != null) {
+					if (policyDef instanceof Policy) {
+						List<PolicyDef> listPolicyDefs	= new ArrayList<>();
+						listPolicyDefs.add(policyDef);
+						this.mapPolicies.put(id, listPolicyDefs);
+						this.mapPolicies.put(policyDef.getIdentifier(), listPolicyDefs);
+						return new StdPolicyFinderResult<>((Policy)policyDef);
+					}
+					return PFR_NOT_A_POLICY;
+				}
+				return PFR_POLICY_NOT_FOUND;
+			}
+		}
+		return PFR_POLICY_NOT_FOUND;
 	}
 	
 	/**
@@ -218,38 +213,33 @@ public class StdPolicyFinder implements PolicyFinder {
 	 */
 	private PolicyFinderResult<PolicySet> lookupPolicySetByIdentifier(IdReferenceMatch idReferenceMatch) {
 		List<PolicySet> listCachedPolicySets	= this.getFromPolicyMap(idReferenceMatch, PolicySet.class);
-		if (listCachedPolicySets == null) {
-			Identifier id	= idReferenceMatch.getId();
-			if (id != null) {
-				URI uri	= id.getUri();
-				if (uri != null && uri.isAbsolute()) {
-					PolicyDef policyDef	= null;
-					try {
-						policyDef	= this.loadPolicyDefFromURI(uri);
-					} catch (StdPolicyFinderException ex) {
-						return new StdPolicyFinderResult<>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, ex.getMessage()));
-					}
-					if (policyDef != null) {
-						if (policyDef instanceof PolicySet) {
-							List<PolicyDef> listPolicyDefs	= new ArrayList<>();
-							listPolicyDefs.add(policyDef);
-							this.mapPolicies.put(id, listPolicyDefs);
-							this.mapPolicies.put(policyDef.getIdentifier(), listPolicyDefs);
-							return new StdPolicyFinderResult<>((PolicySet)policyDef);
-						} else {
-							return PFR_NOT_A_POLICYSET;
-						}
-					} else {
-						return PFR_POLICYSET_NOT_FOUND;
-					}
-				}
-			}
-		}
 		if (listCachedPolicySets != null) {
 			return new StdPolicyFinderResult<>(this.getBestMatch(listCachedPolicySets));
-		} else {
-			return PFR_POLICYSET_NOT_FOUND;
 		}
+		Identifier id	= idReferenceMatch.getId();
+		if (id != null) {
+			URI uri	= id.getUri();
+			if (uri != null && uri.isAbsolute()) {
+				PolicyDef policyDef	= null;
+				try {
+					policyDef	= this.loadPolicyDefFromURI(uri);
+				} catch (StdPolicyFinderException ex) {
+					return new StdPolicyFinderResult<>(new StdStatus(StdStatusCode.STATUS_CODE_PROCESSING_ERROR, ex.getMessage()));
+				}
+				if (policyDef == null) {
+					return PFR_POLICYSET_NOT_FOUND;
+				}
+				if (policyDef instanceof PolicySet) {
+					List<PolicyDef> listPolicyDefs	= new ArrayList<>();
+					listPolicyDefs.add(policyDef);
+					this.mapPolicies.put(id, listPolicyDefs);
+					this.mapPolicies.put(policyDef.getIdentifier(), listPolicyDefs);
+					return new StdPolicyFinderResult<>((PolicySet)policyDef);
+				}
+				return PFR_NOT_A_POLICYSET;
+			}
+		}
+		return PFR_POLICYSET_NOT_FOUND;
 	}
 	
 	/**
