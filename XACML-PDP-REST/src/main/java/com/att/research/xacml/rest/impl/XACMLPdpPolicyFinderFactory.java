@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.std.StdStatusCode;
 import com.att.research.xacml.std.dom.DOMStructureException;
@@ -34,7 +34,7 @@ public class XACMLPdpPolicyFinderFactory extends PolicyFinderFactory {
 	public static final String	PROP_FILE		= ".file";
 	public static final String	PROP_URL		= ".url";
 	
-	private static Log logger							= LogFactory.getLog(XACMLPdpPolicyFinderFactory.class);
+	private static Logger logger							= LoggerFactory.getLogger(XACMLPdpPolicyFinderFactory.class);
 	private List<PolicyDef> rootPolicies;
 	private List<PolicyDef> referencedPolicies;
 	private boolean needsInit					= true;
@@ -61,77 +61,101 @@ public class XACMLPdpPolicyFinderFactory extends PolicyFinderFactory {
 		this.init();
 	}
 
-	/**
-	 * Loads the <code>PolicyDef</code> for the given <code>String</code> identifier by looking first
-	 * for a ".file" property associated with the ID and using that to load from a <code>File</code> and
-	 * looking for a ".url" property associated with the ID and using that to load from a <code>URL</code>.
-	 * 
-	 * @param policyId the <code>String</code> identifier for the policy
-	 * @return a <code>PolicyDef</code> loaded from the given identifier
-	 */
-	protected PolicyDef loadPolicyDef(String policyId) {
-		String propLocation = null;
-		if (this.properties == null) {
-			propLocation	= XACMLProperties.getProperty(policyId + PROP_FILE);
-		} else {
-			propLocation	= this.properties.getProperty(policyId + PROP_FILE);
-		}
-		if (propLocation != null) {
-			File fileLocation	= new File(propLocation);
-			if (!fileLocation.exists()) {
-				XACMLPdpPolicyFinderFactory.logger.error("Policy file " + fileLocation.getAbsolutePath() + " does not exist.");
-			} else if (!fileLocation.canRead()) {
-				XACMLPdpPolicyFinderFactory.logger.error("Policy file " + fileLocation.getAbsolutePath() + " cannot be read.");
-			} else {
-				try {
-					XACMLPdpPolicyFinderFactory.logger.info("Loading policy file " + fileLocation);
-					PolicyDef policyDef	= DOMPolicyDef.load(fileLocation);
-					if (policyDef != null) {
-						return policyDef;
-					}
-				} catch (DOMStructureException ex) {
-					XACMLPdpPolicyFinderFactory.logger.error("Error loading policy file " + fileLocation.getAbsolutePath() + ": " + ex.getMessage(), ex);
-					return new Policy(StdStatusCode.STATUS_CODE_SYNTAX_ERROR, ex.getMessage());
-				}
-			}
-		}
-		if (this.properties == null) {
-			propLocation = XACMLProperties.getProperty(policyId + PROP_URL);
-		} else {
-			propLocation = this.properties.getProperty(policyId + PROP_URL);
-		}
-		if (propLocation != null) {
-			 InputStream is = null;
-			try {
-				URL url						= new URL(propLocation);
-				URLConnection urlConnection	= url.openConnection();
-				XACMLPdpPolicyFinderFactory.logger.info("Loading policy file " + url.toString());
-				is = urlConnection.getInputStream();
-				PolicyDef policyDef			= DOMPolicyDef.load(is);
-				if (policyDef != null) {
-					return policyDef;
-				}
-			} catch (MalformedURLException ex) {
-				XACMLPdpPolicyFinderFactory.logger.error("Invalid URL " + propLocation + ": " + ex.getMessage(), ex);
-			} catch (IOException ex) {
-				XACMLPdpPolicyFinderFactory.logger.error("IOException opening URL " + propLocation + ": " + ex.getMessage(), ex);
-			} catch (DOMStructureException ex) {
-				XACMLPdpPolicyFinderFactory.logger.error("Invalid Policy " + propLocation + ": " + ex.getMessage(), ex);
-				return new Policy(StdStatusCode.STATUS_CODE_SYNTAX_ERROR, ex.getMessage());
-			} finally {
-				if (is != null) {
-					try {
-						is.close();
-					} catch (IOException e) {
-						XACMLPdpPolicyFinderFactory.logger.error("Exception closing InputStream for GET of url " + propLocation + " : " + e.getMessage() + "  (May be memory leak)", e);
-					}
-				}
-			}
-		}
-		
-		XACMLPdpPolicyFinderFactory.logger.error("No known location for Policy " + policyId);
-		return null;
-	}
+    /**
+     * Loads the <code>PolicyDef</code> for the given <code>String</code> identifier by looking first
+     * for a ".file" property associated with the ID and using that to load from a <code>File</code> and
+     * looking for a ".url" property associated with the ID and using that to load from a <code>URL</code>.
+     *
+     * @param policyId the <code>String</code> identifier for the policy
+     * @return a <code>PolicyDef</code> loaded from the given identifier
+     */
+    protected PolicyDef loadPolicyDef(String policyId) {
+        String propLocation = null;
+        if (this.properties == null) {
+            propLocation    = XACMLProperties.getProperty(policyId + PROP_FILE);
+        } else {
+            propLocation    = this.properties.getProperty(policyId + PROP_FILE);
+        }
+        if (propLocation != null) {
+            //
+            // Try to load it from the file
+            //
+            PolicyDef policy = this.loadPolicyFileDef(propLocation);
+            if (policy != null) {
+                return policy;
+            }
+        }
+        if (this.properties == null) {
+            propLocation = XACMLProperties.getProperty(policyId + PROP_URL);
+        } else {
+            propLocation = this.properties.getProperty(policyId + PROP_URL);
+        }
+        if (propLocation != null) {
+            PolicyDef policy = this.loadPolicyUrlDef(propLocation);
+            if (policy != null) {
+                return policy;
+            }
+        }
+
+        logger.error("No known location for Policy {}", policyId);
+        return null;
+    }
+
+    protected PolicyDef loadPolicyFileDef(String propLocation) {
+        File fileLocation   = new File(propLocation);
+        if (!fileLocation.exists()) {
+            logger.error("Policy file {} does not exist.", fileLocation.getAbsolutePath());
+            return null;
+        }
+        if (!fileLocation.canRead()) {
+            logger.error("Policy file {} cannot be read.", fileLocation.getAbsolutePath());
+            return null;
+        }
+        try {
+            logger.info("Loading policy file {}", fileLocation);
+            PolicyDef policyDef = DOMPolicyDef.load(fileLocation);
+            if (policyDef != null) {
+                return policyDef;
+            }
+            return new Policy(StdStatusCode.STATUS_CODE_SYNTAX_ERROR, "DOM Could not load policy");
+        } catch (DOMStructureException ex) {
+            logger.error("Error loading policy file {}: {}", fileLocation.getAbsolutePath(), ex);
+            return new Policy(StdStatusCode.STATUS_CODE_SYNTAX_ERROR, ex.getMessage());
+        }
+    }
+
+    protected PolicyDef loadPolicyUrlDef(String propLocation) {
+        InputStream is = null;
+        try {
+            URL url                     = new URL(propLocation);
+            URLConnection urlConnection = url.openConnection();
+            logger.info("Loading policy file {}", url);
+            is = urlConnection.getInputStream();
+            PolicyDef policyDef         = DOMPolicyDef.load(is);
+            if (policyDef != null) {
+                return policyDef;
+            }
+        } catch (MalformedURLException ex) {
+            logger.error("Invalid URL " + propLocation + ": " + ex.getMessage(), ex);
+        } catch (IOException ex) {
+            logger.error("IOException opening URL {}: {}{}",
+                    propLocation, ex.getMessage(), ex);
+        } catch (DOMStructureException ex) {
+            logger.error("Invalid Policy " + propLocation + ": " + ex.getMessage(), ex);
+            return new Policy(StdStatusCode.STATUS_CODE_SYNTAX_ERROR, ex.getMessage());
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    logger.error("Exception closing InputStream for GET of url {}: {}",
+                            propLocation, e.getMessage() + "  (May be memory leak)", e);
+                }
+            }
+        }
+        return null;
+    }
+
 	
 	/**
 	 * Finds the identifiers for all of the policies referenced by the given property name in the
@@ -151,7 +175,7 @@ public class XACMLPdpPolicyFinderFactory extends PolicyFinderFactory {
 			return null;
 		}
 		
-		List<PolicyDef> listPolicyDefs	= new ArrayList<PolicyDef>();
+		List<PolicyDef> listPolicyDefs	= new ArrayList<>();
 		for (String policyId : policyIdArray) {
 			PolicyDef policyDef	= this.loadPolicyDef(policyId);	
 			if (policyDef != null) {
@@ -169,8 +193,8 @@ public class XACMLPdpPolicyFinderFactory extends PolicyFinderFactory {
 			this.rootPolicies		= this.getPolicyDefs(XACMLProperties.PROP_ROOTPOLICIES);
 			this.referencedPolicies	= this.getPolicyDefs(XACMLProperties.PROP_REFERENCEDPOLICIES);
 			if (XACMLPdpPolicyFinderFactory.logger.isDebugEnabled()) {
-				XACMLPdpPolicyFinderFactory.logger.debug("Root Policies: " + this.rootPolicies);
-				XACMLPdpPolicyFinderFactory.logger.debug("Referenced Policies: " + this.referencedPolicies);
+				XACMLPdpPolicyFinderFactory.logger.debug("Root Policies: {}", this.rootPolicies.size());
+				XACMLPdpPolicyFinderFactory.logger.debug("Referenced Policies: {}", this.referencedPolicies.size());
 			}
 			this.needsInit	= false;
 		}
