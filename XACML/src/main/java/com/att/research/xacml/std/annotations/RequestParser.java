@@ -67,12 +67,12 @@ public class RequestParser {
 				logger.error("Could not create data type factory");
 			}
 		} catch (FactoryException e) {
-			logger.error("Can't get Data type Factory: " + e.getLocalizedMessage());
+			logger.error("Can't get Data type Factory: {}", e);
 		}
 		return dataTypeFactory;
 	}
 
-	public static Request	parseRequest(Object obj) throws IllegalArgumentException, IllegalAccessException, DataTypeException {
+	public static Request	parseRequest(Object obj) throws IllegalAccessException, DataTypeException {
 		//
 		// Our returned object
 		//
@@ -80,7 +80,7 @@ public class RequestParser {
 		//
 		// Our collection of attribute values
 		//
-		List<StdMutableRequestAttributes> attributes = new ArrayList<StdMutableRequestAttributes>();
+		List<StdMutableRequestAttributes> attributes = new ArrayList<>();
 		//
 		// Get overall XACML request annotation fields
 		//
@@ -90,7 +90,7 @@ public class RequestParser {
 		//
 		stdMutableRequest.setReturnPolicyIdList(requestAnnotation.ReturnPolicyIdList());
 		stdMutableRequest.setCombinedDecision(requestAnnotation.CombinedDecision());
-		if (requestAnnotation.Defaults().equals(XACMLRequest.nullString) == false) {
+		if (! requestAnnotation.Defaults().equals(XACMLRequest.nullString)) {
 			stdMutableRequest.setRequestDefaults(new StdRequestDefaults(URI.create(requestAnnotation.Defaults())));
 		}
 		//
@@ -99,11 +99,11 @@ public class RequestParser {
 		XACMLMultiRequest multi = requestAnnotation.multiRequest();
 		if (multi != null) {
 			for (XACMLRequestReference reference : multi.values()) {
-				Collection<RequestAttributesReference> refs = new ArrayList<RequestAttributesReference>();
+				Collection<RequestAttributesReference> refs = new ArrayList<>();
 				for (String id : reference.values()) {
 					refs.add(new StdRequestAttributesReference(id));
 				}
-				if (refs.isEmpty() == false) {
+				if (! refs.isEmpty()) {
 					stdMutableRequest.add(new StdRequestReference(refs));
 				}
 			}
@@ -113,7 +113,7 @@ public class RequestParser {
 		//
 		for (Field field : obj.getClass().getDeclaredFields()) {
 			if (logger.isTraceEnabled()) {
-				logger.trace("Field: " + field);
+				logger.trace("Field: {}", field);
 			}
 			XACMLSubject subject = field.getAnnotation(XACMLSubject.class);
 			if (subject != null) {
@@ -196,7 +196,7 @@ public class RequestParser {
 									String issuer,
 									String id,
 									Field field, 
-									Object object) throws IllegalArgumentException, IllegalAccessException, DataTypeException {
+									Object object) throws IllegalAccessException, DataTypeException {
 		//
 		// Create our attribute
 		//
@@ -204,7 +204,7 @@ public class RequestParser {
 		mutableAttribute.setCategory(category);
 		mutableAttribute.setAttributeId(attributeId);
 		mutableAttribute.setIncludeInResults(includeInResults);
-		if (issuer != null && issuer.isEmpty() == false) {
+		if (issuer != null && ! issuer.isEmpty()) {
 			mutableAttribute.setIssuer(issuer);
 		}
 		//
@@ -212,10 +212,11 @@ public class RequestParser {
 		//
 		field.setAccessible(true);
 		Collection<AttributeValue<?>> value = RequestParser.extractValues(datatype, field, object);
-		if (value != null) {
+		if (value != null && ! value.isEmpty()) {
 			mutableAttribute.addValues(value);
 		} else {
-			throw new IllegalArgumentException("Unable to extract attribute value from object");
+			logger.warn("Unable to extract attribute value from object: {}", attributeId);
+			return;
 		}
 		//
 		// Does the category exist?
@@ -235,7 +236,7 @@ public class RequestParser {
 		//
 		// Was it added?
 		//
-		if (added == false) {
+		if (! added) {
 			//
 			// No the category does not exist yet or this has a different xml:id
 			//
@@ -247,7 +248,7 @@ public class RequestParser {
 		}
 	}
 
-	public static Collection<AttributeValue<?>>	extractValues(String datatype, Field field, Object object) throws IllegalArgumentException, IllegalAccessException, DataTypeException {
+	public static Collection<AttributeValue<?>>	extractValues(String datatype, Field field, Object object) throws IllegalAccessException, DataTypeException {
 		//
 		// Synchronize?
 		//
@@ -363,7 +364,7 @@ public class RequestParser {
 		}
 		DataType<?> dataTypeExtended	= getDataTypeFactory().getDataType(datatypeId);
 		if (dataTypeExtended == null) {
-			logger.error("DataType factory does not know datatype: " + datatype);
+			logger.error("DataType factory does not know datatype: {}", datatype);
 			return null;
 		}
 		return dataTypeExtended.createAttributeValue(object);
