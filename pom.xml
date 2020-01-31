@@ -95,7 +95,6 @@
 		<module>XACML</module>
 		<module>XACML-PIP</module>
 		<module>XACML-PDP</module>
-		<module>XACML-TEST</module>
 		<module>XACML-REST</module>
 		<module>XACML-PDP-REST</module>
 		<module>XACML-PAP-REST</module>
