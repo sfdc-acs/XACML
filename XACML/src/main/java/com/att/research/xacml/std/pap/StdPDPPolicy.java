@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import com.att.research.xacml.api.pap.PAPException;
 import com.att.research.xacml.api.pap.PDPPolicy;
 import com.att.research.xacml.util.XACMLPolicyScanner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
@@ -163,7 +162,7 @@ public class StdPDPPolicy implements PDPPolicy, Serializable {
 	}
 	
 	@Override
-	@JsonIgnore
+	// @JsonIgnore
 	public int[] getVersionInts() {
 		return version;
 	}
@@ -180,7 +179,7 @@ public class StdPDPPolicy implements PDPPolicy, Serializable {
 	}
 
 	@Override
-	@JsonIgnore
+	// @JsonIgnore
 	public InputStream getStream() throws PAPException, IOException {
 		try {
 			if (this.location != null) {

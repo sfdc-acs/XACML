@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2018-2019 AT&T Knowledge Ventures
+ *          Copyright (c) 2018-2020 AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 
@@ -20,7 +20,7 @@ public class DataTypeBase64BinaryTest {
 		
 		assertNull(datatype.convert(null));
 		
-		String test = "iamasecret";
+		String test = "iamasecretxx";
 		Base64Binary base64 = Base64Binary.newInstance(test);
 		assertEquals(base64, datatype.convert(base64));
 		assertEquals(base64, datatype.convert(base64.getData()));

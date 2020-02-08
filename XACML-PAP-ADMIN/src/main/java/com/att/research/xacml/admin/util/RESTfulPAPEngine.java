@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -35,8 +36,8 @@ import com.att.research.xacml.std.pap.StdPDPItemSetChangeNotifier;
 import com.att.research.xacml.std.pap.StdPDPPolicy;
 import com.att.research.xacml.std.pap.StdPDPStatus;
 import com.att.research.xacml.util.XACMLProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Implementation of the PAPEngine interface that communicates with a PAP engine in a remote servlet
@@ -47,6 +48,7 @@ import com.fasterxml.jackson.databind.type.CollectionType;
  */
 public class RESTfulPAPEngine extends StdPDPItemSetChangeNotifier implements PAPEngine {
 	private static final Log logger	= LogFactory.getLog(RESTfulPAPEngine.class);
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 	//
 	// URL of the PAP Servlet that this Admin Console talks to
@@ -400,8 +402,9 @@ public class RESTfulPAPEngine extends StdPDPItemSetChangeNotifier implements PAP
 		    	} else {
 		    		// The content is an object to be encoded in JSON
 		    		connection.setRequestProperty("Content-Type", "application/json");
-		    		ObjectMapper mapper = new ObjectMapper();
-		    		mapper.writeValue(connection.getOutputStream(),  content);
+		    		try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream())) {
+		    		    gson.toJson(content, content.getClass(), writer);
+		    		}
 		    	}
 		    }
             //
@@ -423,20 +426,11 @@ public class RESTfulPAPEngine extends StdPDPItemSetChangeNotifier implements PAP
     		    scanner.close();
     		    logger.info("JSON response from PAP: " + json);
             	
-            	// convert Object sent as JSON into local object
-	            ObjectMapper mapper = new ObjectMapper();
-	            
 	            if (collectionTypeClass != null) {
-	            	// collection of objects expected
-	            	final CollectionType javaType = 
-	            	      mapper.getTypeFactory().constructCollectionType(collectionTypeClass, responseContentClass);
-
-	            	Object objectFromJSON = mapper.readValue(json, javaType);
-					return objectFromJSON;
+	            	return gson.fromJson(json, collectionTypeClass);
 	            } else {
 	            	// single value object expected
-		            Object objectFromJSON = mapper.readValue(json, responseContentClass);
-					return objectFromJSON;
+		            return gson.fromJson(json, responseContentClass);
 	            }
 
             } else if (connection.getResponseCode() >= 300 && connection.getResponseCode()  <= 399) {

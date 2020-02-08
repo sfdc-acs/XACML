@@ -9,21 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
-import com.att.research.xacml.std.pap.StdPDPPolicy;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-
-/*
- * The following allows us to use Jackson to convert sub-types of this type into JSON and back to objects.
- */
-@JsonTypeInfo(  
-	    use = JsonTypeInfo.Id.NAME,  
-	    include = JsonTypeInfo.As.PROPERTY,  
-	    property = "PDPPolicyType")  
-@JsonSubTypes({  
-	    @Type(value = StdPDPPolicy.class, name = "StdPDPPolicy") })  
 public interface PDPPolicy {
 	
 	public String 		getId();

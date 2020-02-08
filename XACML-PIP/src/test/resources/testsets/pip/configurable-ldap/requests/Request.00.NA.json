@@ -1,6 +1,6 @@
 {
    "Request" : {
-		"Subject" : {
+		"Subject" : [{
 			"Attribute" : [
 			   {
                   "Value" : "hnelson",
@@ -11,21 +11,21 @@
                  "AttributeId" : "urn:oasis:names:tc:xacml:1.0:subject:subject-id-qualifier"
                }
              ]
-        },
-        "Action" : {
+        }],
+        "Action" : [{
         	"Attribute" : 
 	           {
 	              "Value" : "sink",
 	              "AttributeId" : "urn:oasis:names:tc:xacml:1.0:action:action-id"
                }
-	    },
-        "Resource" : {
+	    }],
+        "Resource" : [{
         	"Attribute" : [
                {
 	              "Value" : "HMS Victory",
 	              "AttributeId" : "urn:oasis:names:tc:xacml:1.0:resource:resource-id"
                }	        
 	       ]
-	    }
+	    }]
    }
 }

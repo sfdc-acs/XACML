@@ -1,9 +1,11 @@
 /*
  *
- *          Copyright (c) 2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.pip.engines.csv;
+
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -20,7 +22,9 @@ public class HyperCSVEngineTest {
 	@Test
 	public void test() throws MalformedURLException, IOException, FactoryException, ParseException, HelpException {
 		String [] args = new String[] {"-dir", "src/test/resources/testsets/pip/configurable-csv-hyper"};
-		new TestBase(args).run();
+		assertThatCode(() -> {
+			new TestBase(args).run();
+		}).doesNotThrowAnyException();
 	}
 
 }

@@ -26,7 +26,7 @@ public class ISO8601Time implements IDateTime<ISO8601Time>, Comparable<ISO8601Ti
 	
 	private ISO8601DateTime dateTime;
 	
-	protected ISO8601Time(ISO8601DateTime iso8601DateTime) {
+	public ISO8601Time(ISO8601DateTime iso8601DateTime) {
 		this.dateTime	= iso8601DateTime;
 	}
 	

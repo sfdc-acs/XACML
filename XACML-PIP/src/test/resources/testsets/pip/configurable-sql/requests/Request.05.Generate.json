@@ -1,6 +1,6 @@
 {
    "Request" : {
- 		"AccessSubject" : {
+ 		"AccessSubject" : [{
 			"Attribute" : [
 			   {
                   "Value" : "Chinese",
@@ -11,13 +11,13 @@
                  "AttributeId" : "urn:oasis:names:tc:xacml:1.0:subject:subject-id-qualifier"
                }
              ]
-        },
-        "Action" : {
+        }],
+        "Action" : [{
         	"Attribute" : 
 	           {
 	              "Value" : "speak",
 	              "AttributeId" : "urn:oasis:names:tc:xacml:1.0:action:action-id"
                }
-	    }
+	    }]
    }
 }

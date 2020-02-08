@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2014,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2014,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacmlatt.pdp.test;
@@ -58,9 +58,9 @@ import com.att.research.xacml.std.StdMutableRequestAttributes;
 import com.att.research.xacml.std.dom.DOMRequest;
 import com.att.research.xacml.std.dom.DOMResponse;
 import com.att.research.xacml.std.dom.DOMStructureException;
-import com.att.research.xacml.std.json.JSONRequest;
-import com.att.research.xacml.std.json.JSONResponse;
 import com.att.research.xacml.std.json.JSONStructureException;
+import com.att.research.xacml.std.json.JsonRequestTranslator;
+import com.att.research.xacml.std.json.JsonResponseTranslator;
 import com.att.research.xacml.util.FactoryException;
 import com.att.research.xacml.util.XACMLProperties;
 import com.google.common.base.Splitter;
@@ -96,7 +96,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 		Path file;
 		InputStream is;
 		BufferedReader reader;
-		List<StdMutableAttribute> attributes = new ArrayList<StdMutableAttribute>();
+		List<StdMutableAttribute> attributes = new ArrayList<>();
 		
 		public Generator(Path path) {
 			this.file = path;
@@ -180,7 +180,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 	protected URL restURL = null;
 	protected int loop = 1;
 	protected PDPEngine engine = null;
-	protected List<Generator> generators = new ArrayList<Generator>();
+	protected List<Generator> generators = new ArrayList<>();
 	protected static DataTypeFactory dataTypeFactory		= null;
 	
 	private long	permits = 0;
@@ -358,7 +358,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 				}				
 			});
 		} catch (IOException e) {
-			logger.error("Failed to removeRequests from " + this.directory + " " + e);
+			logger.error("Failed to removeRequests from {} {}", this.directory, e);
 		}
 	}
 	
@@ -421,13 +421,13 @@ public class TestBase extends SimpleFileVisitor<Path> {
 		int runs = 1;
 		do {
 			long lTimeStart = System.currentTimeMillis();
-			logger.info("Run number: " + runs);
+			logger.info("Run number: {}", runs);
 			//
 			// Walk the request directory
 			//
-			Files.walkFileTree(Paths.get(this.directory.toString(), "requests"), this);
+			Files.walkFileTree(Paths.get(this.directory, "requests"), this);
 			long lTimeEnd = System.currentTimeMillis();
-			logger.info("Run elapsed time: " + (lTimeEnd - lTimeStart) + "ms");
+			logger.info("Run elapsed time: {} ms", lTimeEnd - lTimeStart);
 			//
 			// Dump the stats
 			//
@@ -446,43 +446,43 @@ public class TestBase extends SimpleFileVisitor<Path> {
 		// Sanity check the file name
 		//
 		Matcher matcher = this.pattern.matcher(file.getFileName().toString());
-		if (matcher.matches()) {
-			//
-			// if user has limited which files to use, check that here
-			//
-			if (testNumbersArray != null) {
-				String fileNameString = file.getFileName().toString();
-				boolean found = false;
-				for (String numberString : testNumbersArray) {
-					if (fileNameString.contains(numberString)) {
-						found = true;
-						break;
-					}
-				}
-				if (found == false) {
-					//
-					// this test is not in the list to be run, so skip it
-					//
-					return super.visitFile(file, attrs);
+		if (! matcher.matches()) {
+			return super.visitFile(file, attrs);
+		}
+		//
+		// if user has limited which files to use, check that here
+		//
+		if (testNumbersArray != null) {
+			String fileNameString = file.getFileName().toString();
+			boolean found = false;
+			for (String numberString : testNumbersArray) {
+				if (fileNameString.contains(numberString)) {
+					found = true;
+					break;
 				}
 			}
-			try {
+			if (! found) {
 				//
-				// Pull what this request is supposed to be
+				// this test is not in the list to be run, so skip it
 				//
-				String group = null;
-				int count = matcher.groupCount();
-				if (count >= 1) {
-					group = matcher.group(count-1);
-				}
-				//
-				// Send it
-				//
-				this.sendRequest(file, group);
-			} catch (Exception e) {
-				logger.error("{}", e);
-				e.printStackTrace();
+				return super.visitFile(file, attrs);
 			}
+		}
+		try {
+			//
+			// Pull what this request is supposed to be
+			//
+			String group = null;
+			int count = matcher.groupCount();
+			if (count >= 1) {
+				group = matcher.group(count-1);
+			}
+			//
+			// Send it
+			//
+			this.sendRequest(file, group);
+		} catch (Exception e) {
+			logger.error("{}", e);
 		}
 		return super.visitFile(file, attrs);
 	}
@@ -526,7 +526,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 			//
 			// Is this a generated request?
 			//
-			if (group.equals("Generate")) {
+			if ("Generate".equals(group)) {
 				//
 				// Yes, increment counter and move
 				// on to the next generated request.
@@ -538,7 +538,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 				//
 				break;
 			}
-		} while (group.equals("Generate"));
+		} while ("Generate".equals(group));
 	}
 	
 	/**
@@ -554,7 +554,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 		Response response = null;
 		if (this.isREST) {
 			try {
-				String jsonString = JSONRequest.toString(request, false);
+				String jsonString = JsonRequestTranslator.toString(request, false);
 				//
 				// Call RESTful PDP
 				//
@@ -573,7 +573,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 				logger.error("{}", e);
 			}
 			long lTimeEnd = System.currentTimeMillis();
-			logger.info("Elapsed Time: " + (lTimeEnd - lTimeStart) + "ms");
+			logger.info("Elapsed Time: {} ms", lTimeEnd - lTimeStart);
 		}
 		return response;
 	}
@@ -597,7 +597,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 		//
 		Request request = null;
 		if (TestBase.isJSON(file)) {
-			request = JSONRequest.load(file.toFile());
+			request = JsonRequestTranslator.load(file.toFile());
 		} else if (TestBase.isXML(file)) {
 			request = DOMRequest.load(file.toFile());
 		}
@@ -675,7 +675,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 				// Is the field number valid?
 				//
 				if (field >= fields.size()) {
-					logger.error("Not enough fields: " + field + "(" + fields.size() + ")");
+					logger.error("Not enough fields: {}({})", field, fields.size());
 					return null;
 				}
 				//
@@ -713,7 +713,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 							break;
 						}
 					}
-					if (added == false) {
+					if (! added) {
 						//
 						// New category - create it and add it in
 						//
@@ -792,12 +792,12 @@ public class TestBase extends SimpleFileVisitor<Path> {
         			contentType = ContentType.parse(connection.getContentType());
         			
         			if (contentType.getMimeType().equalsIgnoreCase(ContentType.APPLICATION_JSON.getMimeType())) {
-                		response = JSONResponse.load(connection.getInputStream());
+                		response = JsonResponseTranslator.load(connection.getInputStream());
         			} else if (contentType.getMimeType().equalsIgnoreCase(ContentType.APPLICATION_XML.getMimeType()) ||
         					contentType.getMimeType().equalsIgnoreCase("application/xacml+xml") ) {
                 		response = DOMResponse.load(connection.getInputStream());
         			} else {
-                		logger.error("unknown content-type: " + contentType);
+                		logger.error("unknown content-type: {}", contentType);
                 	}
 
                 } catch (Exception e) {
@@ -806,7 +806,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
         		}
 
             } else {
-            	logger.error(connection.getResponseCode() + " " + connection.getResponseMessage());
+            	logger.error("{} {}", connection.getResponseCode(), connection.getResponseMessage());
             }
 		} catch (Exception e) {
 			logger.error("{}", e);
@@ -860,7 +860,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 			//
 			// Create it
 			//
-			logger.warn(responseFile.toString() + " does NOT exist, creating...");
+			logger.warn("{} does NOT exist, creating...", responseFile);
 			try {
 				Files.createDirectories(responseFile);
 			} catch (IOException e) {
@@ -890,7 +890,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 			//
 			// Create it
 			//
-			logger.warn(resultFile.toString() + " does NOT exist, creating...");
+			logger.warn("{} does NOT exist, creating...", resultFile);
 			try {
 				Files.createDirectories(resultFile);
 			} catch (IOException e) {
@@ -913,7 +913,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 			//
 			Response expectedResponse = null;
 			if (TestBase.isJSON(responseFile)) {
-				expectedResponse = JSONResponse.load(responseFile);
+				expectedResponse = JsonResponseTranslator.load(responseFile.toFile());
 			} else if (TestBase.isXML(responseFile)) {
 				expectedResponse = DOMResponse.load(responseFile);
 			}
@@ -932,7 +932,7 @@ public class TestBase extends SimpleFileVisitor<Path> {
 					} else {
 						logger.error("Response does not match expected response.");
 						logger.error("Expected: ");
-						logger.error(expectedResponse.toString());
+						logger.error("{}", expectedResponse);
 						this.responseNotMatches++;
 						succeeded = false;
 					}
@@ -942,10 +942,10 @@ public class TestBase extends SimpleFileVisitor<Path> {
 		//
 		// Write the response to the result file
 		//
-		logger.info("Request: " + requestFile.getFileName() + " response is: " + (response == null ? "null" : response.toString()));
+		logger.info("Request: {} response is: {}", requestFile.getFileName(), response);
 		if (resultFile != null && response != null) {
 			if (TestBase.isJSON(resultFile)) {
-				Files.write(resultFile, JSONResponse.toString(response, true).getBytes());
+				Files.write(resultFile, JsonResponseTranslator.toString(response, true).getBytes());
 			} else if (TestBase.isXML(resultFile)) {
 				Files.write(resultFile, DOMResponse.toString(response, true).getBytes());
 			}
@@ -979,27 +979,27 @@ public class TestBase extends SimpleFileVisitor<Path> {
 				}
 				if (decision.equals(Decision.PERMIT)) {
 					this.permits++;
-					if (group.equals("Permit") == false) {
+					if (! group.equals("Permit")) {
 						succeeded = false;
-						logger.error("Expected " + group + " got " + decision);
+						logger.error("Expected {} got {}", group, decision);
 					}
 				} else if (decision.equals(Decision.DENY)) {
 					this.denies++;
-					if (group.equals("Deny") == false) {
+					if (! group.equals("Deny")) {
 						succeeded = false;
-						logger.error("Expected " + group + " got " + decision);
+						logger.error("Expected {} got {}", group, decision);
 					}
 				} else if (decision.equals(Decision.NOTAPPLICABLE)) {
 					this.notapplicables++;
-					if (group.equals("NA") == false) {
+					if (! group.equals("NA")) {
 						succeeded = false;
-						logger.error("Expected " + group + " got " + decision);
+						logger.error("Expected {} got {}", group, decision);
 					}
 				} else if (decision.equals(Decision.INDETERMINATE)) {
 					this.indeterminates++;
-					if (group.equals("Indeterminate") == false) {
+					if (! group.equals("Indeterminate")) {
 						succeeded = false;
-						logger.error("Expected " + group + " got " + decision);
+						logger.error("Expected {} got {}", group, decision);
 					}
 				}
 			}
@@ -1039,9 +1039,9 @@ public class TestBase extends SimpleFileVisitor<Path> {
 			this.notapplicables != this.expectedNotApplicables ||
 			this.indeterminates != this.expectedIndeterminates ||
 			this.responseNotMatches > 0) {
-			logger.error(dump.toString());
+			logger.error("{}", dump);
 		} else {
-			logger.info(dump.toString());
+			logger.info("{}", dump);
 		}
 	}
 	

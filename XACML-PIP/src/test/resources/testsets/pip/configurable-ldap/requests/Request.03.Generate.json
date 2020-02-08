@@ -1,19 +1,19 @@
 {
    "Request" : {
-        "Action" : {
+        "Action" : [{
         	"Attribute" : 
 	           {
 	              "Value" : "board",
 	              "AttributeId" : "urn:oasis:names:tc:xacml:1.0:action:action-id"
                }
-	    },
-        "Resource" : {
+	    }],
+        "Resource" : [{
         	"Attribute" : [
                {
 	              "Value" : "HMS Lydia",
 	              "AttributeId" : "urn:oasis:names:tc:xacml:1.0:resource:resource-id"
                }	        
 	       ]
-	    }
+	    }]
    }
 }

@@ -54,7 +54,7 @@ public class StdMutableMissingAttributeDetail implements MissingAttributeDetail 
 		this.attributeId	= attributeIdIn;
 		this.dataTypeId		= dataTypeIdIn;
 		this.issuer			= issuerIn;
-		if (attributeValuesIn != null && attributeValuesIn.size() > 0) {
+		if (attributeValuesIn != null && ! attributeValuesIn.isEmpty()) {
 			this.attributeValues	= new ArrayList<AttributeValue<?>>();
 			this.attributeValues.addAll(attributeValuesIn);
 		} else {

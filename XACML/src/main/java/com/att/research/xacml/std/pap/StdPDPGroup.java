@@ -33,7 +33,6 @@ import com.att.research.xacml.api.pap.PDPPIPConfig;
 import com.att.research.xacml.api.pap.PDPPolicy;
 import com.att.research.xacml.std.pap.StdPDPItemSetChangeNotifier.StdItemSetChangeListener;
 import com.att.research.xacml.util.XACMLProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.io.ByteStreams;
@@ -58,10 +57,7 @@ public class StdPDPGroup extends StdPDPItemSetChangeNotifier implements PDPGroup
 	
 	private Set<PDPPIPConfig> pipConfigs = new HashSet<>();
 	
-	@JsonIgnore
-	private  Path directory;
-	
-
+	private transient Path directory;
 	
 	public StdPDPGroup(String id, Path directory) {
 		this.id = id;

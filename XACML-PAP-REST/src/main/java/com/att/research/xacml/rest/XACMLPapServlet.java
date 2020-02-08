@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.rest;
@@ -50,8 +50,9 @@ import com.att.research.xacml.std.pap.StdPDPItemSetChangeNotifier.StdItemSetChan
 import com.att.research.xacml.std.pap.StdPDPStatus;
 import com.att.research.xacml.util.FactoryException;
 import com.att.research.xacml.util.XACMLProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Splitter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Servlet implementation class XacmlPapServlet
@@ -70,6 +71,7 @@ import com.google.common.base.Splitter;
 public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeListener, Runnable {
 	private static final long serialVersionUID = 1L;
 	private static final Log logger	= LogFactory.getLog(XACMLPapServlet.class);
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	
 	/*
 	 * 
@@ -404,8 +406,7 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 					Set<PDPGroup> groups = papEngine.getPDPGroups();
 					
 					// convert response object to JSON and include in the response
-		            ObjectMapper mapper = new ObjectMapper();
-		            mapper.writeValue(response.getOutputStream(),  groups);
+					gson.toJson(groups, PDPGroup.class, response.getWriter());
 					response.setHeader("content-type", "application/json");
 					response.setStatus(HttpServletResponse.SC_OK);
 					return;
@@ -615,8 +616,7 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 					PDPGroup group = papEngine.getDefaultGroup();
 					
 					// convert response object to JSON and include in the response
-		            ObjectMapper mapper = new ObjectMapper();
-		            mapper.writeValue(response.getOutputStream(),  group);
+					gson.toJson(group, PDPGroup.class, response.getWriter());
 		            
 					if (logger.isDebugEnabled()) {
 						logger.debug("GET Default group req from '" + request.getRequestURL() + "'");
@@ -634,8 +634,7 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 						PDP pdp = papEngine.getPDP(pdpId);
 						
 						// convert response object to JSON and include in the response
-			            ObjectMapper mapper = new ObjectMapper();
-			            mapper.writeValue(response.getOutputStream(),  pdp);
+	                    gson.toJson(pdp, PDP.class, response.getWriter());
 			            
 						if (logger.isDebugEnabled()) {
 							logger.debug("GET pdp '" + pdpId + "' req from '" + request.getRequestURL() + "'");
@@ -651,8 +650,7 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 						PDPGroup group = papEngine.getPDPGroup(pdp);
 						
 						// convert response object to JSON and include in the response
-			            ObjectMapper mapper = new ObjectMapper();
-			            mapper.writeValue(response.getOutputStream(),  group);
+	                    gson.toJson(group, PDPGroup.class, response.getWriter());
 			            
 						if (logger.isDebugEnabled()) {
 							logger.debug("GET PDP '" + pdpId + "' Group req from '" + request.getRequestURL() + "'");
@@ -668,8 +666,7 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 					Set<PDPGroup> groups = papEngine.getPDPGroups();
 					
 					// convert response object to JSON and include in the response
-		            ObjectMapper mapper = new ObjectMapper();
-		            mapper.writeValue(response.getOutputStream(),  groups);
+                    gson.toJson(groups, PDPGroup.class, response.getWriter());
 					
 //TODO
 // In "notification" section, ALSO need to tell AC about other changes (made by other ACs)?'
@@ -715,8 +712,7 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 				// No other parameters, so return the identified Group
 				
 				// convert response object to JSON and include in the response
-	            ObjectMapper mapper = new ObjectMapper();
-	            mapper.writeValue(response.getOutputStream(),  group);
+                gson.toJson(group, PDPGroup.class, response.getWriter());
 	            
 	            if (logger.isDebugEnabled()) {
 	            	logger.debug("GET group '" + group.getId() + "' req from '" + request.getRequestURL() + "'");
@@ -914,9 +910,7 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
     		    logger.info("JSON request from AC: " + json);
             	
             	// convert Object sent as JSON into local object
-	            ObjectMapper mapper = new ObjectMapper();
-				
-	            Object objectFromJSON = mapper.readValue(json, StdPDP.class);
+                Object objectFromJSON = gson.fromJson(json, StdPDP.class);
 
 				if (pdpId == null ||
 						objectFromJSON == null ||
@@ -969,9 +963,7 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
     		    logger.info("JSON request from AC: " + json);
             	
             	// convert Object sent as JSON into local object
-	            ObjectMapper mapper = new ObjectMapper();
-	            
-	            Object objectFromJSON  = mapper.readValue(json, StdPDPGroup.class);
+	            Object objectFromJSON  = gson.fromJson(json, StdPDPGroup.class);
 
 				if (objectFromJSON == null ||
 						! (objectFromJSON instanceof StdPDPGroup) ||

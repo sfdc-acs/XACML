@@ -13,7 +13,6 @@ import java.util.Set;
 import com.att.research.xacml.api.pap.PDPPIPConfig;
 import com.att.research.xacml.api.pap.PDPPolicy;
 import com.att.research.xacml.api.pap.PDPStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class StdPDPStatus implements Serializable, PDPStatus {
 	private static final long serialVersionUID = 1L;
@@ -178,7 +177,7 @@ public class StdPDPStatus implements Serializable, PDPStatus {
 	}
 
 	@Override
-	@JsonIgnore
+	// @JsonIgnore
 	public boolean isOk() {
 		if (this.policiesOK() == false) {
 			return false;

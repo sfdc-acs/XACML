@@ -13,7 +13,6 @@ import com.att.research.xacml.api.pap.PDP;
 import com.att.research.xacml.api.pap.PDPGroupStatus;
 import com.att.research.xacml.api.pap.PDPPIPConfig;
 import com.att.research.xacml.api.pap.PDPPolicy;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class StdPDPGroupStatus implements PDPGroupStatus {
 	
@@ -240,8 +239,9 @@ public class StdPDPGroupStatus implements PDPGroupStatus {
 		this.lastUpdateFailedPDPs.add(pdp);
 	}
 
+	// Json Ignore PLD
+	
 	@Override
-	@JsonIgnore
 	public Set<PDP> getUnknownStatusPDPs() {
 		return Collections.unmodifiableSet(this.unknownPDPs);
 	}
@@ -267,8 +267,9 @@ public class StdPDPGroupStatus implements PDPGroupStatus {
 		return true;
 	}
 
+	// Json Ignore PLD
+	
 	@Override
-	@JsonIgnore
 	public boolean isGroupOk() {
 		if (this.policiesOK() == false) {
 			return false;

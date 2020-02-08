@@ -11,7 +11,7 @@
 	            ]
             }
 	    ],
-		"AccessSubject" : {
+		"AccessSubject" : [{
 			"Attribute" : [
 			   {
                   "Value" : "Mary",
@@ -30,16 +30,16 @@
                  "AttributeId" : "com:att:research:xacml:test:csv:subject:parental-consent"
                }
              ]
-        },
-        "Action" : {
+        }],
+        "Action" : [{
         	"Attribute" : [
 	           {
 	              "Value" : "Marry",
 	              "AttributeId" : "urn:oasis:names:tc:xacml:1.0:action:action-id"
                }
             ]
-   	    },
-        "Resource" : {
+   	    }],
+        "Resource" : [{
         	"Attribute" : [
                {
 	              "Value" : "Joe",
@@ -58,6 +58,6 @@
                  "AttributeId" : "com:att:research:xacml:test:csv:resource:parental-consent"
                }
 	       ]
-	    }
+	    }]
    }
 }

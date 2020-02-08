@@ -1,6 +1,6 @@
 {
    "Request" : {
-		"AccessSubject" : {
+		"AccessSubject" : [{
 			"Attribute" : [
 			   {
                   "Value" : "biggicr01",
@@ -149,22 +149,22 @@
                   "Issuer" : "com:att:research:xacml:test:csv"
                }
              ]
-        },
-        "Action" : {
+        }],
+        "Action" : [{
         	"Attribute" : [
 	           {
 	              "Value" : "eligible",
 	              "AttributeId" : "urn:oasis:names:tc:xacml:1.0:action:action-id"
                }
             ]
-   	    },
-        "Resource" : {
+   	    }],
+        "Resource" : [{
         	"Attribute" : [
                {
 	              "Value" : "HOF",
 	              "AttributeId" : "urn:oasis:names:tc:xacml:1.0:resource:resource-id"
                }
 	       ]
-	    }
+	    }]
    }
 }

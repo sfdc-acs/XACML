@@ -23,7 +23,7 @@ import com.att.research.xacml.api.SemanticString;
 public class ISO8601Date implements IDateTime<ISO8601Date>, Comparable<ISO8601Date>, SemanticString {
 	private ISO8601DateTime	dateTime;
 	
-	protected ISO8601Date(ISO8601DateTime iso8601DateTime) {
+	public ISO8601Date(ISO8601DateTime iso8601DateTime) {
 		this.dateTime	= iso8601DateTime;
 	}
 	

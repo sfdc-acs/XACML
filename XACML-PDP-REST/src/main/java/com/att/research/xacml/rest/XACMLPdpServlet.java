@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.rest;
@@ -37,11 +37,13 @@ import com.att.research.xacml.api.pdp.PDPEngine;
 import com.att.research.xacml.api.pdp.PDPException;
 import com.att.research.xacml.std.dom.DOMRequest;
 import com.att.research.xacml.std.dom.DOMResponse;
-import com.att.research.xacml.std.json.JSONRequest;
-import com.att.research.xacml.std.json.JSONResponse;
+import com.att.research.xacml.std.json.JsonRequestTranslator;
+import com.att.research.xacml.std.json.JsonResponseTranslator;
 import com.att.research.xacml.std.pap.StdPDPStatus;
 import com.att.research.xacml.util.XACMLProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonWriter;
 
 /**
  * Servlet implementation class XacmlPdpServlet
@@ -85,6 +87,10 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
 	// It's output ideally should be sent to a separate file from the application logger.
 	//
 	private static final Log requestLogger = LogFactory.getLog("xacml.request");
+	//
+	// Gson object converter
+	//
+	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	//
 	// This thread may getting invoked on startup, to let the PAP know
 	// that we are up and running.
@@ -394,8 +400,8 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
 		} else if ("Status".equals(type)) {
 			// convert response object to JSON and include in the response
 			synchronized(pdpStatusLock) {
-				ObjectMapper mapper = new ObjectMapper();
-	            mapper.writeValue(response.getOutputStream(),  status);
+			    JsonWriter writer = new JsonWriter(response.getWriter());
+			    gson.toJson(status, StdPDPStatus.class, writer);
 			}
             response.setStatus(HttpServletResponse.SC_OK);
             
@@ -488,7 +494,7 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
 			//
 			try {
 				if (contentType.getMimeType().equalsIgnoreCase(ContentType.APPLICATION_JSON.getMimeType())) {
-					pdpRequest = JSONRequest.load(incomingRequestString);
+					pdpRequest = JsonRequestTranslator.load(incomingRequestString);
 				} else if (	contentType.getMimeType().equalsIgnoreCase(ContentType.APPLICATION_XML.getMimeType()) ||
 							contentType.getMimeType().equalsIgnoreCase("application/xacml+xml")) {
 					pdpRequest = DOMRequest.load(incomingRequestString);
@@ -589,13 +595,13 @@ synchronized(pdpEngineLock) {
 				// Get it as a String. This is not very efficient but we need to log our
 				// results for auditing.
 				//
-				outgoingResponseString = JSONResponse.toString(pdpResponse, logger.isDebugEnabled());
+				outgoingResponseString = JsonResponseTranslator.toString(pdpResponse, logger.isDebugEnabled());
 				if (logger.isDebugEnabled()) {
 					logger.debug(outgoingResponseString);
 					//
 					// Get rid of whitespace
 					//
-					outgoingResponseString = JSONResponse.toString(pdpResponse, false);
+					outgoingResponseString = JsonResponseTranslator.toString(pdpResponse, false);
 				}
 			} else if (	contentType.getMimeType().equalsIgnoreCase(ContentType.APPLICATION_XML.getMimeType()) ||
 						contentType.getMimeType().equalsIgnoreCase("application/xacml+xml")) {

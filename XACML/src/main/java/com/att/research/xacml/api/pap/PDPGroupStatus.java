@@ -7,21 +7,6 @@ package com.att.research.xacml.api.pap;
 
 import java.util.Set;
 
-import com.att.research.xacml.std.pap.StdPDPGroupStatus;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-
-/*
- * The following allows us to use Jackson to convert sub-types of this type into JSON and back to objects.
- */
-@JsonTypeInfo(  
-	    use = JsonTypeInfo.Id.NAME,  
-	    include = JsonTypeInfo.As.PROPERTY,  
-	    property = "PDPGroupStatusType")  
-@JsonSubTypes({  
-	    @Type(value = StdPDPGroupStatus.class, name = "StdPDPGroupStatus") }) 
 public interface PDPGroupStatus {
 	
 	public enum Status {

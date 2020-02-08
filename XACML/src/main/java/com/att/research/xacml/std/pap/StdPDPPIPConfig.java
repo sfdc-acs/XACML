@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.pap.PDPPIPConfig;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class StdPDPPIPConfig implements PDPPIPConfig, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -111,7 +110,7 @@ public class StdPDPPIPConfig implements PDPPIPConfig, Serializable {
 	}
 
 	@Override
-	@JsonIgnore
+	// @JsonIgnore
 	public Map<String,String> getConfiguration() {
 		return Collections.unmodifiableMap(this.config);
 	}
@@ -121,7 +120,7 @@ public class StdPDPPIPConfig implements PDPPIPConfig, Serializable {
 	}
 
 	@Override
-	@JsonIgnore
+	// @JsonIgnore
 	public boolean isConfigured() {
 		//
 		// TODO
