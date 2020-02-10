@@ -6,14 +6,11 @@
 	<groupId>com.att.research.xacml</groupId>
 	<artifactId>att-xacml</artifactId>
 	<version>2.1.0-SNAPSHOT</version>
+	
 	<packaging>pom</packaging>
 	<name>ATT XACML</name>
 	<description>ATT XACML Parent Project</description>
 	<url>https://github.com/att/XACML</url>
-
-	<prerequisites>
-		<maven>3.0</maven>
-	</prerequisites>
 
 	<licenses>
 		<license>
@@ -61,7 +58,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<jacoco.version>0.8.5</jacoco.version>
 		<sonar-jacoco-listeners.version>3.2</sonar-jacoco-listeners.version>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml,target/site/jacoco-it/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
@@ -81,9 +77,10 @@
 		<version.commons.cli>1.4</version.commons.cli>
 		<version.commons.text>1.8</version.commons.text>
 		<version.junit>4.13</version.junit>
-		<version.mockito>1.10.19</version.mockito>
+		<version.mockito>3.2.4</version.mockito>
 		<version.log4j>2.11.0</version.log4j>
 		<version.xmlapi>1.4.01</version.xmlapi>
+		<version.assertj>3.14.0</version.assertj>
 	</properties>
 
 	<modules>
@@ -173,54 +170,49 @@
 				</plugins>
 			</build>
 		</profile>
-    <profile>
-      <id>coverage</id>
-      <build>
-        <plugins>
-
-          <!-- Coverage -->
-          <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.5</version>
-            <executions>
-              <execution>
-                <id>default-prepare-agent</id>
-                <goals>
-                  <goal>prepare-agent</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>default-prepare-agent-integration</id>
-                <goals>
-                  <goal>prepare-agent-integration</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>default-report</id>
-                <goals>
-                  <goal>report</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>default-report-integration</id>
-                <goals>
-                  <goal>report-integration</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-
-          <!-- sonar -->
-          <plugin>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>3.7.0.1746</version>
-          </plugin>
-
-        </plugins>
-      </build>
-    </profile>
+		<profile>
+			<id>coverage</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.8.5</version>
+						<executions>
+							<execution>
+								<id>default-prepare-agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>default-prepare-agent-integration</id>
+								<goals>
+									<goal>prepare-agent-integration</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>default-report</id>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>default-report-integration</id>
+								<goals>
+									<goal>report-integration</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.sonarsource.scanner.maven</groupId>
+						<artifactId>sonar-maven-plugin</artifactId>
+						<version>3.7.0.1746</version>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<dependencyManagement>
@@ -354,7 +346,7 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.14.0</version>
+			<version>${version.assertj}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -408,6 +400,11 @@
 							</goals>
 						</execution>
 					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.2.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
