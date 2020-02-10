@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 
@@ -31,8 +31,12 @@ public class XACMLRest {
 	private static final Logger logger	= LoggerFactory.getLogger(XACMLRest.class);
 	private static Properties restProperties = new Properties();
 	
+	private XACMLRest() {
+	    // Do not instantiate
+	}
+	
 	/**
-	 * This must be called during servlet initialization. It sets up the xacml.?.properties
+	 * This must be called during servlet initialization. It sets up the xacml.{?}.properties
 	 * file as a system property. If the System property is already set, then it does not
 	 * do anything. This allows the developer to specify their own xacml.properties file to be
 	 * used. They can 1) modify the default properties that comes with the project, or 2) change
@@ -42,6 +46,13 @@ public class XACMLRest {
 	 * The recommended way of overriding the default xacml.properties file is using a Java System
 	 * property:
 	 * 
+	 * For PDP REST:
+     * -Dxacml.properties=/opt/app/xacml/etc/xacml.pdp.properties
+	 * 
+     * For PAP REST:
+     * -Dxacml.properties=/opt/app/xacml/etc/xacml.pap.properties
+     * 
+     * For PAP ADMIN:
 	 * -Dxacml.properties=/opt/app/xacml/etc/xacml.admin.properties
 	 * 
 	 * This way one does not change any actual code or files in the project and can leave the 
@@ -63,14 +74,10 @@ public class XACMLRest {
 				//
 				// Set it to our servlet default
 				//
-				if (logger.isDebugEnabled()) {
-					logger.debug("Using Servlet Config Property for XACML_PROPERTIES_NAME:" + propFile);
-				}
+				logger.debug("Using Servlet Config Property for XACML_PROPERTIES_NAME {}", propFile);
 				System.setProperty(XACMLProperties.XACML_PROPERTIES_NAME, propFile);
 			} else {
-				if (logger.isDebugEnabled()) {
-					logger.debug("Using System Property for XACML_PROPERTIES_NAME:" + xacmlPropertiesName);
-				}
+				logger.debug("Using System Property for XACML_PROPERTIES_NAME {}", xacmlPropertiesName);
 			}
 		}
 		//
@@ -81,7 +88,7 @@ public class XACMLRest {
 			String param = params.nextElement();
 			if (! param.equals("XACML_PROPERTIES_NAME")) {
 				String value = config.getInitParameter(param);
-				logger.info(param + "=" + config.getInitParameter(param));
+				logger.info("{}={}", param, config.getInitParameter(param));
 				restProperties.setProperty(param, value);
 			}
 		}
@@ -141,57 +148,58 @@ public class XACMLRest {
 	 * @param request - Servlet request (from a POST/GET/PUT/etc.)
 	 */
 	public static void dumpRequest(HttpServletRequest request) {
-		if (logger.isDebugEnabled()) {
-			// special-case for receiving heartbeat - don't need to repeatedly output all of the information in multiple lines
-			if (request.getMethod().equals("GET") && "hb".equals(request.getParameter("type"))  ) {
-				logger.debug("GET type=hb : heartbeat received");
-				return;
-			}
-			logger.debug(request.getMethod() + ":" + request.getRemoteAddr() + " " + request.getRemoteHost() + " " + request.getRemotePort());
-			logger.debug(request.getLocalAddr() + " " + request.getLocalName() + " " + request.getLocalPort());
-			Enumeration<String> en = request.getHeaderNames();
-			logger.debug("Headers:");
-			while (en.hasMoreElements()) {
-				String element = en.nextElement();
-				Enumeration<String> values = request.getHeaders(element);
-				while (values.hasMoreElements()) {
-					String value = values.nextElement();
-					logger.debug(element + ":" + value);
-				}
-			}
-			logger.debug("Attributes:");
-			en = request.getAttributeNames();
-			while (en.hasMoreElements()) {
-				String element = en.nextElement();
-				logger.debug(element + ":" + request.getAttribute(element));
-			}
-			logger.debug("ContextPath: " + request.getContextPath());
-			if (request.getMethod().equals("PUT") || request.getMethod().equals("POST")) {
-				// POST and PUT are allowed to have parameters in the content, but in our usage the parameters are always in the Query string.
-				// More importantly, there are cases where the POST and PUT content is NOT parameters (e.g. it might contain a Policy file).
-				// Unfortunately the request.getParameterMap method reads the content to see if there are any parameters,
-				// and once the content is read it cannot be read again.
-				// Thus for PUT and POST we must avoid reading the content here so that the main code can read it.
-				logger.debug("Query String:" + request.getQueryString());
-				try {
-					if (request.getInputStream() == null) {
-						logger.debug("Content: No content inputStream");
-					} else {
-						logger.debug("Content available: " + request.getInputStream().available());
-					}
-				} catch (Exception e) {
-					logger.debug("Content: inputStream exception: " + e.getMessage() + ";  (May not be relevant)");
-				}
-			} else {
-				logger.debug("Parameters:");
-				Map<String, String[]> params = request.getParameterMap();
-				Set<String> keys = params.keySet();
-				for (String key : keys) {
-					String[] values = params.get(key);
-					logger.debug(key + "(" + values.length + "): " + (values.length > 0 ? values[0] : ""));
-				}
-			}
-			logger.debug("Request URL:" + request.getRequestURL());
+		if (! logger.isDebugEnabled()) {
+		    return;
 		}
+		// special-case for receiving heartbeat - don't need to repeatedly output all of the information in multiple lines
+		if (request.getMethod().equals("GET") && "hb".equals(request.getParameter("type"))  ) {
+			logger.debug("GET type=hb : heartbeat received");
+			return;
+		}
+		logger.debug("{}:{} {} {}", request.getMethod(), request.getRemoteAddr(), request.getRemoteHost(), request.getRemotePort());
+		logger.debug("{} {} {}", request.getLocalAddr(), request.getLocalName(), request.getLocalPort());
+		Enumeration<String> en = request.getHeaderNames();
+		logger.debug("Headers:");
+		while (en.hasMoreElements()) {
+			String element = en.nextElement();
+			Enumeration<String> values = request.getHeaders(element);
+			while (values.hasMoreElements()) {
+				String value = values.nextElement();
+				logger.debug("{}:{}", element, value);
+			}
+		}
+		logger.debug("Attributes:");
+		en = request.getAttributeNames();
+		while (en.hasMoreElements()) {
+			String element = en.nextElement();
+			logger.debug("{}:{}", element, request.getAttribute(element));
+		}
+		logger.debug("ContextPath: {}", request.getContextPath());
+		if (request.getMethod().equals("PUT") || request.getMethod().equals("POST")) {
+			// POST and PUT are allowed to have parameters in the content, but in our usage the parameters are always in the Query string.
+			// More importantly, there are cases where the POST and PUT content is NOT parameters (e.g. it might contain a Policy file).
+			// Unfortunately the request.getParameterMap method reads the content to see if there are any parameters,
+			// and once the content is read it cannot be read again.
+			// Thus for PUT and POST we must avoid reading the content here so that the main code can read it.
+			logger.debug("Query String: {}", request.getQueryString());
+			try {
+				if (request.getInputStream() == null) {
+					logger.debug("Content: No content inputStream");
+				} else {
+					logger.debug("Content available: {}", request.getInputStream().available());
+				}
+			} catch (Exception e) {
+				logger.debug("Content: inputStream exception: {}", e.getMessage(), e);
+			}
+		} else {
+			logger.debug("Parameters:");
+			Map<String, String[]> params = request.getParameterMap();
+			Set<String> keys = params.keySet();
+			for (String key : keys) {
+				String[] values = params.get(key);
+				logger.debug("{}({}): {}", key, values.length, values);
+			}
+		}
+		logger.debug("Request URL {}", request.getRequestURL());
 	}
 }
