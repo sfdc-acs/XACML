@@ -64,6 +64,16 @@
 					<version>${version.jetty}</version>
 					<configuration>
 						<scanIntervalSeconds>10</scanIntervalSeconds>
+						<systemProperties>
+							<systemProperty>
+								<name>xacml.properties</name>
+								<value>src/main/resources/xacml.pdp.properties</value>
+							</systemProperty>
+							<systemProperty>
+								<name>XACML_LOGS</name>
+								<value>${project.build.directory}/tmp/logs</value>
+							</systemProperty>
+						</systemProperties>
 						<webApp>
 							<contextPath>/pdp</contextPath>
 						</webApp>

@@ -17,7 +17,7 @@
     </dependencySets>
     <fileSets>
         <fileSet>
-            <directory>${project.basedir}/src/main/resources
+            <directory>${project.basedir}${file.separator}src${file.separator}main${file.separator}resources
             </directory>
             <includes>
                 <include>*.json</include>
@@ -31,17 +31,7 @@
             </excludes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}src/main/package/ssl
-            </directory>
-            <includes>
-                <include>keystore</include>
-                <include>truststore</include>
-            </includes>
-            <outputDirectory>webapp${file.separator}ssl</outputDirectory>
-            <lineEnding>keep</lineEnding>
-        </fileSet>
-        <fileSet>
-            <directory>${project.basedir}${file.separator}src${file.separator}main${file.separator}package${file.separator}config
+            <directory>${project.basedir}${file.separator}src${file.separator}assembly${file.separator}config
             </directory>
             <includes>
                 <include>*.json</include>
@@ -50,6 +40,16 @@
             </includes>
             <outputDirectory>webapp${file.separator}config</outputDirectory>
             <lineEnding>unix</lineEnding>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}src${file.separator}main${file.separator}package${file.separator}ssl
+            </directory>
+            <includes>
+                <include>keystore</include>
+                <include>truststore</include>
+            </includes>
+            <outputDirectory>webapp${file.separator}ssl</outputDirectory>
+            <lineEnding>keep</lineEnding>
         </fileSet>
     </fileSets>
 </assembly>
