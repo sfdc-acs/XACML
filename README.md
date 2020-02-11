@@ -51,6 +51,8 @@ If you point your browser to this URL you can get the current configuration for 
 
 http://localhost:8080/pdp/?type=config
 
+Please review the XACML-PDP-REST/pom.xml jetty maven configuration in order to override system properties to customize where the properties are read from, where log files are stored, where policies are stored, etc.
+
 3. XACML-PAP-ADMIN
 
 Open a terminal window and cd to the XACML-PAP-ADMIN subdirectory.
