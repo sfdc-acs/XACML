@@ -29,7 +29,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.entity.ContentType;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.att.research.xacml.api.Request;
 import com.att.research.xacml.api.Response;
 import com.att.research.xacml.api.pap.PDPStatus.Status;
@@ -81,7 +82,7 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
 	//
 	// Our application debug log
 	//
-	private static final Log logger	= LogFactory.getLog(XACMLPdpServlet.class);
+	private final Logger logger    = LoggerFactory.getLogger(XACMLPdpServlet.class);
 	//
 	// This logger is specifically only for Xacml requests and their corresponding response.
 	// It's output ideally should be sent to a separate file from the application logger.
@@ -135,11 +136,13 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
      * Default constructor. 
      */
     public XACMLPdpServlet() {
+        // Empty Constructor
     }
 
 	/**
 	 * @see Servlet#init(ServletConfig)
 	 */
+    @Override
 	public void init(ServletConfig config) throws ServletException {
 		//
 		// Initialize
@@ -174,6 +177,7 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
 	/**
 	 * @see Servlet#destroy()
 	 */
+    @Override
 	public void destroy() {
 		super.destroy();
 		logger.info("Destroying....");
@@ -188,7 +192,7 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
 					this.registerThread.join();
 				}
 			} catch (InterruptedException e) {
-				logger.error(e);
+				logger.error("interrupted", e);
 			}
 		}
 		//
@@ -199,7 +203,7 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
 			this.configThread.interrupt();
 			this.configThread.join();
 		} catch (InterruptedException e) {
-			logger.error(e);
+			logger.error("interrupted", e);
 		}
 		logger.info("Destroyed.");
 	}
@@ -279,7 +283,6 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
 			String message = "Invalid cache: '" + cache + "' or content-type: '" + request.getContentType() + "'";
 			logger.error(message);
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, message);
-			return;
 		}
 	}
 	
@@ -340,14 +343,12 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
 				//
 				// Invalid value
 				//
-				logger.error("Invalid config value: " + config);
+				logger.error("Invalid config value: {}", config);
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Config must be one of 'policies', 'pips', 'all'");
-				return;
 			}
 		} catch (Exception e) {
 			logger.error("Failed to process new configuration.", e);
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-			return;
 		}
 	}
 	
@@ -426,8 +427,8 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
 		//
 		// no point in doing any work if we know from the get-go that we cannot do anything with the request
 		//
-		if (status.getLoadedRootPolicies().size() == 0) {
-			logger.warn("Request from PEP at " + request.getRequestURI() + " for service when PDP has No Root Policies loaded");
+		if (status.getLoadedRootPolicies().isEmpty()) {
+			logger.warn("Request from PEP at {} for service when PDP has No Root Policies loaded", request.getRequestURI());
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			return;
 		}
@@ -571,9 +572,7 @@ synchronized(pdpEngineLock) {
 			}
 }
 			requestLogger.info(lTimeStart + "=" + incomingRequestString);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Request time: " + (lTimeEnd - lTimeStart) + "ms");
-			}
+			logger.debug("Request time: {}ms", (lTimeEnd - lTimeStart));
 			//
 			// Convert Response to appropriate Content-Type
 			//

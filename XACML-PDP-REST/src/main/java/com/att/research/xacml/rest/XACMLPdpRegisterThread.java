@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2014,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2014,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.rest;
@@ -13,16 +13,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.Properties;
-
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.att.research.xacml.rest.XACMLPdpServlet.PutRequest;
 import com.att.research.xacml.util.XACMLProperties;
 
 public class XACMLPdpRegisterThread implements Runnable {
-	private static final Log logger	= LogFactory.getLog(XACMLPdpRegisterThread.class);
+	private static final Logger logger    = LoggerFactory.getLogger(XACMLPdpRegisterThread.class);
 	
 	public volatile boolean isRunning = false;
 	
@@ -70,7 +68,7 @@ public class XACMLPdpRegisterThread implements Runnable {
 				// Get the PAP Servlet URL
 				//
 				URL url = new URL(XACMLProperties.getProperty(XACMLRestProperties.PROP_PAP_URL));
-				logger.info("Registering with " + url.toString());
+				logger.info("Registering with {}", url);
 				boolean finished = false;
 				while (! finished) {
 					//
@@ -126,7 +124,7 @@ public class XACMLPdpRegisterThread implements Runnable {
 		            	logger.info("Success. We have a new configuration.");
 		            	Properties properties = new Properties();
 		            	properties.load(connection.getInputStream());
-		            	logger.info("New properties: " + properties.toString());
+		            	logger.info("New properties: {}", properties);
 		            	//
 		            	// Queue it
 		            	//
@@ -147,16 +145,16 @@ public class XACMLPdpRegisterThread implements Runnable {
 		            		logger.warn("Did not receive a valid re-direction location");
 		            		finished = true;
 		            	} else {
-		            		logger.info("New Location: " + newLocation);
+		            		logger.info("New Location: {}", newLocation);
 		            		url = new URL(newLocation);
 		            	}
 		            } else {
-		            	logger.warn("Failed: " + connection.getResponseCode() + "  message: " + connection.getResponseMessage());
+		            	logger.warn("Failed: {} message: {}", connection.getResponseCode(), connection.getResponseMessage());
 		            	finished = true;
 		            }
 				}
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(e.getLocalizedMessage(), e);
 			} finally {
 				// cleanup the connection
  				if (connection != null) {
@@ -183,7 +181,7 @@ public class XACMLPdpRegisterThread implements Runnable {
 			// Wait a little while to try again
 			//
 			try {
-				if (registered == false) {
+				if (! registered) {
 					if (retries > 0) {
 						retries--;
 					} else if (retries == 0) {
@@ -199,7 +197,7 @@ public class XACMLPdpRegisterThread implements Runnable {
 		synchronized(this) {
 			this.isRunning = false;
 		}
-		logger.info("Thread exiting...(registered=" + registered + ", interrupted=" + interrupted + ", isRunning=" + this.isRunning() + ", retries=" + retries + ")");
+		logger.info("Thread exiting...(registered={}, interrupted={}, isRunning={}, retries={})", registered, interrupted, this.isRunning(), retries);
 	}
 
 }

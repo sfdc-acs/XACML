@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2014,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2014,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.rest;
@@ -18,11 +18,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.Set;
-
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.att.research.xacml.api.pap.PAPException;
 import com.att.research.xacml.api.pap.PDPStatus;
 import com.att.research.xacml.api.pap.PDPStatus.Status;
@@ -50,10 +48,14 @@ import com.google.common.base.Splitter;
  *
  */
 public class XACMLPdpLoader {
-	private static final Log logger	= LogFactory.getLog(XACMLPdpLoader.class);
+    private static final Logger logger    = LoggerFactory.getLogger(XACMLPdpLoader.class);
+    
+    private XACMLPdpLoader() {
+        // Empty constructor
+    }
 	
 	public static synchronized PDPEngine loadEngine(StdPDPStatus status, Properties policyProperties, Properties pipProperties) {
-		logger.info("loadEngine: " + policyProperties + " "+ pipProperties);
+		logger.info("loadEngine: {} {}", policyProperties, pipProperties);
 		//
 		// First load our policies
 		//
@@ -84,9 +86,7 @@ public class XACMLPdpLoader {
 			// Validate the policies
 			//
 			XACMLPdpLoader.validatePolicies(policyProperties, status);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Status: " + status);
-			}
+			logger.debug("Status: {}", status);
 		} catch (Exception e) {
 			String error = "Failed to load Policy Cache properties file: " + e.getMessage();
 			logger.error(error, e);
@@ -113,9 +113,7 @@ public class XACMLPdpLoader {
 			// Validate our PIP configurations
 			//
 			XACMLPdpLoader.validatePipConfiguration(pipProperties, status);
-			if (logger.isDebugEnabled()) {
-				logger.debug("Status: " + status);
-			}
+			logger.debug("Status {}", status);
 		} catch (Exception e) {
 			String error = "Failed to load/validate Pip Config properties file: " + e.getMessage();
 			logger.error(error, e);
@@ -138,7 +136,7 @@ public class XACMLPdpLoader {
 		// Dump ALL our properties that we are trying to load
 		//
 		try {
-			logger.info(XACMLProperties.getProperties().toString());
+			logger.info("{}", XACMLProperties.getProperties());
 		} catch (IOException e) {
 			logger.error("Failed to get XACML Properties", e);
 		}
@@ -174,9 +172,9 @@ public class XACMLPdpLoader {
 			loadPolicy(properties, status, id, false);
 		}
 		
-		logger.info("Loaded " + status.getLoadedPolicies().size() + " policies, failed to load " + status.getFailedPolicies().size() + " policies, " +
-				status.getLoadedRootPolicies().size() + " root policies");
-		if (status.getLoadedRootPolicies().size() == 0) {
+		logger.info("Loaded {} policies, failed to load {} policies, {} root policies", status.getLoadedPolicies().size(), status.getFailedPolicies().size(),
+				status.getLoadedRootPolicies().size());
+		if (status.getLoadedRootPolicies().isEmpty()) {
 			logger.warn("NO ROOT POLICIES LOADED!!!  Cannot serve PEP Requests.");
 			status.addLoadWarning("NO ROOT POLICIES LOADED!!!  Cannot serve PEP Requests.");
 		}
@@ -230,7 +228,7 @@ public class XACMLPdpLoader {
 			}
 			if (policy != null) {
 				status.addLoadedPolicy(new StdPDPPolicy(id, isRoot, locationURI, properties));
-				logger.info("Loaded policy: " + policy.getIdentifier() + " version: " + policy.getVersion().stringValue());
+				logger.info("Loaded policy: {} version: {}", policy.getIdentifier(), policy.getVersion().stringValue());
 			} else {
 				String error = "Failed to load policy " + location;
 				logger.error(error);
@@ -250,10 +248,10 @@ public class XACMLPdpLoader {
 				// Let's remove it
 				//
 				try {
-					logger.error("Corrupted policy file, deleting: " + location);
+					logger.error("Corrupted policy file, deleting: {}", location);
 					Files.delete(Paths.get(location));
 				} catch (IOException e1) {
-					logger.error(e1);
+					logger.error("Failed to delete corrupted policy file", e1);
 				}
 			}
 			throw new PAPException("Failed to load policy '" + id + "' from location '" + location + "'");
@@ -277,13 +275,12 @@ public class XACMLPdpLoader {
 				logger.info("Loaded PIP finder");
 			}
 			for (PIPEngine engine : finder.getPIPEngines()) {
-				logger.info("Configured PIP Engine: " + engine.getName());
+				logger.info("Configured PIP Engine: {}", engine.getName());
 				StdPDPPIPConfig config = new StdPDPPIPConfig();
 				config.setName(engine.getName());
 				status.addLoadedPipConfig(config);
 			}
 		} catch (FactoryException | PIPException e) {
-			logger.error("validate PIP configuration failed: " + e.getLocalizedMessage());
 			status.addLoadError(e.getLocalizedMessage());
 			status.setStatus(Status.LOAD_ERRORS);
 			throw new PAPException(e);
@@ -326,14 +323,14 @@ public class XACMLPdpLoader {
 					// Does it exist?
 					//
 					policyExists = Files.exists(Paths.get(propLocation));
-					if (policyExists == false) {
-						logger.warn("Policy file " + policy + " expected at " + propLocation + " does NOT exist.");
+					if (! policyExists) {
+						logger.warn("Policy file {} expected at {} does NOT exist.", policy, propLocation);
 					}
 				}
 				
 				// If ".file" property does not exist, try looking for the local file anyway 
 				//	(it might exist without having a ".file" property set for it)
-				if (policyExists == false) {
+				if (! policyExists) {
 					//
 					// Now construct the output file name
 					//
@@ -341,13 +338,13 @@ public class XACMLPdpLoader {
 					//
 					// Double check to see if we pulled it at some point
 					//
-					policyExists = Files.exists(outFile);
+					policyExists = outFile.toFile().exists();
 					if (policyExists) {
 						//
 						// Set the property so the PDP engine doesn't have
 						// to pull it from the URL but rather the FILE.
 						//
-						logger.info("Policy does exist: " + outFile.toAbsolutePath().toString());
+						logger.info("Policy does exist: {}", outFile.toAbsolutePath());
 						props.setProperty(policy + StdPolicyFinderFactory.PROP_FILE, outFile.toAbsolutePath().toString());
 						//
 						// Indicate that there were changes made to the properties
@@ -371,7 +368,7 @@ public class XACMLPdpLoader {
 								// Create the URL
 								//
 								url						= new URL(propLocation);
-								logger.info("Pulling " + url.toString());
+								logger.info("Pulling {}", url);
 								//
 								// Open the connection
 								//
@@ -386,7 +383,7 @@ public class XACMLPdpLoader {
 								//
 								// Now save it in the properties as a .file
 								//
-								logger.info("Pulled policy: " + outFile.toAbsolutePath().toString());
+								logger.info("Pulled policy: {}", outFile.toAbsolutePath());
 								props.setProperty(policy + StdPolicyFinderFactory.PROP_FILE, outFile.toAbsolutePath().toString());
 								//
 								// Indicate that there were changes made to the properties
@@ -394,13 +391,13 @@ public class XACMLPdpLoader {
 								changed = true;
 							} catch (Exception e) {
 								if (e instanceof MalformedURLException) {
-									logger.error("Policy '" + policy + "' had bad URL in new configuration, URL='" + propLocation + "'");
+									logger.error("Policy '{}' had bad URL in new configuration, URL='{}'", policy, propLocation);
 								} else {
-									logger.error("Error while retrieving policy " + policy + " from URL " + url.toString() + ", e="+e);
+									logger.error("Error while retrieving policy {} from URL {} ", policy, url, e);
 								}
 							}
 						} else {
-							logger.error("Policy " + policy + " does NOT exist and does NOT have a URL");
+							logger.error("Policy {} does NOT exist and does NOT have a URL", policy);
 						}
 					}
 				}
@@ -412,15 +409,15 @@ public class XACMLPdpLoader {
 	public static synchronized Path	getPDPPolicyCache() throws PAPException {
 		Path config = getPDPConfig();
 		Path policyProperties = Paths.get(config.toAbsolutePath().toString(), "xacml.policy.properties");
-		if (Files.notExists(policyProperties)) {
-			logger.warn(policyProperties.toAbsolutePath().toString() + " does NOT exist.");
+		if (! policyProperties.toFile().exists()) {
+			logger.warn("{} does NOT exist.", policyProperties.toAbsolutePath());
 			//
 			// Try to create the file
 			//
 			try {
 				Files.createFile(policyProperties);
 			} catch (IOException e) {
-				logger.error("Failed to create policy properties file: " + policyProperties.toAbsolutePath().toString());
+				logger.error("Failed to create policy properties file: {}", policyProperties.toAbsolutePath());
 				throw new PAPException("Failed to create policy properties file: " + policyProperties.toAbsolutePath().toString());
 			}
 		}
@@ -430,15 +427,15 @@ public class XACMLPdpLoader {
 	public static synchronized Path	getPIPConfig() throws PAPException {
 		Path config = getPDPConfig();
 		Path pipConfigProperties = Paths.get(config.toAbsolutePath().toString(), "xacml.pip.properties");
-		if (Files.notExists(pipConfigProperties)) {
-			logger.warn(pipConfigProperties.toAbsolutePath().toString() + " does NOT exist.");
+		if (! pipConfigProperties.toFile().exists()) {
+			logger.warn("{} does NOT exist.", pipConfigProperties.toAbsolutePath());
 			//
 			// Try to create the file
 			//
 			try {
 				Files.createFile(pipConfigProperties);
 			} catch (IOException e) {
-				logger.error("Failed to create pip properties file: " + pipConfigProperties.toAbsolutePath().toString());
+				logger.error("Failed to create pip properties file: {}", pipConfigProperties.toAbsolutePath());
 				throw new PAPException("Failed to create pip properties file: " + pipConfigProperties.toAbsolutePath().toString());
 			}
 		}
@@ -447,8 +444,8 @@ public class XACMLPdpLoader {
 	
 	public static synchronized Path getPDPConfig() throws PAPException {
 		Path config = Paths.get(XACMLProperties.getProperty(XACMLRestProperties.PROP_PDP_CONFIG));
-		if (Files.notExists(config)) {
-			logger.warn(config.toAbsolutePath().toString() + " does NOT exist.");
+		if (! config.toFile().exists()) {
+			logger.warn("{} does NOT exist.", config.toAbsolutePath());
 			//
 			// Try to create the directory
 			//

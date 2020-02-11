@@ -1,15 +1,13 @@
 /*
  *
- *          Copyright (c) 2014,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2014,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.rest.impl;
 
 import java.util.Properties;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.att.research.xacml.api.pip.PIPException;
 import com.att.research.xacml.api.pip.PIPFinder;
 import com.att.research.xacml.api.pip.PIPFinderFactory;
@@ -19,7 +17,7 @@ import com.att.research.xacml.util.XACMLProperties;
 public class XACMLPdpPIPFinderFactory extends PIPFinderFactory {
 	private ConfigurableEngineFinder pipFinder;
 	
-	private static Log logger	= LogFactory.getLog(XACMLPdpPIPFinderFactory.class);
+	private static Logger logger    = LoggerFactory.getLogger(XACMLPdpPIPFinderFactory.class);
 	
 	public XACMLPdpPIPFinderFactory() {
 	}
@@ -44,7 +42,7 @@ public class XACMLPdpPIPFinderFactory extends PIPFinderFactory {
 						return null;
 					}
 					if (xacmlProperties != null) {
-						((ConfigurableEngineFinder)pipFinder).configure(xacmlProperties);
+						pipFinder.configure(xacmlProperties);
 					}
 				}
 			}
@@ -58,10 +56,10 @@ public class XACMLPdpPIPFinderFactory extends PIPFinderFactory {
 			synchronized(this) {
 				if (pipFinder == null) {
 					if (logger.isDebugEnabled()) {
-						logger.debug("Creating configurable engine finder using: " + properties);
+						logger.debug("Creating configurable engine finder using: {}", properties);
 					}
 					pipFinder					= new ConfigurableEngineFinder();
-					((ConfigurableEngineFinder)pipFinder).configure(properties);
+					pipFinder.configure(properties);
 				}
 			}
 		}
