@@ -73,6 +73,10 @@
 								<name>XACML_LOGS</name>
 								<value>${project.build.directory}/tmp/logs</value>
 							</systemProperty>
+							<systemProperty>
+								<name>xacml.rest.pdp.config</name>
+								<value>${project.build.directory}/tmp/config</value>
+							</systemProperty>
 						</systemProperties>
 						<webApp>
 							<contextPath>/pdp</contextPath>
