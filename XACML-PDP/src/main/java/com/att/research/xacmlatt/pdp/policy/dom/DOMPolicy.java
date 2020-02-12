@@ -1,14 +1,15 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 
 package com.att.research.xacmlatt.pdp.policy.dom;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Iterator;
-
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -26,6 +27,7 @@ import com.att.research.xacml.std.dom.DOMProperties;
 import com.att.research.xacml.std.dom.DOMStructureException;
 import com.att.research.xacml.std.dom.DOMUtil;
 import com.att.research.xacml.util.FactoryException;
+import com.att.research.xacml.util.MainUtils;
 import com.att.research.xacml.util.StringUtils;
 import com.att.research.xacmlatt.pdp.policy.CombiningAlgorithm;
 import com.att.research.xacmlatt.pdp.policy.CombiningAlgorithmFactory;
@@ -275,36 +277,44 @@ public class DOMPolicy {
 		return result;
 	}
 	
-	public static void main(String args[]) {
+    //
+    // This main() method should only be used for local testing, and not
+    // for running anything in a production environment.
+    //
+	public static void main(String[] args) { //NOSONAR
 		try {
-			DocumentBuilderFactory documentBuilderFactory	= DocumentBuilderFactory.newInstance();
+	        Collection<String> santized = MainUtils.santizeArguments(args);
+	        if (santized.isEmpty()) {
+	            return;
+	        }
+	        DocumentBuilderFactory  documentBuilderFactory  = DocumentBuilderFactory.newInstance();
+	        documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 			documentBuilderFactory.setNamespaceAware(true);
 			DocumentBuilder documentBuilder					= documentBuilderFactory.newDocumentBuilder();
 			
-			for (String fileName: args) {
+			for (String fileName: santized) {
 				File filePolicy	= new File(fileName);
 				if (filePolicy.exists() && filePolicy.canRead()) {
 					try {
 						Document documentPolicy	= documentBuilder.parse(filePolicy);
 						if (documentPolicy.getFirstChild() == null) {
-							System.err.println(fileName + ": Error: No Policy found");
+						    logger.error("{}: Error: No Policy found", fileName);
 						} else if (!XACML3.ELEMENT_POLICY.equals(documentPolicy.getFirstChild().getLocalName())) {
-							System.err.println(fileName + ": Error: Not a Policy documnt");
+						    logger.error("{}: Error: Not a Policy documnt", fileName);
 						} else {
 							Policy	policy	= DOMPolicy.newInstance(documentPolicy.getFirstChild(), null, null);
-							System.out.println(fileName + ": validate()=" + policy.validate());
-							System.out.println(StringUtils.prettyPrint(policy.toString()));
+							logger.info("{}: validate()={}", fileName, policy.validate());
+							logger.info("{}", StringUtils.prettyPrint(policy.toString()));
 						}
 					} catch (Exception ex) {
-						System.err.println("Exception processing policy file \"" + fileName + "\"");
-						ex.printStackTrace(System.err);
+						logger.error("Exception processing policy file {}", fileName);
 					}
 				} else {
-					System.err.println("Cannot read policy file \"" + fileName + "\"");
+				    logger.error("Cannot read policy file {}", fileName);
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace(System.err);
+		    logger.error("{}", ex);
 			System.exit(1);
 		}
 		System.exit(0);

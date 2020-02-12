@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.util;
@@ -31,6 +31,7 @@ import com.att.research.xacml.std.dom.DOMUtil;
  */
 public class XACMLRepair {
 	private static final Logger logger	= LoggerFactory.getLogger(XACMLRepair.class);
+	private static final String MSG_MISSINGARG = "Missing argument to {} command line option";
 	
 	public static final String	PROP_DOCUMENT_REPAIR_CLASSNAME	= "xacml.documentRepairClassName";
 	
@@ -56,7 +57,7 @@ public class XACMLRepair {
 					}
 					this.domDocumentRepair	= (DOMDocumentRepair)(classDocumentRepair.newInstance());
 				} catch (Exception ex) {
-					logger.error("Warning: Could not find Class " + this.documentRepairClassName + ":" + ex.getMessage() + ": using " + DOMDocumentRepair.class.getCanonicalName());
+					logger.error("Warning: Could not find Class {}:{}: using {}", this.documentRepairClassName, ex.getMessage(), DOMDocumentRepair.class.getCanonicalName());
 					this.domDocumentRepair	= new DOMDocumentRepair();
 				}
 			}
@@ -73,7 +74,7 @@ public class XACMLRepair {
 						this.listInputFilesOrDirectories.add(new File(args[i++]));
 					}
 				} else {
-					logger.error("Missing argument to " + args[i] + " command line option");
+					logger.error(MSG_MISSINGARG, args[i]);
 					return false;
 				}
 			} else if (args[i].equals("--output") || args[i].equals("-o")) {
@@ -81,7 +82,7 @@ public class XACMLRepair {
 					this.outputFileOrDirectory	= new File(args[i+1]);
 					i	+= 2;
 				} else {
-					logger.error("Missing argument to " + args[i] + " command line option");
+					logger.error(MSG_MISSINGARG, args[i]);
 					return false;
 				}
 			} else if (args[i].equals("--force") || args[i].equals("-f")) {
@@ -89,7 +90,7 @@ public class XACMLRepair {
 					this.forceOutput	= true;
 					i	+= 1;
 				} else {
-					logger.error("Missing argument to " + args[i] + " command line option");
+                    logger.error(MSG_MISSINGARG, args[i]);
 					return false;					
 				}
 			} else if (args[i].equals("--repairClass")) {
@@ -97,14 +98,14 @@ public class XACMLRepair {
 					this.documentRepairClassName	= args[i+1];
 					i	+= 2;
 				} else {
-					logger.error("Missing argument to " + args[i] + " command line option");
+                    logger.error(MSG_MISSINGARG, args[i]);
 					return false;
 				}
 			} else if (args[i].equals("--verbose") || args[i].equals("-i")) {
 				this.verbose	= true;
 				i	+= 1;
 			} else {
-				logger.error("Unknown command line option " + args[i]);
+				logger.error("Unknown command line option {}", args[i]);
 				return false;
 			}
 		}
@@ -237,7 +238,11 @@ public class XACMLRepair {
 		super();
 	}
 
-	public static void main(String[] args) {
+    //
+    // This main() method should only be used for local testing, and not
+    // for running anything in a production environment.
+    //
+	public static void main(String[] args) { //NOSONAR
 		XACMLRepair xacmlRepair	= new XACMLRepair();
 		try {
 			if (xacmlRepair.init(args)) {

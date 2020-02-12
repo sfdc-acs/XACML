@@ -1,14 +1,15 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.jaxp;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Iterator;
-
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -29,6 +30,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.att.research.xacml.std.StdMutableResponse;
+import com.att.research.xacml.util.MainUtils;
 
 /**
  * JaxpResponse extends {@link com.att.research.xacml.std.StdMutableResponse} with methods for creation from
@@ -77,6 +79,7 @@ public class JaxpResponse extends StdMutableResponse {
     	 * Create XML document factory and builder
     	 */
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 	    documentBuilderFactory.setNamespaceAware(true);
 		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		
@@ -85,7 +88,7 @@ public class JaxpResponse extends StdMutableResponse {
 		 */
 		Document	document	= documentBuilder.parse(fileXmlResponse);
 		if (document == null) {
-			logger.error("No Document returned parsing \"" + fileXmlResponse.getAbsolutePath() + "\"");
+			logger.error("No Document returned parsing {}", fileXmlResponse.getAbsolutePath());
 			return null;
 		}
 		
@@ -111,8 +114,16 @@ public class JaxpResponse extends StdMutableResponse {
 		
 	}
 	
-	public static void main(String[] args) {
-		for (String fileName: args) {
+    //
+    // This main() method should only be used for local testing, and not
+    // for running anything in a production environment.
+    //
+	public static void main(String[] args) { //NOSONAR
+        Collection<String> santized = MainUtils.santizeArguments(args);
+        if (santized.isEmpty()) {
+            return;
+        }
+		for (String fileName: santized) {
 			JaxpResponse	jaxpResponse	= null;
 			try {
 				jaxpResponse	= JaxpResponse.load(new File(fileName));
@@ -121,9 +132,9 @@ public class JaxpResponse extends StdMutableResponse {
 				continue;
 			}
 			if (jaxpResponse == null) {
-				logger.warn("Null JaxpResponse returned for file \"" + fileName + "\"");
+				logger.warn("Null JaxpResponse returned for file {}", fileName);
 			} else {
-				logger.info("JaxpResponse for file \"" + fileName + "\"=" + jaxpResponse.toString());
+				logger.info("JaxpResponse for file {}={}", fileName, jaxpResponse);
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacmlatt.pdp.policy.dom;
@@ -10,7 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -31,6 +31,11 @@ import com.att.research.xacml.std.dom.DOMUtil;
 public class DOMPolicyRepair {
 	private static final String	DEFAULT_VERSION	= "1.0";
 	
+	//
+	// Please use this main only for local testing. It should
+	// not be used in production for anything. It is not secure
+	// with respect to its command line arguments.
+	//
 	public static void main(String[] args) {
 		InputStream	inputStream		= System.in;
 		OutputStream outputStream	= System.out;
@@ -71,8 +76,9 @@ public class DOMPolicyRepair {
 		 * Get the XML Parser for the input file
 		 */
 		DocumentBuilderFactory documentBuilderFactory	= DocumentBuilderFactory.newInstance();
-		documentBuilderFactory.setNamespaceAware(true);
 		try {
+	        documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+	        documentBuilderFactory.setNamespaceAware(true);
 			DocumentBuilder documentBuilder				= documentBuilderFactory.newDocumentBuilder();
 			Document documentInput						= documentBuilder.parse(inputStream);
 			Element elementRoot							= DOMUtil.getFirstChildElement(documentInput);

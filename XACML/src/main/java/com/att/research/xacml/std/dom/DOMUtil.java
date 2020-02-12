@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.dom;
@@ -11,7 +11,7 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
-
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -68,6 +68,7 @@ public class DOMUtil {
 		Node nodeResult	= null;
 		try {
 			DocumentBuilderFactory documentBuilderFactory	= DocumentBuilderFactory.newInstance();
+            documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 			documentBuilderFactory.setNamespaceAware(true);
 			DocumentBuilder documentBuilder					= documentBuilderFactory.newDocumentBuilder();
 			Document documentRoot							= documentBuilder.newDocument();
@@ -541,7 +542,8 @@ public class DOMUtil {
 	public static String toString(Document document) throws DOMStructureException {
 		try {
 			TransformerFactory	transformerFactory	= TransformerFactory.newInstance();
-			transformerFactory.setAttribute("indent-number", new Integer(4));
+			transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+			transformerFactory.setAttribute("indent-number", Integer.valueOf(4));
 			Transformer			transformer			= transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			Source				source				= new DOMSource(document);
@@ -563,7 +565,7 @@ public class DOMUtil {
 			} else {
 				identifier	= IdentifierImpl.gensym("urn:" + attributeName.toLowerCase());
 			}
-			logger.warn("Setting missing " + attributeName + " attribute to " + identifier.stringValue());
+			logger.warn("Setting missing {} attribute to {}", attributeName, identifier.stringValue());
 			element.setAttribute(attributeName, identifier.stringValue());
 			return true;
 		}
@@ -578,7 +580,7 @@ public class DOMUtil {
 		Identifier identifier	= getIdentifierContent(element);
 		if (identifier == null) {
 			identifier	= IdentifierImpl.gensym();
-			logger.warn("Setting missing content to " + identifier.stringValue());
+			logger.warn("Setting missing content to {}", identifier.stringValue());
 			element.setTextContent(identifier.stringValue());
 			return true;
 		}
@@ -590,12 +592,12 @@ public class DOMUtil {
 		try {
 			booleanValue	= getBooleanAttribute(element, attributeName);
 		} catch (DOMStructureException ex) {
-			logger.warn("Setting invalid " + attributeName + " attribute to " + bvalue);
+			logger.warn("Setting invalid {} attribute to {}", attributeName, bvalue);
 			element.setAttribute(attributeName, Boolean.toString(bvalue));
 			return true;
 		}
 		if (booleanValue == null) {
-			logger.warn("Setting missing " + attributeName + " attribute to " + bvalue);
+			logger.warn("Setting missing {} attribute to {}", attributeName, bvalue);
 			element.setAttribute(attributeName, Boolean.toString(bvalue));
 			return true;
 		}
@@ -622,7 +624,7 @@ public class DOMUtil {
 	public static boolean repairVersionAttribute(Element element, String attributeName, Logger logger) {
 		String versionString	= getStringAttribute(element, attributeName);
 		if (versionString == null) {
-			logger.warn("Adding default " + attributeName + " string 1.0");
+			logger.warn("Adding default {} string 1.0", attributeName);
 			element.setAttribute(attributeName, "1.0");
 			return true;
 		}
@@ -644,7 +646,7 @@ public class DOMUtil {
 			if (defaultValue == null) {
 				defaultValue	= IdentifierImpl.gensym().stringValue();
 			}
-			logger.warn("Setting missing " + attributeName + " attribute to " + defaultValue);
+			logger.warn("Setting missing {} attribute to {}", attributeName, defaultValue);
 			element.setAttribute(attributeName, defaultValue);
 			return true;
 		}
@@ -659,13 +661,14 @@ public class DOMUtil {
 		if (documentBuilderFactory == null) {
 			throw new DOMStructureException("No XML DocumentBuilderFactory configured");
 		}
-		documentBuilderFactory.setNamespaceAware(true);
 		
 		/*
 		 * Get the DocumentBuilder
 		 */
 		DocumentBuilder documentBuilder	= null;
 		try {
+            documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            documentBuilderFactory.setNamespaceAware(true);
 			documentBuilder	= documentBuilderFactory.newDocumentBuilder();
 		} catch (Exception ex) {
 			throw new DOMStructureException("Exception creating DocumentBuilder: " + ex.getMessage(), ex);
@@ -678,7 +681,7 @@ public class DOMUtil {
 		try {
 			document	= documentBuilder.parse(fileDocument);
 			if (document == null) {
-				throw new Exception("Null document returned");
+				throw new DOMStructureException("Null document returned");
 			}			
 		} catch (Exception ex) {
 			throw new DOMStructureException("Exception loading file \"" + fileDocument.getAbsolutePath() + "\": " + ex.getMessage(), ex);
@@ -695,13 +698,14 @@ public class DOMUtil {
 		if (documentBuilderFactory == null) {
 			throw new DOMStructureException("No XML DocumentBuilderFactory configured");
 		}
-		documentBuilderFactory.setNamespaceAware(true);
 		
 		/*
 		 * Get the DocumentBuilder
 		 */
 		DocumentBuilder documentBuilder	= null;
 		try {
+		    documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+	        documentBuilderFactory.setNamespaceAware(true);
 			documentBuilder	= documentBuilderFactory.newDocumentBuilder();
 		} catch (Exception ex) {
 			throw new DOMStructureException("Exception creating DocumentBuilder: " + ex.getMessage(), ex);
@@ -714,7 +718,7 @@ public class DOMUtil {
 		try {
 			document	= documentBuilder.parse(inputStreamDocument);
 			if (document == null) {
-				throw new Exception("Null document returned");
+				throw new DOMStructureException("Null document returned");
 			}			
 		} catch (Exception ex) {
 			throw new DOMStructureException("Exception loading file from stream: " + ex.getMessage(), ex);

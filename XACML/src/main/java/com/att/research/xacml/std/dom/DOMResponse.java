@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.dom;
@@ -25,7 +25,7 @@ import javax.security.auth.x500.X500Principal;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
+import javax.xml.parsers.ParserConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -56,6 +56,7 @@ import com.att.research.xacml.std.StdStatusCode;
 import com.att.research.xacml.std.datatypes.ExtendedNamespaceContext;
 import com.att.research.xacml.std.datatypes.XPathExpressionWrapper;
 import com.att.research.xacml.std.json.JSONStructureException;
+import com.att.research.xacml.util.MainUtils;
 
 /**
  * DOMResponse is used to convert XML into {@link com.att.research.xacml.api.Response} objects and 
@@ -789,57 +790,53 @@ public class DOMResponse {
 
 	}
 	
-	
-	
-	
-	
-	
 	/**
-	 * Unit test program to load an XML file containing a XACML Response document.
+	 * Unit test program to load an XML file containing a XACML Response document. This should only
+	 * be used in a local testing environment and not in production.
 	 * 
 	 * @param args the list of Response files to load and parse
+	 * @throws ParserConfigurationException 
 	 */
-	public static void main(String[] args) {
-		if (args.length > 0) {
-			DocumentBuilderFactory	documentBuilderFactory	= DocumentBuilderFactory.newInstance();
-			documentBuilderFactory.setNamespaceAware(true);
-			for (String xmlFileName: args) {
-				File	fileXml	= new File(xmlFileName);
-				if (!fileXml.exists()) {
-					logger.error("Input file \"{}\\\" does not exist.", fileXml.getAbsolutePath());
+	public static void main(String[] args) throws ParserConfigurationException { //NOSONAR
+        Collection<String> santized = MainUtils.santizeArguments(args);
+        if (santized.isEmpty()) {
+            return;
+        }
+		DocumentBuilderFactory	documentBuilderFactory	= DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+		documentBuilderFactory.setNamespaceAware(true);
+		for (String xmlFileName: santized) {
+			File	fileXml	= new File(xmlFileName);
+            if (!fileXml.exists() || !fileXml.canRead()) {
+                logger.error("Input file \"{}\\\" does not exist or is unreadable.", fileXml.getAbsolutePath());
+                continue;
+            }
+			logger.debug("{}:", fileXml.getAbsolutePath());
+			try {
+				DocumentBuilder	documentBuilder	= documentBuilderFactory.newDocumentBuilder();
+				assert(documentBuilder.isNamespaceAware());
+				Document documentResponse		= documentBuilder.parse(fileXml);
+				assert(documentResponse != null);
+				
+				NodeList children				= documentResponse.getChildNodes();
+				if (children == null || children.getLength() == 0) {
+					logger.error("No Responses found in \"{}\\\"", fileXml.getAbsolutePath());
 					continue;
-				} else if (!fileXml.canRead()) {
-					logger.error("Permission denied reading input file \"{}\\\"", fileXml.getAbsolutePath());
+				} else if (children.getLength() > 1) {
+					logger.error("Multiple Responses found in \"{}\\\"", fileXml.getAbsolutePath());
+				}
+				Node nodeResponse				= children.item(0);
+				if (!nodeResponse.getLocalName().equals(XACML3.ELEMENT_RESPONSE)) {
+					logger.error("\"{}\\\" is not a Response", fileXml.getAbsolutePath());
 					continue;
 				}
-				logger.debug("{}:", fileXml.getAbsolutePath());
-				try {
-					DocumentBuilder	documentBuilder	= documentBuilderFactory.newDocumentBuilder();
-					assert(documentBuilder.isNamespaceAware());
-					Document documentResponse		= documentBuilder.parse(fileXml);
-					assert(documentResponse != null);
-					
-					NodeList children				= documentResponse.getChildNodes();
-					if (children == null || children.getLength() == 0) {
-						logger.error("No Responses found in \"{}\\\"", fileXml.getAbsolutePath());
-						continue;
-					} else if (children.getLength() > 1) {
-						logger.error("Multiple Responses found in \"{}\\\"", fileXml.getAbsolutePath());
-					}
-					Node nodeResponse				= children.item(0);
-					if (!nodeResponse.getLocalName().equals(XACML3.ELEMENT_RESPONSE)) {
-						logger.error("\"{}\\\" is not a Response", fileXml.getAbsolutePath());
-						continue;
-					}
-					
-					Response domResponse			= DOMResponse.newInstance(nodeResponse);
-					logger.debug("{}", domResponse);
-				} catch (Exception ex) {
-					logger.error("{}", ex);
-				}
+				
+				Response domResponse			= DOMResponse.newInstance(nodeResponse);
+				logger.debug("{}", domResponse);
+			} catch (Exception ex) {
+				logger.error("{}", ex);
 			}
 		}
 	}
-
 
 }

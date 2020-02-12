@@ -1,14 +1,15 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.jaxp;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Iterator;
-
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -30,6 +31,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.att.research.xacml.std.StdMutableRequest;
+import com.att.research.xacml.util.MainUtils;
 
 /**
  * JaxpRequest extends {@link com.att.research.xacml.std.StdMutableRequest} with methods for creation from JAXP elements.
@@ -41,6 +43,7 @@ public class JaxpRequest extends StdMutableRequest {
 	private static Logger	logger	= LoggerFactory.getLogger(JaxpRequest.class);
 	
 	public JaxpRequest() {
+	    // EMPTY
 	}
 	
 	public static JaxpRequest newInstance(RequestType requestType) {
@@ -88,6 +91,7 @@ public class JaxpRequest extends StdMutableRequest {
     	 * Create XML document factory and builder
     	 */
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 	    documentBuilderFactory.setNamespaceAware(true);
 		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		
@@ -96,7 +100,7 @@ public class JaxpRequest extends StdMutableRequest {
 		 */
 		Document	document	= documentBuilder.parse(fileXmlRequest);
 		if (document == null) {
-			logger.error("No Document returned parsing \"" + fileXmlRequest.getAbsolutePath() + "\"");
+			logger.error("No Document returned parsing {}", fileXmlRequest.getAbsolutePath());
 			return null;
 		}
 		
@@ -122,8 +126,16 @@ public class JaxpRequest extends StdMutableRequest {
 		
 	}
 	
-	public static void main(String[] args) {
-		for (String fileName: args) {
+	//
+	// This main() method should only be used for local testing, and not
+	// for running anything in a production environment.
+	//
+	public static void main(String[] args) { //NOSONAR
+        Collection<String> santized = MainUtils.santizeArguments(args);
+        if (santized.isEmpty()) {
+            return;
+        }
+		for (String fileName: santized) {
 			JaxpRequest	jaxpRequest	= null;
 			try {
 				jaxpRequest	= JaxpRequest.load(new File(fileName));
@@ -132,9 +144,9 @@ public class JaxpRequest extends StdMutableRequest {
 				continue;
 			}
 			if (jaxpRequest == null) {
-				logger.warn("Null JaxpRequest returned for file \"" + fileName + "\"");
+				logger.warn("Null JaxpRequest returned for file {}", fileName);
 			} else {
-				logger.info("JaxpRequest for file \"" + fileName + "\"=" + jaxpRequest.toString());
+				logger.info("JaxpRequest for file {}={}", fileName, jaxpRequest);
 			}
 		}
 	}

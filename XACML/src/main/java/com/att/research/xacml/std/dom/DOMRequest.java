@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.dom;
@@ -11,10 +11,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-
+import java.util.Collection;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
+import javax.xml.parsers.ParserConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -26,6 +27,7 @@ import com.att.research.xacml.api.Request;
 import com.att.research.xacml.api.XACML3;
 import com.att.research.xacml.std.StdMutableRequest;
 import com.att.research.xacml.std.StdRequest;
+import com.att.research.xacml.util.MainUtils;
 
 /**
  * DOMRequest is used to convert XML into {@link com.att.research.xacml.api.Request} objects.
@@ -290,48 +292,50 @@ public class DOMRequest {
 	}
 	
 	/**
-	 * Unit test program to load an XML file containing a XACML Request document.
+	 * Unit test program to load an XML file containing a XACML Request document. This should only be
+	 * used in a local environment and not in production.
 	 * 
 	 * @param args the list of Request files to load and parse
+	 * @throws ParserConfigurationException 
 	 */
-	public static void main(String[] args) {
-		if (args.length > 0) {
-			DocumentBuilderFactory	documentBuilderFactory	= DocumentBuilderFactory.newInstance();
-			documentBuilderFactory.setNamespaceAware(true);
-			for (String xmlFileName: args) {
-				File	fileXml	= new File(xmlFileName);
-				if (!fileXml.exists()) {
-					logger.error("Input file \"{}\\\" does not exist.", fileXml.getAbsolutePath());
+	public static void main(String[] args) throws ParserConfigurationException { //NOSONAR
+	    Collection<String> santized = MainUtils.santizeArguments(args);
+	    if (santized.isEmpty()) {
+	        return;
+	    }
+		DocumentBuilderFactory	documentBuilderFactory	= DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+		documentBuilderFactory.setNamespaceAware(true);
+		for (String xmlFileName: santized) {
+			File	fileXml	= new File(xmlFileName);
+			if (!fileXml.exists() || !fileXml.canRead()) {
+				logger.error("Input file \"{}\\\" does not exist or is unreadable.", fileXml.getAbsolutePath());
+				continue;
+			}
+			logger.debug("{}:", fileXml.getAbsolutePath());
+			try {
+				DocumentBuilder	documentBuilder	= documentBuilderFactory.newDocumentBuilder();
+				assert(documentBuilder.isNamespaceAware());
+				Document documentRequest		= documentBuilder.parse(fileXml);
+				assert(documentRequest != null);
+				
+				NodeList children				= documentRequest.getChildNodes();
+				if (children == null || children.getLength() == 0) {
+					logger.error("No Requests found in \"{}\\\"", fileXml.getAbsolutePath());
 					continue;
-				} else if (!fileXml.canRead()) {
-					logger.error("Permission denied reading input file \"{}\\\"", fileXml.getAbsolutePath());
+				} else if (children.getLength() > 1) {
+					logger.error("Multiple Requests found in \"{}\\\"", fileXml.getAbsolutePath());
+				}
+				Node nodeRequest				= children.item(0);
+				if (!nodeRequest.getLocalName().equals(XACML3.ELEMENT_REQUEST)) {
+					logger.error("\"{}\\\" is not a Request", fileXml.getAbsolutePath());
 					continue;
 				}
-				logger.debug("{}:", fileXml.getAbsolutePath());
-				try {
-					DocumentBuilder	documentBuilder	= documentBuilderFactory.newDocumentBuilder();
-					assert(documentBuilder.isNamespaceAware());
-					Document documentRequest		= documentBuilder.parse(fileXml);
-					assert(documentRequest != null);
-					
-					NodeList children				= documentRequest.getChildNodes();
-					if (children == null || children.getLength() == 0) {
-						logger.error("No Requests found in \"{}\\\"", fileXml.getAbsolutePath());
-						continue;
-					} else if (children.getLength() > 1) {
-						logger.error("Multiple Requests found in \"{}\\\"", fileXml.getAbsolutePath());
-					}
-					Node nodeRequest				= children.item(0);
-					if (!nodeRequest.getLocalName().equals(XACML3.ELEMENT_REQUEST)) {
-						logger.error("\"{}\\\" is not a Request", fileXml.getAbsolutePath());
-						continue;
-					}
-					
-					Request domRequest			= DOMRequest.newInstance(nodeRequest);
-					logger.debug("{}", domRequest);
-				} catch (Exception ex) {
-					logger.error("{}", ex);
-				}
+				
+				Request domRequest			= DOMRequest.newInstance(nodeRequest);
+				logger.debug("{}", domRequest);
+			} catch (Exception ex) {
+				logger.error("{}", ex);
 			}
 		}
 	}
