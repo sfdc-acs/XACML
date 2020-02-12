@@ -14,7 +14,7 @@
   <description>ATT reference implementation of the OASIS XACML 3.0 standard</description>
     
     <properties>
- 	    <sonar.exclusions>src/main/java/oasis/**/*</sonar.exclusions>		
+ 	    <sonar.exclusions>src/main/java/oasis/**/*, **/*Exception.*</sonar.exclusions>		
     </properties>
 
     <dependencies>
