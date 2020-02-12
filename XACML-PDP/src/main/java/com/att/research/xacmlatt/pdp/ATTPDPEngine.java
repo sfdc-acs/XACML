@@ -1,20 +1,9 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacmlatt.pdp;
-
-import java.net.URI;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.Set;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import com.att.research.xacml.api.AttributeCategory;
 import com.att.research.xacml.api.Decision;
@@ -42,6 +31,13 @@ import com.att.research.xacmlatt.pdp.eval.EvaluationContextFactory;
 import com.att.research.xacmlatt.pdp.eval.EvaluationException;
 import com.att.research.xacmlatt.pdp.policy.PolicyDef;
 import com.att.research.xacmlatt.pdp.policy.PolicyFinderResult;
+import java.net.URI;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * ATTPDPEngine implements the {@link com.att.research.xacml.api.pdp.PDPEngine} interface using the XACML 3.0 specification.
@@ -71,7 +67,6 @@ public class ATTPDPEngine implements PDPEngine, Traceable {
 	private Decision defaultDecision				= Decision.INDETERMINATE;
 	private ScopeResolver scopeResolver;
 	private TraceEngine traceEngine;
-	private Log logger								= LogFactory.getLog(this.getClass());
 	
 	protected TraceEngine getTraceEngine() {
 		if (this.traceEngine == null) {
@@ -80,7 +75,6 @@ public class ATTPDPEngine implements PDPEngine, Traceable {
 					try {
 						this.traceEngine	= TraceEngineFactory.newInstance().getTraceEngine();
 					} catch (FactoryException ex) {
-						this.logger.error("FactoryException creating TraceEngine instance: " + ex.toString(), ex);
 						throw new IllegalStateException("FactoryException creating TraceEngine instance", ex);
 					}
 				}

@@ -38,7 +38,7 @@ import com.att.research.xacml.std.datatypes.IPv4Address;
 import com.att.research.xacml.std.datatypes.ISO8601DateTime;
 import com.att.research.xacml.std.datatypes.ISO8601Time;
 import com.att.research.xacml.util.FactoryException;
-import com.att.research.xacmlatt.pdp.test.TestBase;
+import com.att.research.xacml.test.TestBase;
 
 /**
  * This example application shows how to use annotations for Java classes to create requests to send to the

@@ -12,7 +12,7 @@ import org.apache.commons.cli.ParseException;
 import org.junit.Test;
 
 import com.att.research.xacml.util.FactoryException;
-import com.att.research.xacmlatt.pdp.test.TestBase.HelpException;
+import com.att.research.xacml.test.TestBase.HelpException;
 
 public class AnnotationTest {
 

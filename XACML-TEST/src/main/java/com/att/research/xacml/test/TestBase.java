@@ -3,7 +3,7 @@
  *          Copyright (c) 2014,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
-package com.att.research.xacmlatt.pdp.test;
+package com.att.research.xacml.test;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

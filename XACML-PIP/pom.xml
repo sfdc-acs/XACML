@@ -26,6 +26,11 @@
 			<groupId>com.att.research.xacml</groupId>
 			<artifactId>xacml</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>com.att.research.xacml</groupId>
+            <artifactId>xacml-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>com.att.research.xacml</groupId>
 			<artifactId>xacml-pdp</artifactId>

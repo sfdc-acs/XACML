@@ -47,7 +47,7 @@ import com.att.research.xacml.std.StdMutableRequestAttributes;
 import com.att.research.xacml.std.dom.DOMStructureException;
 import com.att.research.xacml.std.json.JSONStructureException;
 import com.att.research.xacml.util.FactoryException;
-import com.att.research.xacmlatt.pdp.test.TestBase;
+import com.att.research.xacml.test.TestBase;
 
 /**
  * TestCustom is an application that tests the extensibility and configurability of the AT&T XACML API.

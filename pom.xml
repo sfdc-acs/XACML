@@ -85,6 +85,7 @@
 
 	<modules>
 		<module>XACML</module>
+		<module>XACML-TEST</module>
 		<module>XACML-PIP</module>
 		<module>XACML-PDP</module>
 		<module>XACML-REST</module>

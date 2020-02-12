@@ -53,7 +53,7 @@ import com.att.research.xacml.util.XACMLObjectCopy;
 import com.att.research.xacml.util.XACMLPolicyAggregator;
 import com.att.research.xacml.util.XACMLPolicyScanner;
 import com.att.research.xacml.util.XACMLProperties;
-import com.att.research.xacmlatt.pdp.test.TestBase;
+import com.att.research.xacml.test.TestBase;
 
 
 /**
