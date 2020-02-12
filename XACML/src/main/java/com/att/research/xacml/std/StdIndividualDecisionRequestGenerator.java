@@ -51,7 +51,7 @@ public class StdIndividualDecisionRequestGenerator {
 	
 	private static final Logger logger									= LoggerFactory.getLogger(StdIndividualDecisionRequestGenerator.class);
 	private Request originalRequest;
-	private List<Request> individualDecisionRequests	= new ArrayList<Request>();
+	private List<Request> individualDecisionRequests	= new ArrayList<>();
 	private ScopeResolver scopeResolver;
 	
 	private static StdMutableRequestAttributes removeMultipleContentSelector(RequestAttributes requestAttributes) {
@@ -193,7 +193,7 @@ public class StdIndividualDecisionRequestGenerator {
 		if (!hasMultipleContentSelectors) {
 			this.individualDecisionRequests.add(request);
 		} else {
-			List<RequestAttributes> listRequestAttributes	= new ArrayList<RequestAttributes>();
+			List<RequestAttributes> listRequestAttributes	= new ArrayList<>();
 			listRequestAttributes.addAll(request.getRequestAttributes());
 			
 			StdMutableRequest stdRequestInProgress	= new StdMutableRequest();
@@ -263,7 +263,7 @@ public class StdIndividualDecisionRequestGenerator {
 		
 		Iterator<AttributeValue<?>> iterAttributeValuesScope	= attributeScope.getValues().iterator();
 		if (!iterAttributeValuesScope.hasNext()) {
-			throw new ScopeResolverException("No values for " + XACML3.ID_RESOURCE_SCOPE.stringValue() + " atribute");
+			throw new ScopeResolverException("No values for " + XACML3.ID_RESOURCE_SCOPE.stringValue() + " attribute");
 		}
 		ScopeQualifier scopeQualifier	= null;
 		while (scopeQualifier == null && iterAttributeValuesScope.hasNext()) {
@@ -355,6 +355,7 @@ public class StdIndividualDecisionRequestGenerator {
 				scopeResolverResult	= this.scopeResolver.resolveScope(attributeResourceId, scopeQualifier);
 			} catch (ScopeResolverException ex) {
 				logger.error("ScopeResolverException resolving " + attributeResourceId.toString() + ": " + ex.getMessage(), ex);
+				continue;
 			}
 			if (scopeResolverResult.getStatus() != null && !scopeResolverResult.getStatus().isOk()) {
 				this.individualDecisionRequests.add(new StdMutableRequest(scopeResolverResult.getStatus()));
@@ -402,7 +403,7 @@ public class StdIndividualDecisionRequestGenerator {
 			this.processScopes(requestInProgress);
 		} else {
 			List<RequestAttributes> listCategoryAttributes	= mapCategories.get(identifiers[pos]);
-			assert(listCategoryAttributes != null && listCategoryAttributes.size() > 0);
+			assert(listCategoryAttributes != null && ! listCategoryAttributes.isEmpty());
 			if (listCategoryAttributes.size() == 1) {
 				requestInProgress.add(listCategoryAttributes.get(0));
 				this.explodeOnCategory(identifiers, pos+1, requestInProgress, mapCategories);
@@ -435,7 +436,7 @@ public class StdIndividualDecisionRequestGenerator {
 		 * We need to do a quick check for multiple Attributes with the same Category
 		 */
 		boolean bContainsMultiples								= false;
-		Set<Identifier> setCategories	= new HashSet<Identifier>();
+		Set<Identifier> setCategories	= new HashSet<>();
 		while (iterRequestAttributes.hasNext() && !bContainsMultiples) {
 			RequestAttributes requestAttributes	= iterRequestAttributes.next();
 			Identifier identifierCategory		= requestAttributes.getCategory();
@@ -458,13 +459,13 @@ public class StdIndividualDecisionRequestGenerator {
 			this.processScopes(request);
 		} else {
 			iterRequestAttributes	= request.getRequestAttributes().iterator();
-			Map<Identifier,List<RequestAttributes>> mapCategories	= new HashMap<Identifier,List<RequestAttributes>>();
+			Map<Identifier,List<RequestAttributes>> mapCategories	= new HashMap<>();
 			while (iterRequestAttributes.hasNext()) {
 				RequestAttributes requestAttributes	= iterRequestAttributes.next();
 				Identifier identifierCategory		= requestAttributes.getCategory();
 				List<RequestAttributes> listRequestAttributes	= mapCategories.get(identifierCategory);
 				if (listRequestAttributes == null) {
-					listRequestAttributes	= new ArrayList<RequestAttributes>();
+					listRequestAttributes	= new ArrayList<>();
 					mapCategories.put(identifierCategory, listRequestAttributes);
 				}
 				listRequestAttributes.add(requestAttributes);
@@ -485,7 +486,7 @@ public class StdIndividualDecisionRequestGenerator {
 	 */
 	protected Request processMultiRequest(Request requestOriginal, RequestReference requestReference) {
 		Collection<RequestAttributesReference> listRequestAttributesReferences	= requestReference.getAttributesReferences();
-		if (listRequestAttributesReferences.size() == 0) {
+		if (listRequestAttributesReferences.isEmpty()) {
 			return new StdMutableRequest(STATUS_NO_ATTRIBUTES);
 		}
 		
