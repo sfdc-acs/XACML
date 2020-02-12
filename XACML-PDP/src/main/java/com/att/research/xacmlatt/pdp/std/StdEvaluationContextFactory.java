@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 
@@ -55,76 +55,56 @@ public class StdEvaluationContextFactory extends EvaluationContextFactory {
 	 */
 	protected Properties properties = null;
 
-	protected PolicyFinder getPolicyFinder() {
+	protected synchronized PolicyFinder getPolicyFinder() {
 		if (this.policyFinder == null) {
-			synchronized(this) {
-				if (this.policyFinder == null) {
-					try {
-						if (this.properties == null) {
-							if (this.logger.isDebugEnabled()) {
-								this.logger.debug("getting Policy finder using default properties");
-							}
-							PolicyFinderFactory policyFinderFactory	= PolicyFinderFactory.newInstance();
-							this.policyFinder	= policyFinderFactory.getPolicyFinder();
-						} else {
-							if (this.logger.isDebugEnabled()) {
-								this.logger.debug("getting Policy finder using properties: " + this.properties);
-							}
-							PolicyFinderFactory policyFinderFactory	= PolicyFinderFactory.newInstance(this.properties);
-							this.policyFinder	= policyFinderFactory.getPolicyFinder(this.properties);
-						}
-					} catch (Exception ex) {
-						this.logger.error("Exception getting PolicyFinder: " + ex.getMessage(), ex);
-					}
+			try {
+				if (this.properties == null) {
+					this.logger.debug("getting Policy finder using default properties");
+					PolicyFinderFactory policyFinderFactory	= PolicyFinderFactory.newInstance();
+					this.policyFinder	= policyFinderFactory.getPolicyFinder();
+				} else {
+					this.logger.debug("getting Policy finder using properties: {}", this.properties);
+					PolicyFinderFactory policyFinderFactory	= PolicyFinderFactory.newInstance(this.properties);
+					this.policyFinder	= policyFinderFactory.getPolicyFinder(this.properties);
 				}
+			} catch (Exception ex) {
+				this.logger.error("Exception getting PolicyFinder: " + ex.getMessage(), ex);
 			}
 		}
 		return this.policyFinder;
 	}
 	
-	protected PIPFinder getPIPFinder() {
+	protected synchronized PIPFinder getPIPFinder() {
 		if (this.pipFinder == null) {
-			synchronized(this) {
-				if (this.pipFinder == null) {
-					try {
-						if (this.properties == null) {
-							if (this.logger.isDebugEnabled()) {
-								this.logger.debug("getting PIP finder using default properties");
-							}
-							PIPFinderFactory pipFinderFactory	= PIPFinderFactory.newInstance();
-							this.pipFinder						= pipFinderFactory.getFinder();
-						} else {
-							if (this.logger.isDebugEnabled()) {
-								this.logger.debug("getting PIP finder using properties: " + this.properties);
-							}
-							PIPFinderFactory pipFinderFactory	= PIPFinderFactory.newInstance(this.properties);
-							this.pipFinder						= pipFinderFactory.getFinder(this.properties);
-						}
-					} catch (Exception ex) {
-						this.logger.error("Exception getting PIPFinder: " + ex.toString(), ex);
-					}
+			try {
+				if (this.properties == null) {
+					this.logger.debug("getting PIP finder using default properties");
+					PIPFinderFactory pipFinderFactory	= PIPFinderFactory.newInstance();
+					this.pipFinder						= pipFinderFactory.getFinder();
+				} else {
+					this.logger.debug("getting PIP finder using properties: {}", this.properties);
+					PIPFinderFactory pipFinderFactory	= PIPFinderFactory.newInstance(this.properties);
+					this.pipFinder						= pipFinderFactory.getFinder(this.properties);
 				}
+			} catch (Exception ex) {
+				this.logger.error("Exception getting PIPFinder: " + ex.toString(), ex);
 			}
 		}
 		return this.pipFinder;
 	}
 	
-	protected TraceEngine getTraceEngine() {
+	protected synchronized TraceEngine getTraceEngine() {
 		if (this.traceEngine == null) {
-			synchronized(this) {
-				if (this.traceEngine == null) {
-					try {
-						if (this.properties == null) {
-							TraceEngineFactory traceEngineFactory	= TraceEngineFactory.newInstance();
-							this.traceEngine	= traceEngineFactory.getTraceEngine();
-						} else {
-							TraceEngineFactory traceEngineFactory	= TraceEngineFactory.newInstance(this.properties);
-							this.traceEngine	= traceEngineFactory.getTraceEngine(this.properties);
-						}
-					} catch (Exception ex) {
-						this.logger.error("Exception getting TraceEngine: " + ex.toString(), ex);
-					}
+			try {
+				if (this.properties == null) {
+					TraceEngineFactory traceEngineFactory	= TraceEngineFactory.newInstance();
+					this.traceEngine	= traceEngineFactory.getTraceEngine();
+				} else {
+					TraceEngineFactory traceEngineFactory	= TraceEngineFactory.newInstance(this.properties);
+					this.traceEngine	= traceEngineFactory.getTraceEngine(this.properties);
 				}
+			} catch (Exception ex) {
+				this.logger.error("Exception getting TraceEngine: " + ex.toString(), ex);
 			}
 		}
 		return this.traceEngine;
@@ -147,12 +127,12 @@ public class StdEvaluationContextFactory extends EvaluationContextFactory {
 	}
 
 	@Override
-	public void setPolicyFinder(PolicyFinder policyFinderIn) {
+	public synchronized void setPolicyFinder(PolicyFinder policyFinderIn) {
 		this.policyFinder	= policyFinderIn;
 	}
 
 	@Override
-	public void setPIPFinder(PIPFinder pipFinderIn) {
+	public synchronized void setPIPFinder(PIPFinder pipFinderIn) {
 		this.pipFinder		= pipFinderIn;
 	}
 

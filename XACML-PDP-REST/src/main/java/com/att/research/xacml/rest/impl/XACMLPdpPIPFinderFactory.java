@@ -26,42 +26,30 @@ public class XACMLPdpPIPFinderFactory extends PIPFinderFactory {
 	}
 
 	@Override
-	public PIPFinder getFinder() throws PIPException {
+	public synchronized PIPFinder getFinder() throws PIPException {
 		if (pipFinder == null) {
-			synchronized(this) {
-				if (pipFinder == null) {
-					if (logger.isDebugEnabled()) {
-						logger.debug("Creating default configurable engine finder");
-					}
-					pipFinder					= new ConfigurableEngineFinder();
-					Properties xacmlProperties	= null;
-					try {
-						xacmlProperties	= XACMLProperties.getProperties();
-					} catch (Exception ex) {
-						logger.error("Exception getting XACML properties: " + ex.getMessage(), ex);
-						return null;
-					}
-					if (xacmlProperties != null) {
-						pipFinder.configure(xacmlProperties);
-					}
-				}
+			logger.debug("Creating default configurable engine finder");
+			pipFinder					= new ConfigurableEngineFinder();
+			Properties xacmlProperties	= null;
+			try {
+				xacmlProperties	= XACMLProperties.getProperties();
+			} catch (Exception ex) {
+				logger.error("Exception getting XACML properties: " + ex.getMessage(), ex);
+				return null;
+			}
+			if (xacmlProperties != null) {
+				pipFinder.configure(xacmlProperties);
 			}
 		}
 		return pipFinder;
 	}
 
 	@Override
-	public PIPFinder getFinder(Properties properties) throws PIPException {
+	public synchronized PIPFinder getFinder(Properties properties) throws PIPException {
 		if (pipFinder == null) {
-			synchronized(this) {
-				if (pipFinder == null) {
-					if (logger.isDebugEnabled()) {
-						logger.debug("Creating configurable engine finder using: {}", properties);
-					}
-					pipFinder					= new ConfigurableEngineFinder();
-					pipFinder.configure(properties);
-				}
-			}
+			logger.debug("Creating configurable engine finder using: {}", properties);
+			pipFinder					= new ConfigurableEngineFinder();
+			pipFinder.configure(properties);
 		}
 		return this.pipFinder;
 	}

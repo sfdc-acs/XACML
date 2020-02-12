@@ -54,7 +54,7 @@ public class ATTPDPEngine implements PDPEngine, Traceable {
 	/*
 	 * These are the profiles that this reference implementation of the PDP engine supports
 	 */
-	private static final Set<URI> PROFILES			= new HashSet<URI>();
+	private static final Set<URI> PROFILES			= new HashSet<>();
 	static {
 		PROFILES.add(XACML3.ID_PROFILE_MULTIPLE_COMBINED_DECISION.getUri());
 		PROFILES.add(XACML3.ID_PROFILE_MULTIPLE_REFERENCE.getUri());
@@ -68,16 +68,12 @@ public class ATTPDPEngine implements PDPEngine, Traceable {
 	private ScopeResolver scopeResolver;
 	private TraceEngine traceEngine;
 	
-	protected TraceEngine getTraceEngine() {
+	protected synchronized TraceEngine getTraceEngine() {
 		if (this.traceEngine == null) {
-			synchronized(this) {
-				if (this.traceEngine == null) {
-					try {
-						this.traceEngine	= TraceEngineFactory.newInstance().getTraceEngine();
-					} catch (FactoryException ex) {
-						throw new IllegalStateException("FactoryException creating TraceEngine instance", ex);
-					}
-				}
+			try {
+				this.traceEngine	= TraceEngineFactory.newInstance().getTraceEngine();
+			} catch (FactoryException ex) {
+				throw new IllegalStateException("FactoryException creating TraceEngine instance", ex);
 			}
 		}
 		return this.traceEngine;
@@ -120,7 +116,7 @@ public class ATTPDPEngine implements PDPEngine, Traceable {
 			Result result	= policyDefRoot.evaluate(evaluationContext);
 			if (result.getStatus().isOk()) {
 				Collection<AttributeCategory> listRequestAttributesIncludeInResult	= evaluationContext.getRequest().getRequestAttributesIncludedInResult();
-				if (listRequestAttributesIncludeInResult != null && listRequestAttributesIncludeInResult.size() > 0) {
+				if (listRequestAttributesIncludeInResult != null && ! listRequestAttributesIncludeInResult.isEmpty()) {
 					StdMutableResult stdMutableResult	= new StdMutableResult(result);
 					stdMutableResult.addAttributeCategories(listRequestAttributesIncludeInResult);
 					result	= new StdResult(stdMutableResult);
@@ -189,10 +185,10 @@ public class ATTPDPEngine implements PDPEngine, Traceable {
 			if (bCombineResults) {
 				Decision decision	= resultIndividualDecision.getDecision();
 				Status status		= resultIndividualDecision.getStatus();
-				if (resultIndividualDecision.getAssociatedAdvice().size() > 0) {
+				if (! resultIndividualDecision.getAssociatedAdvice().isEmpty()) {
 					decision	= Decision.INDETERMINATE;
 					status		= STATUS_ADVICE_NA;
-				} else if (resultIndividualDecision.getObligations().size() > 0) {
+				} else if (! resultIndividualDecision.getObligations().isEmpty()) {
 					decision	= Decision.INDETERMINATE;
 					status		= STATUS_OBLIGATIONS_NA;
 				}

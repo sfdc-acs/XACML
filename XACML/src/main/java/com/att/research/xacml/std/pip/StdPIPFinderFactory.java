@@ -1,6 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
+ *          Copyright (c) 2013,2019-2020  AT&T Knowledge Ventures
  *                     SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.pip;
@@ -28,36 +28,28 @@ public class StdPIPFinderFactory extends PIPFinderFactory {
 	}
 
 	@Override
-	public PIPFinder getFinder() throws PIPException {
+	public synchronized PIPFinder getFinder() throws PIPException {
 		if (pipFinder == null) {
-			synchronized(this) {
-				if (pipFinder == null) {
-					pipFinder					= new ConfigurableEngineFinder();
-					Properties xacmlProperties	= null;
-					try {
-						xacmlProperties	= XACMLProperties.getProperties();
-					} catch (Exception ex) {
-						this.logger.error("Exception getting XACML properties: " + ex.getMessage(), ex);
-						return null;
-					}
-					if (xacmlProperties != null) {
-						((ConfigurableEngineFinder)pipFinder).configure(xacmlProperties);
-					}
-				}
+			pipFinder					= new ConfigurableEngineFinder();
+			Properties xacmlProperties	= null;
+			try {
+				xacmlProperties	= XACMLProperties.getProperties();
+			} catch (Exception ex) {
+				this.logger.error("Exception getting XACML properties: " + ex.getMessage(), ex);
+				return null;
+			}
+			if (xacmlProperties != null) {
+				((ConfigurableEngineFinder)pipFinder).configure(xacmlProperties);
 			}
 		}
 		return pipFinder;
 	}
 
 	@Override
-	public PIPFinder getFinder(Properties properties) throws PIPException {
+	public synchronized PIPFinder getFinder(Properties properties) throws PIPException {
 		if (pipFinder == null) {
-			synchronized(this) {
-				if (pipFinder == null) {
-					pipFinder					= new ConfigurableEngineFinder();
-					((ConfigurableEngineFinder)pipFinder).configure(properties);
-				}
-			}
+			pipFinder					= new ConfigurableEngineFinder();
+			((ConfigurableEngineFinder)pipFinder).configure(properties);
 		}
 		return this.pipFinder;
 	}
