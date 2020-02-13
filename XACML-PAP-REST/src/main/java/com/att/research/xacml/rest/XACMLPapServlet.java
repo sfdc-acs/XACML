@@ -22,6 +22,8 @@ import com.att.research.xacml.util.XACMLProperties;
 import com.google.common.base.Splitter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -401,7 +403,11 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 					Set<PDPGroup> groups = papEngine.getPDPGroups();
 					
 					// convert response object to JSON and include in the response
-					gson.toJson(groups, PDPGroup.class, response.getWriter());
+					try {
+                        gson.toJson(groups, PDPGroup.class, response.getWriter());
+                    } catch (JsonIOException | IOException e) {
+                        logger.error(e.getLocalizedMessage(), e);
+                    }
 					response.setHeader("content-type", "application/json");
 					response.setStatus(HttpServletResponse.SC_OK);
 					return;
@@ -610,7 +616,11 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 					PDPGroup group = papEngine.getDefaultGroup();
 					
 					// convert response object to JSON and include in the response
-					gson.toJson(group, PDPGroup.class, response.getWriter());
+					try {
+    					gson.toJson(group, PDPGroup.class, response.getWriter());
+                    } catch (JsonIOException | IOException e) {
+                        logger.error(e.getLocalizedMessage(), e);
+                    }
 		            
 					if (logger.isDebugEnabled()) {
 						logger.debug("GET Default group req from '{}'", request.getRequestURL());
@@ -628,7 +638,11 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 						PDP pdp = papEngine.getPDP(pdpId);
 						
 						// convert response object to JSON and include in the response
-	                    gson.toJson(pdp, PDP.class, response.getWriter());
+						try {
+    	                    gson.toJson(pdp, PDP.class, response.getWriter());
+    	                } catch (JsonIOException | IOException e) {
+    	                    logger.error(e.getLocalizedMessage(), e);
+    	                }
 			            
 						if (logger.isDebugEnabled()) {
 							logger.debug("GET pdp '{}' req from '{}'", pdpId, request.getRequestURL());
@@ -644,7 +658,11 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 						PDPGroup group = papEngine.getPDPGroup(pdp);
 						
 						// convert response object to JSON and include in the response
-	                    gson.toJson(group, PDPGroup.class, response.getWriter());
+						try {
+    	                    gson.toJson(group, PDPGroup.class, response.getWriter());
+    	                } catch (JsonIOException | IOException e) {
+    	                    logger.error(e.getLocalizedMessage(), e);
+    	                }
 			            
 						if (logger.isDebugEnabled()) {
 							logger.debug("GET PDP '{}' Group req from '{}'", pdpId, request.getRequestURL());
@@ -660,7 +678,11 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 					Set<PDPGroup> groups = papEngine.getPDPGroups();
 					
 					// convert response object to JSON and include in the response
-                    gson.toJson(groups, PDPGroup.class, response.getWriter());
+					try {
+                        gson.toJson(groups, PDPGroup.class, response.getWriter());
+                    } catch (JsonIOException | IOException e) {
+                        logger.error(e.getLocalizedMessage(), e);
+                    }
 					
 //TODO
 // In "notification" section, ALSO need to tell AC about other changes (made by other ACs)?'
@@ -706,7 +728,11 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 				// No other parameters, so return the identified Group
 				
 				// convert response object to JSON and include in the response
-                gson.toJson(group, PDPGroup.class, response.getWriter());
+			    try {
+			        gson.toJson(group, PDPGroup.class, response.getWriter());
+                } catch (JsonIOException | IOException e) {
+                    logger.error(e.getLocalizedMessage(), e);
+                }
 	            
 	            if (logger.isDebugEnabled()) {
 	            	logger.debug("GET group '{}' req from '{}'", group.getId(), request.getRequestURL());
@@ -902,7 +928,12 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
     		    logger.info("JSON request from AC: {}", json);
             	
             	// convert Object sent as JSON into local object
-                Object objectFromJSON = gson.fromJson(json, StdPDP.class);
+                Object objectFromJSON = null;
+                try {
+                    objectFromJSON = gson.fromJson(json, StdPDP.class);
+                } catch (JsonSyntaxException e) {
+                    logger.error(e.getLocalizedMessage(), e);
+                }
 
 				if (pdpId == null ||
 						objectFromJSON == null ||
@@ -955,7 +986,12 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
     		    logger.info("JSON request from AC: {}", json);
             	
             	// convert Object sent as JSON into local object
-	            Object objectFromJSON  = gson.fromJson(json, StdPDPGroup.class);
+    		    Object objectFromJSON = null;
+    		    try {
+    		        objectFromJSON  = gson.fromJson(json, StdPDPGroup.class);
+                } catch (JsonSyntaxException e) {
+                    logger.error(e.getLocalizedMessage(), e);
+                }
 
 				if (objectFromJSON == null ||
 						! (objectFromJSON instanceof StdPDPGroup) ||
@@ -985,7 +1021,6 @@ public class XACMLPapServlet extends HttpServlet implements StdItemSetChangeList
 		} catch (PAPException e) {
 			logger.error("AC PUT exception: " + e, e);
 			response.sendError(500, e.getMessage());
-			return;
 		}
 	}
 	

@@ -44,6 +44,7 @@ import com.att.research.xacml.std.pap.StdPDPStatus;
 import com.att.research.xacml.util.XACMLProperties;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
 import com.google.gson.stream.JsonWriter;
 
 /**
@@ -401,8 +402,12 @@ public class XACMLPdpServlet extends HttpServlet implements Runnable {
 		} else if ("Status".equals(type)) {
 			// convert response object to JSON and include in the response
 			synchronized(pdpStatusLock) {
-			    JsonWriter writer = new JsonWriter(response.getWriter());
-			    gson.toJson(status, StdPDPStatus.class, writer);
+			    try {
+                    JsonWriter writer = new JsonWriter(response.getWriter());
+                    gson.toJson(status, StdPDPStatus.class, writer);
+                } catch (JsonIOException | IOException e) {
+                    logger.error("Json exception {}", e.getLocalizedMessage(), e);
+                }
 			}
             response.setStatus(HttpServletResponse.SC_OK);
             
