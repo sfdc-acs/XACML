@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.pip.engines;
 
@@ -35,7 +34,7 @@ import com.att.research.xacml.std.pip.StdSinglePIPResponse;
  */
 public class EnvironmentEngine implements PIPEngine {
 	private Date contextTime;
-	
+    private boolean shutdown = false;
 	private StdSinglePIPResponse responseTime;
 	private StdSinglePIPResponse responseDate;
 	private StdSinglePIPResponse responseDateTime;
@@ -109,6 +108,9 @@ public class EnvironmentEngine implements PIPEngine {
 
 	@Override
 	public PIPResponse getAttributes(PIPRequest pipRequest, PIPFinder pipFinder) throws PIPException {
+        if (shutdown) {
+            throw new PIPException("Engine is shutdown");
+        }
 		/*
 		 * Make sure this is a request for an environment attribute and no issuer has been set
 		 */
@@ -147,5 +149,10 @@ public class EnvironmentEngine implements PIPEngine {
 			return StdPIPResponse.PIP_RESPONSE_EMPTY;
 		}
 	}
+
+    @Override
+    public void shutdown() {
+        this.shutdown = true;
+    }
 
 }

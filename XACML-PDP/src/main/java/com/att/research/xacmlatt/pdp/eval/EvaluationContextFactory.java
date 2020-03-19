@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 package com.att.research.xacmlatt.pdp.eval;
 
@@ -71,4 +70,8 @@ public abstract class EvaluationContextFactory {
 	 */
 	public abstract void setPIPFinder(PIPFinder pipFinder);
 
+    /**
+     * Allows the context factory to shutdown and release handles.
+     */
+    public abstract void shutdown();
 }

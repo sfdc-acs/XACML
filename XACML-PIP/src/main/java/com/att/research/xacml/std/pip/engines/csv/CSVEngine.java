@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2014,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2014,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.pip.engines.csv;
 
@@ -60,6 +59,7 @@ public class CSVEngine extends StdConfigurableEngine {
 	public static final String PROP_RESOLVER		= "resolver";
 
 	private static DataTypeFactory dataTypeFactory		= null;
+    private boolean shutdown = true;
 	
 	static {
 		try {
@@ -90,9 +90,10 @@ public class CSVEngine extends StdConfigurableEngine {
 	//
 	// Our list of resolvers
 	//
-	private List<CSVResolver> csvResolvers = new ArrayList<CSVResolver>();
+    private List<CSVResolver> csvResolvers = new ArrayList<>();
 	
 	public CSVEngine() {
+        super();
 	}
 	
 	/**
@@ -136,7 +137,8 @@ public class CSVEngine extends StdConfigurableEngine {
 		}
 		if (csvSourceFile.length() > this.maximumSize) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("File size is greater than max allowed (" + this.maximumSize + "): " + csvSourceFile.length());
+                logger.debug("File size is greater than max allowed ({}): {}", this.maximumSize,
+                        csvSourceFile.length());
 			}
 			fileIsBig = true;
 		}
@@ -190,7 +192,7 @@ public class CSVEngine extends StdConfigurableEngine {
 		String propResolverPrefix	= id + "." + PROP_RESOLVERS;
 		String stringProp = properties.getProperty(propResolverPrefix);
 		if (stringProp == null || stringProp.isEmpty()) {
-			this.logger.error("No '" + propResolverPrefix + "' property");
+            this.logger.error("No '{}' property", propResolverPrefix);
 			throw new PIPException("No '" + propResolverPrefix + "' property");
 		}
 		//
@@ -206,7 +208,7 @@ public class CSVEngine extends StdConfigurableEngine {
 			try (CSVReader csvReader = new CSVReader(new FileReader(csvSourceFile), csvDelimiter, csvQuote, csvSkip)) {
 				this.allLines = csvReader.readAll();
 				if (logger.isDebugEnabled()) {
-					logger.debug(id + ": All lines read from csv file, size="+allLines.size());
+                    logger.debug("{}: All lines read from csv file, size={}", id, allLines.size());
 				}
 			} catch (IOException e) {
 				String message = id + ": CSVReader unable to read csv.source '" + csvSourceFile.getAbsolutePath() + "': " + e;
@@ -228,13 +230,14 @@ public class CSVEngine extends StdConfigurableEngine {
 		String propPrefix	= resolverId + ".";
 		String resolverClassName	= properties.getProperty(propPrefix + PROP_CLASSNAME);
 		if (resolverClassName == null || resolverClassName.length() == 0) {
-			this.logger.error("No '" + propPrefix + PROP_CLASSNAME + "' property.");
+            this.logger.error("No '{}' property.", propPrefix + PROP_CLASSNAME);
 			throw new PIPException("No '" + propPrefix + PROP_CLASSNAME + "' property.");
 		}
 		try {
 			Class<?> resolverClass	= Class.forName(resolverClassName);
 			if (!CSVResolver.class.isAssignableFrom(resolverClass)) {
-				this.logger.error("CSVResolver class " + propPrefix + " does not implement " + CSVResolver.class.getCanonicalName());
+                this.logger.error("CSVResolver class {} does not implement {}", propPrefix,
+                        CSVResolver.class.getCanonicalName());
 				throw new PIPException("CSVResolver class " + propPrefix + " does not implement " + CSVResolver.class.getCanonicalName());
 				
 			}
@@ -258,34 +261,37 @@ public class CSVEngine extends StdConfigurableEngine {
 
 	@Override
 	public PIPResponse getAttributes(PIPRequest pipRequest, PIPFinder pipFinder) throws PIPException {
+        if (this.shutdown) {
+            throw new PIPException("Engine is shutdown.");
+        }
 		//
 		// Do we have any resolvers defined?
 		//
-		if (this.csvResolvers.size() == 0) {
+        if (this.csvResolvers.isEmpty()) {
 			throw new IllegalStateException(this.getClass().getCanonicalName() + " is not configured");
 		}
 		//
 		// Do any of our resolvers support this?
 		//
-		List<CSVResolver> resolvers = new ArrayList<CSVResolver>();
+        List<CSVResolver> resolvers = new ArrayList<>();
 		for (CSVResolver resolver : this.csvResolvers) {
 			if (resolver.supportRequest(pipRequest)) {
 				resolvers.add(resolver);
 			}
 		}
-		if (resolvers.size() == 0) {
+        if (resolvers.isEmpty()) {
 			if (this.logger.isDebugEnabled()) {
-				this.logger.debug("does not support this pip request: " + pipRequest);
+                this.logger.debug("does not support this pip request: {}", pipRequest);
 			}
 			return StdPIPResponse.PIP_RESPONSE_EMPTY;
 		}
 		if (this.logger.isDebugEnabled()) {
-			this.logger.debug("supports this pip request: " + pipRequest);
+            this.logger.debug("supports this pip request: {}", pipRequest);
 		}
 		//
 		// We have at least one, have the resolvers prepare themselves.
 		//
-		List<Map<Integer, List<AttributeValue<?>>>> listParameters = new ArrayList<Map<Integer, List<AttributeValue<?>>>>();
+        List<Map<Integer, List<AttributeValue<?>>>> listParameters = new ArrayList<>();
 		for (CSVResolver resolver : resolvers) {
 			Map<Integer, List<AttributeValue<?>>> map = resolver.getColumnParameterValues(this, pipRequest, pipFinder);
 			//
@@ -338,7 +344,7 @@ public class CSVEngine extends StdConfigurableEngine {
 				//
 				// Does the line match?
 				//
-				if (this.doesLineMatch(line, listParameters) == false) {
+                if (!this.doesLineMatch(line, listParameters)) {
 					continue;
 				}
 				//
@@ -348,7 +354,7 @@ public class CSVEngine extends StdConfigurableEngine {
 					List<Attribute> attributes = resolver.decodeResult(line);
 					if (attributes != null && attributes.size() > 0) {
 						if (this.logger.isDebugEnabled()) {
-							this.logger.debug("resolver returned " + attributes.size() + " attributes");
+                            this.logger.debug("resolver returned {} attributes", attributes.size());
 						}
 						mutablePIPResponse.addAttributes(attributes);
 					}
@@ -358,7 +364,7 @@ public class CSVEngine extends StdConfigurableEngine {
 			// Done reading the file
 			//
 			if (this.logger.isDebugEnabled()) {
-				this.logger.debug("Returning " + mutablePIPResponse.getAttributes().size() + " attributes");
+                this.logger.debug("Returning {} attributes", mutablePIPResponse.getAttributes().size());
 				for (Attribute attribute : mutablePIPResponse.getAttributes()) {
 					this.logger.debug(System.lineSeparator() + AttributeUtils.prettyPrint(attribute));
 				}
@@ -373,7 +379,7 @@ public class CSVEngine extends StdConfigurableEngine {
 				try {
 					csvReader.close();
 				} catch (IOException e) {
-					this.logger.error("Close CSV Reader: " + e.getLocalizedMessage());
+                    this.logger.error("Close CSV Reader: {}", e.getLocalizedMessage());
 				}
 			}
 		}
@@ -425,12 +431,7 @@ public class CSVEngine extends StdConfigurableEngine {
 				//
 				// Did a match happen?
 				//
-				if (foundMatch == false) {
-					/*
-					if (this.logger.isDebugEnabled()) {
-						this.logger.debug("Failed to find value for column " + column);
-					}
-					*/
+                if (!foundMatch) {
 					return false;
 				}
 			}
@@ -444,7 +445,7 @@ public class CSVEngine extends StdConfigurableEngine {
 
 	@Override
 	public Collection<PIPRequest> attributesRequired() {
-		Set<PIPRequest> requiredAttributes = new HashSet<PIPRequest>();
+        Set<PIPRequest> requiredAttributes = new HashSet<>();
 		for (CSVResolver resolver : this.csvResolvers) {
 			resolver.attributesRequired(requiredAttributes);
 		}
@@ -453,11 +454,16 @@ public class CSVEngine extends StdConfigurableEngine {
 
 	@Override
 	public Collection<PIPRequest> attributesProvided() {
-		Set<PIPRequest> attributes = new HashSet<PIPRequest>();
+        Set<PIPRequest> attributes = new HashSet<>();
 		for (CSVResolver resolver : this.csvResolvers) {
 			resolver.attributesProvided(attributes);
 		}
 		return attributes;
 	}
+
+    @Override
+    public void shutdown() {
+        this.shutdown = true;
+    }
 
 }

@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 
 package com.att.research.xacml.api.pdp;
@@ -30,10 +29,18 @@ public interface PDPEngine {
 	public Response decide(Request pepRequest) throws PDPException;
 	
 	/**
-	 * Gets the <code>Collection</code> of <code>URI</code>s that represent the profiles supported by this <code>PDPEngine</code>.
-	 * 
-	 * @return an <code>Collection</code> over the <code>URI</code>s that represent the profiles supported by this <code>PDPEngine</code>.
-	 */
+     * Allows the PDP to shutdown all its factories and release any open handles. Do not call decide()
+     * after a shutdown call, it will throw a PDP Exception.
+     */
+    public void shutdown();
+
+    /**
+     * Gets the <code>Collection</code> of <code>URI</code>s that represent the profiles supported by
+     * this <code>PDPEngine</code>.
+     * 
+     * @return an <code>Collection</code> over the <code>URI</code>s that represent the profiles
+     *         supported by this <code>PDPEngine</code>.
+     */
 	public Collection<URI> getProfiles();
 	
 	/**

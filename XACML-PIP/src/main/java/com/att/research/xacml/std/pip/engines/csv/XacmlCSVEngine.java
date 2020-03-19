@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 
 package com.att.research.xacml.std.pip.engines.csv;
@@ -12,7 +11,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -60,6 +58,7 @@ public class XacmlCSVEngine implements ConfigurableEngine {
 	private Map<String,PIPResponse> cache	= new HashMap<String,PIPResponse>();
 	private List<Attribute> listAttributes	= new ArrayList<Attribute>();
 	private DataTypeFactory dataTypeFactory;
+    private boolean shutdown = false;
 	
 	protected DataTypeFactory getDataTypeFactory() throws FactoryException {
 		if (this.dataTypeFactory == null) {
@@ -107,10 +106,10 @@ public class XacmlCSVEngine implements ConfigurableEngine {
 	}
 	
 	public XacmlCSVEngine() {
-		
+        super();
 	}
 	
-	public void loadAttributes(File fileAttributes) throws IOException, ParseException, FactoryException {
+    public void loadAttributes(File fileAttributes) throws IOException, FactoryException {
 		if (fileAttributes != null) {
 			if (!fileAttributes.exists()) {
 				throw new FileNotFoundException("Attributes file " + fileAttributes.getAbsolutePath() + " not found.");
@@ -124,7 +123,7 @@ public class XacmlCSVEngine implements ConfigurableEngine {
 					if (line.length() > 0) {
 						String[] fields	= line.split("[|]",-1);
 						if (fields.length < 4) {
-							logger.warn("Not enough fields in record \"" + line + "\"");
+                            logger.warn("Not enough fields in record {}", line);
 							continue;
 						}
 						this.store(fields);
@@ -151,6 +150,9 @@ public class XacmlCSVEngine implements ConfigurableEngine {
 
 	@Override
 	public PIPResponse getAttributes(PIPRequest pipRequest, PIPFinder pipFinder) throws PIPException {
+        if (this.shutdown) {
+            throw new PIPException("Engine is shutdown.");
+        }
 		String pipRequestKey	= generateKey(pipRequest);
 		PIPResponse pipResponse	= this.cache.get(pipRequestKey);
 		if (pipResponse == null) {
@@ -221,5 +223,10 @@ public class XacmlCSVEngine implements ConfigurableEngine {
 		//
 		return Collections.emptyList();
 	}
+
+    @Override
+    public void shutdown() {
+        this.shutdown = true;
+    }
 
 }

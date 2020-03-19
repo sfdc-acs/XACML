@@ -660,6 +660,9 @@ newEngine = XACMLPdpLoader.loadEngine(newStatus, request.policyProperties, reque
 //				PDPEngine newEngine = XACMLPdpLoader.loadEngine(newStatus, request.policyProperties, request.pipConfigProperties);
 				if (newEngine != null) {
 					synchronized(XACMLPdpServlet.pdpEngineLock) {
+                        if (this.pdpEngine != null) {
+                            this.pdpEngine.shutdown();
+                        }
 						this.pdpEngine = newEngine;
 						try {
 							logger.info("Saving configuration.");

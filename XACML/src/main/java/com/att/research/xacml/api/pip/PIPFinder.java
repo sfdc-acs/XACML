@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.api.pip;
 
@@ -66,5 +65,15 @@ public interface PIPFinder {
 	 */
 	public PIPResponse getMatchingAttributes(PIPRequest pipRequest, PIPEngine exclude, PIPFinder pipFinderParent) throws PIPException;
 	
+    /**
+     * Returns a list of PIP Engines.
+     * 
+     * @return Collection of PIPEngine
+     */
 	public Collection<PIPEngine>	getPIPEngines();
+
+    /**
+     * The PIPFinder should shutdown any created PIP engines and not allow any more to be created.
+     */
+    public void shutdown();
 }

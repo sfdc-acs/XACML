@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.pip.engines;
 
@@ -37,6 +36,7 @@ import com.att.research.xacml.std.pip.StdPIPResponse;
  */
 public class RequestEngine implements PIPEngine {
 	private Request request;
+    private boolean shutdown = false;
 	
 	protected Request getRequest() {
 		return this.request;
@@ -63,6 +63,9 @@ public class RequestEngine implements PIPEngine {
 
 	@Override
 	public PIPResponse getAttributes(PIPRequest pipRequest, PIPFinder pipFinder) throws PIPException {
+        if (shutdown) {
+            throw new PIPException("Engine is shutdown");
+        }
 		Request thisRequest	= this.getRequest();
 		if (thisRequest == null) {
 			return StdPIPResponse.PIP_RESPONSE_EMPTY;
@@ -80,7 +83,8 @@ public class RequestEngine implements PIPEngine {
 			Iterator<Attribute> iterAttributes	= requestAttributes.getAttributes(pipRequest.getAttributeId());
 			while (iterAttributes.hasNext()) {
 				Attribute attribute	= iterAttributes.next();
-				if (attribute.getValues().size() > 0 && (pipRequest.getIssuer() == null || pipRequest.getIssuer().equals(attribute.getIssuer()))) {
+                if (!attribute.getValues().isEmpty()
+                        && (pipRequest.getIssuer() == null || pipRequest.getIssuer().equals(attribute.getIssuer()))) {
 					/*
 					 * If all of the attribute values in the given Attribute match the requested data type, we can just return
 					 * the whole Attribute as part of the response.
@@ -107,7 +111,7 @@ public class RequestEngine implements PIPEngine {
 						for (AttributeValue<?> attributeValue: attribute.getValues()) {
 							if (pipRequest.getDataTypeId().equals(attributeValue.getDataTypeId())) {
 								if (listAttributeValues == null) {
-									listAttributeValues	= new ArrayList<AttributeValue<?>>();
+                                    listAttributeValues = new ArrayList<>();
 								}
 								listAttributeValues.add(attributeValue);
 							}
@@ -137,10 +141,10 @@ public class RequestEngine implements PIPEngine {
 
 	@Override
 	public Collection<PIPRequest> attributesProvided() {
-		Set<PIPRequest> providedAttributes = new HashSet<PIPRequest>();
+        Set<PIPRequest> providedAttributes = new HashSet<>();
 		for (RequestAttributes attributes : this.request.getRequestAttributes()) {
 			for (Attribute attribute : attributes.getAttributes()) {
-				Set<Identifier> datatypes = new HashSet<Identifier>();
+                Set<Identifier> datatypes = new HashSet<>();
 				for (AttributeValue<?> value : attribute.getValues()) {
 					datatypes.add(value.getDataTypeId());
 				}
@@ -151,5 +155,10 @@ public class RequestEngine implements PIPEngine {
 		}
 		return providedAttributes;
 	}
+
+    @Override
+    public void shutdown() {
+        this.shutdown = true;
+    }
 
 }

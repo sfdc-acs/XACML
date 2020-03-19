@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 
 package com.att.research.xacmlatt.pdp.std;
@@ -46,6 +45,7 @@ public class StdEvaluationContext implements EvaluationContext {
 	private RequestFinder requestFinder;
 	private PolicyFinder policyFinder;
 	private TraceEngine traceEngine;
+    private boolean shutdown = false;
 	
 	/**
 	 * Creates a new <code>StdEvaluationContext</code> with the given {@link com.att.research.xacml.api.Request} and
@@ -143,11 +143,17 @@ public class StdEvaluationContext implements EvaluationContext {
 
 	@Override
 	public PIPResponse getMatchingAttributes(PIPRequest pipRequest, PIPEngine exclude) throws PIPException {
+        if (this.shutdown) {
+            throw new PIPException("Engine is shutdown.");
+        }
 		return this.requestFinder.getMatchingAttributes(pipRequest, exclude);
 	}
 
 	@Override
 	public PIPResponse getMatchingAttributes(PIPRequest pipRequest, PIPEngine exclude, PIPFinder pipFinderParent) throws PIPException {
+        if (this.shutdown) {
+            throw new PIPException("Engine is shutdown.");
+        }
 		return this.requestFinder.getMatchingAttributes(pipRequest, exclude, pipFinderParent);
 	}
 
@@ -155,4 +161,11 @@ public class StdEvaluationContext implements EvaluationContext {
 	public Collection<PIPEngine> getPIPEngines() {
 		return this.requestFinder.getPIPEngines();
 	}
+
+    @Override
+    public void shutdown() {
+        this.policyFinder.shutdown();
+        this.requestFinder.shutdown();
+        this.shutdown = true;
+    }
 }

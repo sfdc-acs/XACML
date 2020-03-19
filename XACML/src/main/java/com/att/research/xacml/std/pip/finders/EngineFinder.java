@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.pip.finders;
 
@@ -32,12 +31,14 @@ import com.att.research.xacml.std.pip.StdPIPResponse;
  * @version $Revision: 1.1 $
  */
 public class EngineFinder implements PIPFinder {
-	private Map<String,List<PIPEngine>> pipEngines	= new HashMap<String,List<PIPEngine>>();
+    private Map<String, List<PIPEngine>> pipEngines = new HashMap<>();
+    private boolean shutdown = false;
 
 	/**
 	 * Creates an empty <code>EngineFinder</code>
 	 */
 	public EngineFinder() {
+        super();
 	}
 	
 	/**
@@ -46,10 +47,13 @@ public class EngineFinder implements PIPFinder {
 	 * @param pipEngine the <code>PIPEngine</code> to register
 	 */
 	public void register(PIPEngine pipEngine) {
+        if (this.shutdown) {
+            return;
+        }
 		if (pipEngine != null) {
 			List<PIPEngine> pipEnginesForName	= this.pipEngines.get(pipEngine.getName());
 			if (pipEnginesForName == null) {
-				pipEnginesForName	= new ArrayList<PIPEngine>();
+                pipEnginesForName = new ArrayList<>();
 				this.pipEngines.put(pipEngine.getName(), pipEnginesForName);
 			}
 			pipEnginesForName.add(pipEngine);
@@ -58,6 +62,9 @@ public class EngineFinder implements PIPFinder {
 	
 	@Override
 	public PIPResponse getAttributes(PIPRequest pipRequest, PIPEngine exclude, PIPFinder pipFinderParent) throws PIPException {
+        if (this.shutdown) {
+            throw new PIPException("Engine is shutdown");
+        }
 		StdMutablePIPResponse pipResponse	= new StdMutablePIPResponse();
 		Status firstErrorStatus	= null;
 		Iterator<List<PIPEngine>> iterPIPEngineLists	= this.pipEngines.values().iterator();
@@ -82,7 +89,7 @@ public class EngineFinder implements PIPFinder {
 				}
 			}
 		}
-		if (pipResponse.getAttributes().size() == 0 && firstErrorStatus != null) {
+        if (pipResponse.getAttributes().isEmpty() && firstErrorStatus != null) {
 			pipResponse.setStatus(firstErrorStatus);
 		}
 		
@@ -106,7 +113,7 @@ public class EngineFinder implements PIPFinder {
 
 	@Override
 	public Collection<PIPEngine> getPIPEngines() {
-		List<PIPEngine> engines = new ArrayList<PIPEngine>();
+        List<PIPEngine> engines = new ArrayList<>();
 		for (List<PIPEngine> list : this.pipEngines.values()) {
 			for (PIPEngine engine : list) {
 				engines.add(engine);
@@ -114,4 +121,9 @@ public class EngineFinder implements PIPFinder {
 		}
 		return Collections.unmodifiableList(engines);
 	}
+
+    @Override
+    public void shutdown() {
+        this.shutdown = true;
+    }
 }

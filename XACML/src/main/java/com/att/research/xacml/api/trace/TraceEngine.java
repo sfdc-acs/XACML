@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 
 package com.att.research.xacml.api.trace;
@@ -28,4 +27,9 @@ public interface TraceEngine {
 	 * @return true if this <code>TraceEngine</code> would perform an action on a <code>TraceEvent</code>.
 	 */
 	public boolean isTracing();
+
+    /**
+     * Shutdown the engine, release any handles.
+     */
+    public void shutdown();
 }

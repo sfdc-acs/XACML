@@ -55,4 +55,7 @@ public class NullTraceEngine implements TraceEngine {
 		return false;
 	}
 
+    @Override
+    public void shutdown() {}
+
 }

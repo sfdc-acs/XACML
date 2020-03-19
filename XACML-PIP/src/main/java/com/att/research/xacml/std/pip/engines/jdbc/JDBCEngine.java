@@ -66,7 +66,8 @@ public class JDBCEngine extends StdConfigurableEngine {
 	private boolean jdbcDriverClassLoaded;
 	private String jdbcUrl;
 	private Properties jdbcConnProperties	= new Properties();
-	private List<JDBCResolver> jdbcResolvers	= new ArrayList<JDBCResolver>();
+    private List<JDBCResolver> jdbcResolvers = new ArrayList<>();
+    private boolean shutdown = false;
 	
 	/**
 	 * If the JDBC driver <code>Class</code> has not been loaded yet, do so now.
@@ -109,7 +110,6 @@ public class JDBCEngine extends StdConfigurableEngine {
 		try {
 			this.loadDriverClass();
 		} catch (ClassNotFoundException ex) {
-			this.logger.error("ClassNotFoundException loading JDBC driver class '" + this.jdbcDriverClass + "'", ex);
 			throw new PIPException("ClassNotFoundException loading JDBC driver class '" + this.jdbcDriverClass + "'", ex);
 		}
 		
@@ -120,7 +120,6 @@ public class JDBCEngine extends StdConfigurableEngine {
 		try {
 			connectionResult	= DriverManager.getConnection(this.jdbcUrl, this.jdbcConnProperties);
 		} catch (SQLException ex) {
-			this.logger.error("SQLException creating Connection", ex);
 			throw new PIPException("SQLException creating Connection", ex);
 		}
 		
@@ -136,7 +135,6 @@ public class JDBCEngine extends StdConfigurableEngine {
 			}
 			return datasource.getConnection();
 		} catch (NamingException | SQLException e) {
-			this.logger.error("JNDIException creating Connection", e);
 			throw new PIPException("JNDIException creating Connection", e);
 		}
 	}
@@ -148,7 +146,7 @@ public class JDBCEngine extends StdConfigurableEngine {
 		Connection connection = this.getConnection();
 		PreparedStatement preparedStatement	= jdbcResolver.getPreparedStatement(this, pipRequest, pipFinder, connection);
 		if (preparedStatement == null) {
-			this.logger.debug(this.getName() + " does not handle " + pipRequest.toString());
+            this.logger.debug("{} does not handle {}", this.getName(), pipRequest.toString());
 			try {
 				if (connection != null) {
 					connection.close();
@@ -161,7 +159,7 @@ public class JDBCEngine extends StdConfigurableEngine {
 		/*
 		 * Is it in the cache?
 		 */
-		this.logger.debug(preparedStatement.toString());
+        this.logger.debug("{}", preparedStatement);
 		Cache<String, PIPResponse> cache = this.getCache();
 		if (cache != null) {
 			// TODO - a cache key
@@ -175,7 +173,6 @@ public class JDBCEngine extends StdConfigurableEngine {
 			resultSet	= preparedStatement.executeQuery();
 		} catch (SQLException ex) {
 			this.logger.error("SQLException executing query: " + ex.toString(), ex);
-			// TODO: Should we re-throw the exception, or just return an empty response?
 		}
 		if (resultSet == null) {
 			try {
@@ -208,32 +205,34 @@ public class JDBCEngine extends StdConfigurableEngine {
 				// TODO
 			}
 		} catch (SQLException ex) {
-			this.logger.error("SQLException decoding results: " + ex.toString());
-			// TODO: Should we re-throw the exception or just continue
+            this.logger.error("SQLException decoding results", ex);
 		} finally {
 			if (resultSet != null) {
 				try {
 					resultSet.close();
 				} catch (SQLException e) {
-					this.logger.error("SQLException closing resultSet: " + e.toString() + "  (May be memory leak)");
+                    this.logger.error("SQLException closing resultSet", e);
 				}
 			}
 			try {
 				preparedStatement.close();
 			} catch (SQLException e) {
-				this.logger.error("SQLException closing preparedStatement: " + e.toString() + "  (May be memory leak)");
+                this.logger.error("SQLException closing preparedStatement: ", e);
 			}
 			try {
 				connection.close();
 			} catch (SQLException e) {
-				this.logger.error("SQLException closing connection: " + e.toString() + "  (May be memory leak)");
+                this.logger.error("SQLException closing connection: (May be memory leak)", e);
 			}
 		}
 	}
 
 	@Override
 	public PIPResponse getAttributes(PIPRequest pipRequest, PIPFinder pipFinder) throws PIPException {
-		if (this.jdbcResolvers.size() == 0) {
+        if (this.shutdown) {
+            throw new PIPException("Engine is shutdown.");
+        }
+        if (this.jdbcResolvers.isEmpty()) {
 			throw new IllegalStateException(this.getClass().getCanonicalName() + " is not configured");
 		}
 		
@@ -241,20 +240,17 @@ public class JDBCEngine extends StdConfigurableEngine {
 		for (JDBCResolver jdbcResolver : this.jdbcResolvers) {
 			this.getAttributes(pipRequest, pipFinder, jdbcResolver, mutablePIPResponse);
 		}
-		if (mutablePIPResponse.getAttributes().size() == 0) {
+        if (mutablePIPResponse.getAttributes().isEmpty()) {
 			if (this.logger.isDebugEnabled()) {
 				this.logger.debug("returning empty response");
 			}
 			return StdPIPResponse.PIP_RESPONSE_EMPTY;
 		} else {
 			if (this.logger.isDebugEnabled()) {
-				this.logger.trace("Returning " + mutablePIPResponse.getAttributes().size() + " attributes");
+                this.logger.trace("Returning {} attributes", mutablePIPResponse.getAttributes().size());
 				for (Attribute attribute : mutablePIPResponse.getAttributes()) {
 					this.logger.debug(AttributeUtils.prettyPrint(attribute));
 				}
-			} else if (this.logger.isDebugEnabled()) {
-//				this.logger.debug("Returning " + mutablePIPResponse.getAttributes().size() + " attributes");
-//				this.logger.debug(mutablePIPResponse.getAttributes());
 			}
 			return new StdPIPResponse(mutablePIPResponse);
 		}
@@ -272,13 +268,14 @@ public class JDBCEngine extends StdConfigurableEngine {
 		String propPrefix	= resolverId + ".";
 		String resolverClassName	= properties.getProperty(propPrefix + PROP_CLASSNAME);
 		if (resolverClassName == null || resolverClassName.length() == 0) {
-			this.logger.error("No '" + propPrefix + PROP_CLASSNAME + "' property.");
+            this.logger.error("No {} property", propPrefix + PROP_CLASSNAME);
 			throw new PIPException("No '" + propPrefix + PROP_CLASSNAME + "' property.");
 		}
 		try {
 			Class<?> resolverClass	= Class.forName(resolverClassName);
 			if (!JDBCResolver.class.isAssignableFrom(resolverClass)) {
-				this.logger.error("JDBCResolver class " + propPrefix + " does not implement " + JDBCResolver.class.getCanonicalName());
+                this.logger.error("JDBCResolver class {} does not implement {}", propPrefix,
+                        JDBCResolver.class.getCanonicalName());
 				throw new PIPException("JDBCResolver class " + propPrefix + " does not implement " + JDBCResolver.class.getCanonicalName());
 				
 			}
@@ -286,7 +283,6 @@ public class JDBCEngine extends StdConfigurableEngine {
 			jdbcResolver.configure(resolverId, properties, this.getIssuer());
 			this.jdbcResolvers.add(jdbcResolver);
 		} catch (Exception ex) {
-			this.logger.error("Exception creating JDBCResolver: " + ex.getMessage(), ex);
 			throw new PIPException("Exception creating JDBCResolver", ex);
 		}		
 	}
@@ -309,18 +305,15 @@ public class JDBCEngine extends StdConfigurableEngine {
 		// These are mandatory for our engine to work.
 		//
 		if ((this.jdbcDriverClass = properties.getProperty(propPrefix + PROP_JDBC_DRIVER)) == null) {
-			this.logger.error("No '" + propPrefix + PROP_JDBC_DRIVER + "' property");
 			throw new PIPException("No '" + propPrefix + PROP_JDBC_DRIVER + "' property");
 		}
 		try {
 			Class.forName(this.jdbcDriverClass);
 		} catch (Exception ex) {
-			this.logger.error("Exception instantiating JDBC driver class '" + this.jdbcDriverClass + "'", ex);
 			throw new PIPException("Exception instantiating JDBC driver class '" + this.jdbcDriverClass + "'", ex);
 		}
 		
 		if ((this.jdbcUrl = properties.getProperty(propPrefix + PROP_JDBC_URL)) == null) {
-			this.logger.error("No '" + propPrefix + PROP_JDBC_URL + "' property");
 			throw new PIPException("No '" + propPrefix + PROP_JDBC_URL + "' property");
 		}
 		//
@@ -329,7 +322,6 @@ public class JDBCEngine extends StdConfigurableEngine {
 		String propResolverPrefix	= propPrefix + PROP_RESOLVERS;
 		String stringProp = properties.getProperty(propResolverPrefix);
 		if (stringProp == null || stringProp.isEmpty()) {
-			this.logger.error("No '" + propResolverPrefix + "' property");
 			throw new PIPException("No '" + propResolverPrefix + "' property");
 		}
 		for (String resolverId : Splitter.on(',').trimResults().omitEmptyStrings().split(stringProp)) {
@@ -358,7 +350,7 @@ public class JDBCEngine extends StdConfigurableEngine {
 
 	@Override
 	public Collection<PIPRequest> attributesRequired() {
-		Set<PIPRequest> attributes = new HashSet<PIPRequest>();
+        Set<PIPRequest> attributes = new HashSet<>();
 		for (JDBCResolver jdbcResolver : this.jdbcResolvers) {
 			jdbcResolver.attributesRequired(attributes);
 		}
@@ -367,10 +359,15 @@ public class JDBCEngine extends StdConfigurableEngine {
 
 	@Override
 	public Collection<PIPRequest> attributesProvided() {
-		Set<PIPRequest> attributes = new HashSet<PIPRequest>();
+        Set<PIPRequest> attributes = new HashSet<>();
 		for (JDBCResolver jdbcResolver : this.jdbcResolvers) {
 			jdbcResolver.attributesProvided(attributes);
 		}
 		return attributes;
 	}
+
+    @Override
+    public void shutdown() {
+        this.shutdown = true;
+    }
 }

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.att.research.xacml.api.Request;
+import com.att.research.xacml.api.pip.PIPEngine;
 import com.att.research.xacml.api.pip.PIPFinder;
 import com.att.research.xacml.api.pip.PIPFinderFactory;
 import com.att.research.xacml.api.trace.TraceEngine;
@@ -33,29 +34,32 @@ public class StdEvaluationContextFactory extends EvaluationContextFactory {
 	private PolicyFinder policyFinder;
 	private PIPFinder pipFinder;
 	private TraceEngine traceEngine;
+    private boolean shutdown = false;
 	
 	/**
-	 * Should this properties file be passed onward when instantiating the PolicyFinder 
-	 * and the PIPFinder?
-	 * 
-	 * If yes, then we are assuming that the given properties were not just meant to
-	 * configure the evaluation context, but all the other engines that get created.
-	 * 
-	 * If no, then we are assuming the given properties were only meant for the evaluation
-	 * context. But this implementation as of 7/14 does not even need the properties for
-	 * configuring itseof.
-	 * 
-	 * The problem is, the caller does not have the ability to instantiate the PIPFinder
-	 * and PolicyFinder engines. This is done internally by the evaluation context. So how
-	 * can they have the ability to customize PIP/Policy factories with their own properties 
-	 * object if the properties file isn't passed on?
-	 * 
-	 * Thus, this class will pass on the properties file if given in the constructor.
-	 * 
-	 */
+     * Should this properties file be passed onward when instantiating the PolicyFinder and the
+     * PIPFinder?
+     * 
+     * If yes, then we are assuming that the given properties were not just meant to configure the
+     * evaluation context, but all the other engines that get created.
+     * 
+     * If no, then we are assuming the given properties were only meant for the evaluation context. But
+     * this implementation as of 7/14 does not even need the properties for configuring itself.
+     * 
+     * The problem is, the caller does not have the ability to instantiate the PIPFinder and
+     * PolicyFinder engines. This is done internally by the evaluation context. So how can they have the
+     * ability to customize PIP/Policy factories with their own properties object if the properties file
+     * isn't passed on?
+     * 
+     * Thus, this class will pass on the properties file if given in the constructor.
+     * 
+     */
 	protected Properties properties = null;
 
 	protected synchronized PolicyFinder getPolicyFinder() {
+        if (this.shutdown) {
+            return null;
+        }
 		if (this.policyFinder == null) {
 			try {
 				if (this.properties == null) {
@@ -75,6 +79,9 @@ public class StdEvaluationContextFactory extends EvaluationContextFactory {
 	}
 	
 	protected synchronized PIPFinder getPIPFinder() {
+        if (this.shutdown) {
+            return null;
+        }
 		if (this.pipFinder == null) {
 			try {
 				if (this.properties == null) {
@@ -94,6 +101,9 @@ public class StdEvaluationContextFactory extends EvaluationContextFactory {
 	}
 	
 	protected synchronized TraceEngine getTraceEngine() {
+        if (this.shutdown) {
+            return null;
+        }
 		if (this.traceEngine == null) {
 			try {
 				if (this.properties == null) {
@@ -119,6 +129,9 @@ public class StdEvaluationContextFactory extends EvaluationContextFactory {
 
 	@Override
 	public EvaluationContext getEvaluationContext(Request request) {
+        if (this.shutdown) {
+            return null;
+        }
 		if (this.properties == null) {
 			return new StdEvaluationContext(request, this.getPolicyFinder(), this.getPIPFinder(), this.getTraceEngine());
 		} else {
@@ -135,5 +148,15 @@ public class StdEvaluationContextFactory extends EvaluationContextFactory {
 	public synchronized void setPIPFinder(PIPFinder pipFinderIn) {
 		this.pipFinder		= pipFinderIn;
 	}
+
+    @Override
+    public void shutdown() {
+        this.pipFinder.shutdown();
+        this.traceEngine.shutdown();
+        for (PIPEngine pipEngine : this.pipFinder.getPIPEngines()) {
+            pipEngine.shutdown();
+        }
+        this.shutdown = true;
+    }
 
 }

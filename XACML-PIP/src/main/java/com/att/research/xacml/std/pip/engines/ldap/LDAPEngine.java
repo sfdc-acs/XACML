@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 
 package com.att.research.xacml.std.pip.engines.ldap;
@@ -55,8 +54,9 @@ public class LDAPEngine extends StdConfigurableEngine {
 	private static final String DEFAULT_SCOPE			= LDAP_SCOPE_SUBTREE;
 
 	private Logger logger								= LoggerFactory.getLogger(this.getClass());	
-	private Hashtable<Object,Object> ldapEnvironment	= new Hashtable<Object,Object>();
-	private List<LDAPResolver> ldapResolvers 			= new ArrayList<LDAPResolver>();
+    private Hashtable<Object, Object> ldapEnvironment = new Hashtable<>();
+    private List<LDAPResolver> ldapResolvers = new ArrayList<>();
+    private boolean shutdown = false;
 	private int ldapScope;
 	
 	/*
@@ -78,6 +78,7 @@ public class LDAPEngine extends StdConfigurableEngine {
 	 */
 
 	public LDAPEngine() {
+        super();
 	}
 	
 	private boolean configureStringProperty(String propertyPrefix, String property, Properties properties, String defaultValue) {
@@ -104,7 +105,7 @@ public class LDAPEngine extends StdConfigurableEngine {
 				this.ldapEnvironment.put(property, Integer.parseInt(propertyValue));
 				return true;
 			} catch (NumberFormatException ex) {
-				this.logger.error("Invalid Integer '" + propertyValue + "' for '" + property + "' property");
+                this.logger.error("Invalid Integer {} for property {}", propertyValue, property);
 				return false;
 			}
 		}
@@ -146,7 +147,7 @@ public class LDAPEngine extends StdConfigurableEngine {
 		} else if (LDAP_SCOPE_ONELEVEL.equals(ldapScopeValue)) {
 			this.ldapScope	= SearchControls.ONELEVEL_SCOPE;
 		} else {
-			this.logger.warn("Invalid LDAP Scope value '" + ldapScopeValue + "'; using " + DEFAULT_SCOPE);
+            this.logger.warn("Invalid LDAP Scope value {}: using {}", ldapScopeValue, DEFAULT_SCOPE);
 			this.ldapScope	= SearchControls.SUBTREE_SCOPE;
 		}
 		
@@ -174,12 +175,10 @@ public class LDAPEngine extends StdConfigurableEngine {
 			try {
 				Class<?> classResolver	= Class.forName(resolverClassName);
 				if (!LDAPResolver.class.isAssignableFrom(classResolver)) {
-					this.logger.error("LDAPResolver class " + resolverClassName + " does not implement " + LDAPResolver.class.getCanonicalName());
 					throw new PIPException("LDAPResolver class " + resolverClassName + " does not implement " + LDAPResolver.class.getCanonicalName());
 				}
 				ldapResolverNew	= LDAPResolver.class.cast(classResolver.newInstance());
 			} catch (Exception ex) {
-				this.logger.error("Exception instantiating LDAPResolver for class '" + resolverClassName + "': " + ex.getMessage(), ex);
 				throw new PIPException("Exception instantiating LDAPResolver for class '" + resolverClassName + "'", ex);
 			}
 			assert(ldapResolverNew != null);
@@ -192,10 +191,13 @@ public class LDAPEngine extends StdConfigurableEngine {
 	
 	@Override
 	public PIPResponse getAttributes(PIPRequest pipRequest, PIPFinder pipFinder) throws PIPException {
+        if (this.shutdown) {
+            throw new PIPException("Engine is shutdown.");
+        }
 		/*
 		 * Make sure we have at least one resolver.
 		 */
-		if (this.ldapResolvers.size() == 0) {
+        if (this.ldapResolvers.isEmpty()) {
 			throw new IllegalStateException(this.getClass().getCanonicalName() + " is not configured");
 		}
 		
@@ -203,14 +205,14 @@ public class LDAPEngine extends StdConfigurableEngine {
 		for (LDAPResolver ldapResolver : this.ldapResolvers) {
 			this.getAttributes(pipRequest, pipFinder, mutablePIPResponse, ldapResolver);
 		}
-		if (mutablePIPResponse.getAttributes().size() == 0) {
+        if (mutablePIPResponse.getAttributes().isEmpty()) {
 			if (this.logger.isDebugEnabled()) {
 				this.logger.debug("returning empty response");
 			}
 			return StdPIPResponse.PIP_RESPONSE_EMPTY;
 		} else {
 			if (this.logger.isDebugEnabled()) {
-				this.logger.debug("Returning " + mutablePIPResponse.getAttributes().size() + " attributes");
+                this.logger.debug("Returning {}", mutablePIPResponse.getAttributes().size());
 				this.logger.debug("Attributes: {}", mutablePIPResponse.getAttributes());
 			}
 			return new StdPIPResponse(mutablePIPResponse);
@@ -223,7 +225,7 @@ public class LDAPEngine extends StdConfigurableEngine {
 		 */
 		String stringBase	= ldapResolver.getBase(this, pipRequest, pipFinder);
 		if (stringBase == null) {
-			this.logger.warn(this.getName() + " does not handle " + pipRequest.toString());
+            this.logger.warn("{} does not handle {}", this.getName(), pipRequest);
 			return;
 		}
 		
@@ -241,7 +243,7 @@ public class LDAPEngine extends StdConfigurableEngine {
 			PIPResponse pipResponse	= cache.getIfPresent(cacheKey);
 			if (pipResponse != null) {
 				if (this.logger.isDebugEnabled()) {
-					this.logger.debug("Returning cached response: " + pipResponse);
+                    this.logger.debug("Returning cached response: {}", pipResponse);
 				}
 				mutablePIPResponse.addAttributes(pipResponse.getAttributes());
 				return;
@@ -271,7 +273,7 @@ public class LDAPEngine extends StdConfigurableEngine {
 			if (namingEnumeration != null && namingEnumeration.hasMore()) {
 				while (namingEnumeration.hasMore()) {
 					List<Attribute> listAttributes	= ldapResolver.decodeResult(namingEnumeration.next());
-					if (listAttributes != null && listAttributes.size() > 0) {
+                    if (listAttributes != null && !listAttributes.isEmpty()) {
 						mutablePIPResponse.addAttributes(listAttributes);
 					}
 				}
@@ -297,7 +299,7 @@ public class LDAPEngine extends StdConfigurableEngine {
 
 	@Override
 	public Collection<PIPRequest> attributesRequired() {
-		Set<PIPRequest> requiredAttributes = new HashSet<PIPRequest>();
+        Set<PIPRequest> requiredAttributes = new HashSet<>();
 		for (LDAPResolver resolver : this.ldapResolvers) {
 			resolver.attributesRequired(requiredAttributes);
 		}
@@ -306,10 +308,15 @@ public class LDAPEngine extends StdConfigurableEngine {
 
 	@Override
 	public Collection<PIPRequest> attributesProvided() {
-		Set<PIPRequest> providedAttributes = new HashSet<PIPRequest>();
+        Set<PIPRequest> providedAttributes = new HashSet<>();
 		for (LDAPResolver resolver : this.ldapResolvers) {
 			resolver.attributesProvided(providedAttributes);
 		}
 		return providedAttributes;
 	}
+
+    @Override
+    public void shutdown() {
+        this.shutdown = true;
+    }
 }

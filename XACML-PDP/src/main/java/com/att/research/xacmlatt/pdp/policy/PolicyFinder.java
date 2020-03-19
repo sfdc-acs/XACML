@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 package com.att.research.xacmlatt.pdp.policy;
 
@@ -43,4 +42,8 @@ public interface PolicyFinder {
 	 */
 	public PolicyFinderResult<PolicySet> getPolicySet(IdReferenceMatch idReferenceMatch);
 
+    /**
+     * Shutdown the polcy finder to release handles.
+     */
+    public void shutdown();
 }

@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.api.pip;
 
@@ -54,4 +53,10 @@ public interface PIPEngine {
 	 * @throws PIPException if there is an error retrieving the <code>Attribute</code>s.
 	 */
 	public PIPResponse getAttributes(PIPRequest pipRequest, PIPFinder pipFinder) throws PIPException;
+
+    /**
+     * Allows the PIP engine to shutdown and release handles etc. Any call to retrieve getAttributes
+     * should result in a PIPException being thrown.
+     */
+    public void shutdown();
 }

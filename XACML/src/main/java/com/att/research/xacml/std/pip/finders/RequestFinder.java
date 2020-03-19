@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 package com.att.research.xacml.std.pip.finders;
 
@@ -36,7 +35,8 @@ import com.att.research.xacml.std.pip.engines.RequestEngine;
 public class RequestFinder extends WrappingFinder {
 	private RequestEngine requestEngine;
 	private EnvironmentEngine environmentEngine;
-	private Map<PIPRequest, PIPResponse>	mapCache	= new HashMap<PIPRequest,PIPResponse>();
+    private Map<PIPRequest, PIPResponse> mapCache = new HashMap<>();
+    private boolean shutdown = false;
 	
 	protected RequestEngine getRequestEngine() {
 		return this.requestEngine;
@@ -67,7 +67,7 @@ public class RequestFinder extends WrappingFinder {
 				 * We know how the RequestEngine works.  It does not return multiple results
 				 * and all of the results should match the request.
 				 */
-				if (pipResponse.getAttributes().size() > 0) {
+                if (!pipResponse.getAttributes().isEmpty()) {
 					return pipResponse;
 				}
 			} else {
@@ -86,7 +86,7 @@ public class RequestFinder extends WrappingFinder {
 				 * We know how the EnvironmentEngine works.  It does not return multiple results
 				 * and all of the results should match the request.
 				 */
-				if (pipResponse.getAttributes().size() > 0) {
+                if (!pipResponse.getAttributes().isEmpty()) {
 					return pipResponse;
 				}
 			} else {
@@ -111,7 +111,7 @@ public class RequestFinder extends WrappingFinder {
 			pipResponse	= thisWrappedFinder.getAttributes(pipRequest, exclude, (pipFinderRoot == null ? this : pipFinderRoot));
 			if (pipResponse != null) {
 				if (pipResponse.getStatus() == null || pipResponse.getStatus().isOk()) {
-					if (pipResponse.getAttributes().size() > 0) {
+                    if (!pipResponse.getAttributes().isEmpty()) {
 						/*
 						 * Cache all of the returned attributes
 						 */
@@ -143,7 +143,10 @@ public class RequestFinder extends WrappingFinder {
 
 	@Override
 	public Collection<PIPEngine> getPIPEngines() {
-		List<PIPEngine>	engines = new ArrayList<PIPEngine>();
+        if (this.shutdown) {
+            return Collections.emptyList();
+        }
+        List<PIPEngine> engines = new ArrayList<>();
 		if (this.requestEngine != null) {
 			engines.add(this.requestEngine);
 		}
@@ -156,4 +159,11 @@ public class RequestFinder extends WrappingFinder {
 		}
 		return Collections.unmodifiableList(engines);
 	}
+
+    @Override
+    public void shutdown() {
+        this.requestEngine.shutdown();
+        this.environmentEngine.shutdown();
+        this.shutdown = true;
+    }
 }

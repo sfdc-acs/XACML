@@ -72,4 +72,11 @@ public class LoggingTraceEngine implements TraceEngine {
 		return this.logger.isDebugEnabled();
 	}
 
+    @Override
+    public void shutdown() {
+        //
+        // Nothing really to shutdown
+        //
+    }
+
 }

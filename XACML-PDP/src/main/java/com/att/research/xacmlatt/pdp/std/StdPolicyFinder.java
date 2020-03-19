@@ -1,7 +1,6 @@
 /*
  *
- *          Copyright (c) 2013,2019  AT&T Knowledge Ventures
- *                     SPDX-License-Identifier: MIT
+ * Copyright (c) 2013,2019-2020 AT&T Knowledge Ventures SPDX-License-Identifier: MIT
  */
 
 package com.att.research.xacmlatt.pdp.std;
@@ -55,7 +54,8 @@ public class StdPolicyFinder implements PolicyFinder {
 
 	private final Logger logger	= LoggerFactory.getLogger(this.getClass());
 	private List<PolicyDef> listRoots					= new ArrayList<>();
-	private Map<Identifier,List<PolicyDef>> mapPolicies	= new HashMap<Identifier,List<PolicyDef>>();
+    private Map<Identifier, List<PolicyDef>> mapPolicies = new HashMap<>();
+    private boolean shutdown = false;
 	
 	public static class StdPolicyFinderException extends Exception {
 		private static final long serialVersionUID = -8969282995787463288L;
@@ -304,6 +304,9 @@ public class StdPolicyFinder implements PolicyFinder {
 
 	@Override
 	public PolicyFinderResult<PolicyDef> getRootPolicyDef(EvaluationContext evaluationContext) {
+        if (this.shutdown) {
+            return null;
+        }
 		logger.debug("getRootPolicyDef called");
 		PolicyDef policyDefFirstMatch			= null;
 		Iterator<PolicyDef> iterRootPolicies	= this.listRoots.iterator();
@@ -350,12 +353,18 @@ public class StdPolicyFinder implements PolicyFinder {
 
 	@Override
 	public PolicyFinderResult<Policy> getPolicy(IdReferenceMatch idReferenceMatch) {
+        if (this.shutdown) {
+            return null;
+        }
 		logger.debug("getPolicy {}", idReferenceMatch.getId());
 		return this.lookupPolicyByIdentifier(idReferenceMatch);
 	}
 
 	@Override
 	public PolicyFinderResult<PolicySet> getPolicySet(IdReferenceMatch idReferenceMatch) {
+        if (this.shutdown) {
+            return null;
+        }
 		logger.debug("getPolicySet {}", idReferenceMatch.getId());
 		return this.lookupPolicySetByIdentifier(idReferenceMatch);
 	}
@@ -364,4 +373,9 @@ public class StdPolicyFinder implements PolicyFinder {
 		logger.debug("addReferencedPolicy {}", policyDef.getIdentifier());
 		this.updatePolicyMap(policyDef);
 	}
+
+    @Override
+    public void shutdown() {
+        this.shutdown = true;
+    }
 }

@@ -63,6 +63,7 @@ public class ATTPDPEngine implements PDPEngine, Traceable {
 		PROFILES.add(XACML3.ID_PROFILE_MULTIPLE_XPATH_EXPRESSION.getUri());
 	}
 	
+    private boolean isShutdown = false;
 	private EvaluationContextFactory evaluationContextFactory;
 	private Decision defaultDecision				= Decision.INDETERMINATE;
 	private ScopeResolver scopeResolver;
@@ -129,7 +130,13 @@ public class ATTPDPEngine implements PDPEngine, Traceable {
 	}
 	
 	@Override
-	public Response decide(Request pepRequest) throws PDPException {
+    public synchronized Response decide(Request pepRequest) throws PDPException {
+        /*
+         * If we are shutdown, they should not call this method anymore
+         */
+        if (this.isShutdown) {
+            throw new PDPException("Engine is shutdown.");
+        }
 		/*
 		 * Validate the request
 		 */
@@ -217,6 +224,11 @@ public class ATTPDPEngine implements PDPEngine, Traceable {
 		}
 		return stdResponse;
 	}
+
+    @Override
+    public synchronized void shutdown() {
+
+    }
 
 	@Override
 	public Collection<URI> getProfiles() {

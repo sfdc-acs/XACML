@@ -225,4 +225,9 @@ public class ConformancePIPEngine implements ConfigurableEngine {
 		return Collections.emptyList();
 	}
 
+    @Override
+    public void shutdown() {
+
+    }
+
 }
