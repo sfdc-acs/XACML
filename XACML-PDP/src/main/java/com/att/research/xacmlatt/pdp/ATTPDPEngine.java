@@ -227,7 +227,7 @@ public class ATTPDPEngine implements PDPEngine, Traceable {
 
     @Override
     public synchronized void shutdown() {
-
+        this.evaluationContextFactory.shutdown();
     }
 
 	@Override

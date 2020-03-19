@@ -151,10 +151,14 @@ public class StdEvaluationContextFactory extends EvaluationContextFactory {
 
     @Override
     public void shutdown() {
-        this.pipFinder.shutdown();
-        this.traceEngine.shutdown();
-        for (PIPEngine pipEngine : this.pipFinder.getPIPEngines()) {
-            pipEngine.shutdown();
+        if (this.pipFinder != null) {
+            this.pipFinder.shutdown();
+            for (PIPEngine pipEngine : this.pipFinder.getPIPEngines()) {
+                pipEngine.shutdown();
+            }
+        }
+        if (this.traceEngine != null) {
+            this.traceEngine.shutdown();
         }
         this.shutdown = true;
     }
