@@ -62,6 +62,7 @@ public class GsonJsonRequest implements Serializable {
 		parseCategory(xacmlRequest, this.request.getIntermediarySubject());
 		parseCategory(xacmlRequest, this.request.getCodeBase());
 		parseCategory(xacmlRequest, this.request.getRequestingMachine());
+		parseCategory(xacmlRequest, this.request.getCategory());
 		//
 		// Check if there is multi request references
 		//
@@ -126,6 +127,10 @@ public class GsonJsonRequest implements Serializable {
 		this.setCategoryId(GsonJsonCategory.getCategory("IntermediarySubject"), this.request.getIntermediarySubject());
 		this.setCategoryId(GsonJsonCategory.getCategory("Codebase"), this.request.getCodeBase());
 		this.setCategoryId(GsonJsonCategory.getCategory("RequestingMachine"), this.request.getRequestingMachine());
+
+		if (this.request.getCategory() != null) {
+			this.request.getCategory().forEach(GsonJsonCategory::postProcess);
+		}
 		
 		this.isPostProcessed = true;
 	}

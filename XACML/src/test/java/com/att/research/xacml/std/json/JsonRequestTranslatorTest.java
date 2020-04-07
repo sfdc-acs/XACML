@@ -51,10 +51,19 @@ public class JsonRequestTranslatorTest {
 	
 	@Test
 	public void test81() throws Exception {
+		test81("src/test/resources/Request-8.1.json");
+	}
+
+	@Test
+	public void test81urn() throws Exception {
+		test81("src/test/resources/Request-8.1-urn.json");
+	}
+
+	private void test81(String filename) throws Exception {
 		//
 		// Read it from the file
 		//
-		Request request = JsonRequestTranslator.load(new File("src/test/resources/Request-8.1.json"));
+		Request request = JsonRequestTranslator.load(new File(filename));
 		validate81Request(request);
 
 		//
