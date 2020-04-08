@@ -55,7 +55,6 @@
 					<artifactId>maven-war-plugin</artifactId>
 					<configuration>
 						<failOnMissingWebXml>false</failOnMissingWebXml>
-						<attachClasses>true</attachClasses>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -101,6 +100,22 @@
 								<descriptor>src/assembly/assembly.xml</descriptor>
 							</descriptors>
 							<finalName>${project.artifactId}-${project.version}</finalName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<includes>**/*.class</includes>
+							<classifier>classes</classifier>
 						</configuration>
 					</execution>
 				</executions>
