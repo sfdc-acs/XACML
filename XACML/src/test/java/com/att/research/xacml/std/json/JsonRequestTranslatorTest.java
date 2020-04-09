@@ -16,6 +16,8 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+
+import com.google.common.collect.Iterators;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -575,40 +577,53 @@ public class JsonRequestTranslatorTest {
 		
         // @formatter:on
     }
+
+    @Test
+	public void testMulti() throws Exception {
+		Request request = JsonRequestTranslator.load(new File("src/test/resources/Request-Multi.json"));
+		validateMulti(request);
+	}
+
+	private void validateMulti( Request request) throws Exception {
+		assertThat(Iterators.size(request.getRequestAttributes(XACML1.ID_SUBJECT_CATEGORY_ACCESS_SUBJECT))).isEqualTo(2);
+		assertThat(Iterators.size(request.getRequestAttributes(XACML3.ID_ATTRIBUTE_CATEGORY_RESOURCE))).isEqualTo(2);
+		assertThat(Iterators.size(request.getRequestAttributes(XACML3.ID_ATTRIBUTE_CATEGORY_ACTION))).isEqualTo(1);
+		assertThat(Iterators.size(request.getRequestAttributes(new IdentifierImpl("urn:custom:category")))).isEqualTo(1);
+	}
     
-   private <T> boolean hasAttribute(Request request, Identifier categoryId, Identifier attributeId, 
-		   String issuer, boolean includeInResults, Collection<AttributeValue<T>> expectedValues) {
-	   logger.info("Searching for attribute {} in category {}", attributeId, categoryId);
+    private <T> boolean hasAttribute(Request request, Identifier categoryId, Identifier attributeId,
+		    String issuer, boolean includeInResults, Collection<AttributeValue<T>> expectedValues) {
+	    logger.info("Searching for attribute {} in category {}", attributeId, categoryId);
 
-	   Iterator<RequestAttributes> iterAttributes = request.getRequestAttributes(categoryId);
-	   while (iterAttributes.hasNext()) {
-		   RequestAttributes requestAttributes = iterAttributes.next();
-		   Iterator<Attribute> iterAttribute = requestAttributes.getAttributes(attributeId);
-		   while (iterAttribute.hasNext()) {
-			   Attribute attribute = iterAttribute.next();
-			   assertThat(attribute.getCategory()).isEqualTo(categoryId);
-			   assertThat(attribute.getAttributeId()).isEqualTo(attributeId);
-			   if (attribute.getValues().containsAll(expectedValues)) {
-				   return true;
-			   }
-		   };
-	   };
-	   return false;
-   }
+	    Iterator<RequestAttributes> iterAttributes = request.getRequestAttributes(categoryId);
+	    while (iterAttributes.hasNext()) {
+		    RequestAttributes requestAttributes = iterAttributes.next();
+		    Iterator<Attribute> iterAttribute = requestAttributes.getAttributes(attributeId);
+		    while (iterAttribute.hasNext()) {
+			    Attribute attribute = iterAttribute.next();
+			    assertThat(attribute.getCategory()).isEqualTo(categoryId);
+			    assertThat(attribute.getAttributeId()).isEqualTo(attributeId);
+			    if (attribute.getValues().containsAll(expectedValues)) {
+				    return true;
+			    }
+		    }
+	    }
+	    return false;
+    }
 
-   @Test
-   public void testExceptions() {
-       assertThatExceptionOfType(JSONStructureException.class).isThrownBy(() -> {
-           JsonRequestTranslator.load(new File(folder.getRoot().getAbsolutePath() + "/idontexist.json"));
-       });
-       assertThatExceptionOfType(JSONStructureException.class).isThrownBy(() -> {
-           JsonRequestTranslator.load("iamnot a json string at all");
-       });
-       assertThatExceptionOfType(JSONStructureException.class).isThrownBy(() -> {
-           try (ByteArrayInputStream is = new ByteArrayInputStream("fjskfjdskalfjdkslajdf".getBytes())) {
-               JsonRequestTranslator.load(is);
-           }
+    @Test
+    public void testExceptions() {
+        assertThatExceptionOfType(JSONStructureException.class).isThrownBy(() -> {
+            JsonRequestTranslator.load(new File(folder.getRoot().getAbsolutePath() + "/idontexist.json"));
+        });
+        assertThatExceptionOfType(JSONStructureException.class).isThrownBy(() -> {
+            JsonRequestTranslator.load("iamnot a json string at all");
+        });
+        assertThatExceptionOfType(JSONStructureException.class).isThrownBy(() -> {
+            try (ByteArrayInputStream is = new ByteArrayInputStream("fjskfjdskalfjdkslajdf".getBytes())) {
+                JsonRequestTranslator.load(is);
+            }
            
-       });
-   }
+        });
+    }
 }
