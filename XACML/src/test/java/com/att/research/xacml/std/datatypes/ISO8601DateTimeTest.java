@@ -37,7 +37,7 @@ public class ISO8601DateTimeTest {
 		calendar.add(Calendar.MONTH, 1);
 		assertEquals(calendar.get(Calendar.YEAR), add.getYear());
 		assertEquals(calendar.get(Calendar.MONTH) + 1, add.getMonth());
-		add = iso.sub(ISO8601Duration.newInstance("P3Y"));
+		add = add.sub(ISO8601Duration.newInstance("P6Y"));
 		calendar.add(Calendar.YEAR, -6);
 		assertEquals(calendar.get(Calendar.YEAR), add.getYear());
 		
